@@ -1,22 +1,17 @@
-<img src="DPPLogo400_new_doublecanvas.png" style="float:left;margin-right: 10px;" />
+<img src="DPPLogo400_new_closecanvas.png" style="float:left;margin-right: 10px;" />
 
 ## Scope
 
-Create a minimal viable API for IMF software applications to resolve and manage assets. [Full scope published end of December]
+Implement a minimal viable API for IMF software applications to resolve and manage assets. [Full scope published end of December 2018]
 
 ## Requirements
 
-To be published end of december
+To be maintained by the DPP
 
-## Timeline
+## Background
 
-* Presentation at the IMF User Group in Geneva in February
-* Presentation at the HPA Tech Retreat in Palm Desert in February
-* Demonstration and release of Code & Test Harness in April in Las Vegase
+This API was originally conceived and created by Bruce Devlin (MrMXF) with the support and involvement of some of his clients.
+At the conlusion of the original project, MrMXF passed the results to the DPP to share and maintain the API for the industry.
 
 ## Outputs
 
-* A cloud hosted test harness for new vendors to test their API
-* Cloud hosted content for new vendors to test products
-* Reference software & OpenAPI specifications for the end points
-* Demo application for stand alone testing.
