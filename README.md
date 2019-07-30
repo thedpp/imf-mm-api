@@ -1,4 +1,4 @@
-<img src="DPPLogo400_new_closecanvas.png" style="float:left;margin-right: 10px;" />
+<img src="DPPLogo400_new_closeecanvas.png" style="float:left;margin-right: 10px;" />
 
 ## Scope
 
