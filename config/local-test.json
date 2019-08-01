@@ -1,0 +1,20 @@
+{
+    "annotation": "Test (jest) Configuration",
+    "port": 3030,
+    "api_prefix": "test",
+    "test_folder": "__test__/",
+    "test_asset_root":"__test__/assets-imf/",
+    "database": {
+        "type": "local",
+        "local_filename": "db-local-test.json",
+        "local_crawl_filename": "db-local-crawl-test.json",
+        "simpledb_domain_name": "imf-mm-api-server-js-test"
+    },
+    "log_options": {
+        "commment": "levels: fatal error warn info debug trace silent",
+        "level": "trace",
+        "show_config_sources": true,
+        "prettyPrint": true,
+        "log_api_access": false
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "file_size":0,
+    "file_type":"",
+    "identifiers": [],
+    "locations":	[],
+    "providers":[],
+    "user": {
+        "id": "usr-10000001",
+        "name": "mrmxf"
+    },
+    "aws": {
+        "Key": "path/file.mxf",
+        "ETag": "value",
+        "LastModified": "date",
+        "StorageClasss": "STANDARD"
+    },
+    "version":"0.1"
+}

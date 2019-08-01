@@ -1,0 +1,86 @@
+{
+  "name": "imf-mm-api-server",
+  "version": "0.1.1",
+  "description": "Demo server for imf-mm-api used in the demo app",
+  "main": "src/start_awslambda.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node src/start_local",
+    "test": "jest",
+    "dev": "nodemon src/start_local",
+    "serve": "pm2 src/start_local"
+  },
+  "jest": {
+    "testMatch": [
+      "**/__test__/**/-test*.[jt]s?(x)",
+      "**/__test__/test-db-local.js",
+      "**/__test__/test-lib-crawl-fs.js"
+    ],
+    "roots": [
+      "./src/",
+      "./__test__"
+    ],
+    "reporters": [
+      "default",
+      [
+        "jest-html-reporter",
+        {
+          "pageTitle": "Jest Test Report",
+          "outputPath": "__test__/__jest-report.html"
+        }
+      ]
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrmxf/imf-mm-api-server-js.git"
+  },
+  "keywords": [
+    "imf",
+    "api"
+  ],
+  "author": "Mr Mxf",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/mrmxf/imf-mm-api-server-js/issues"
+  },
+  "homepage": "https://github.com/mrmxf/imf-mm-api-server-js#readme",
+  "dependencies": {
+    "aws-sdk": "^2.490.0",
+    "binary": "^0.3.0",
+    "chokidar": "^3.0.2",
+    "config": "^3.1.0",
+    "dotenv": "^8.0.0",
+    "json-format": "^1.0.1",
+    "koa": "^2.7.0",
+    "koa-body": "^4.1.0",
+    "koa-logger": "^3.2.0",
+    "koa-pino-logger": "^2.1.3",
+    "koa-router": "^7.4.0",
+    "lowdb": "^1.0.0",
+    "moment": "^2.24.0",
+    "pino": "^5.12.6",
+    "serverless-http": "^1.10.1",
+    "simpledb": "^0.2.0",
+    "xml2js": "^0.4.19"
+  },
+  "devDependencies": {
+    "chalk": "^2.4.2",
+    "express-openapi": "^4.6.4",
+    "gulp": "^4.0.2",
+    "gulp-jsdoc3": "^2.0.0",
+    "gulp-jshint": "^2.1.0",
+    "gulp-lambda-deploy": "^0.3.0",
+    "gulp-zip": "^4.2.0",
+    "jest": "^24.8.0",
+    "jest-html-reporter": "^2.4.1",
+    "jshint": "^2.10.2",
+    "jshint-stylish": "^2.2.1",
+    "koa-openapi": "^3.13.4",
+    "lodash": "^4.17.13",
+    "pino-pretty": "^3.2.0",
+    "supertest": "^3.4.2"
+  }
+}

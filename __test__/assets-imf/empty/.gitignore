@@ -1,0 +1,4 @@
+# Ignore everything in this directory to force an emptyish folder to be checked into Git
+*
+# Except this file
+!.gitignore
