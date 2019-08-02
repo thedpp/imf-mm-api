@@ -28,7 +28,7 @@ beforeAll(async () => {
         app = require('../src/start_local')
         await request.get('/')
     } catch (e) {
-        //nothing
+        log.error(`${rJ('Server failed to start:')} ${e}.`);
     }
 });
 

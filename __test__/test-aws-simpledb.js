@@ -13,7 +13,7 @@ const __test = path.basename(__filename)
 
 const imf_simpledb = require('../src/lib/lib-db-aws-simpledb')
 
-const test_assets = require('./test_assets.json')
+const test_assets = require('./test-data/test_assets.json')
 const test_asset1= test_assets[0]
 const test_asset2= test_assets[1]
 
@@ -24,7 +24,7 @@ var error_params = {
     domain_name: 'a-non-existant-domain',
 }
 
-describe(`${_test}: simple db code`, () => {
+describe(`${__test} simple db`, () => {
 
     describe('Database basics', () => {
 

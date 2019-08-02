@@ -2,7 +2,7 @@
   "name": "imf-mm-api-server",
   "version": "0.1.1",
   "description": "Demo server for imf-mm-api used in the demo app",
-  "main": "src/start_awslambda.js",
+  "main": "src/start_local.js",
   "directories": {
     "doc": "docs"
   },
@@ -14,9 +14,9 @@
   },
   "jest": {
     "testMatch": [
-      "**/__test__/**/-test*.[jt]s?(x)",
-      "**/__test__/test-db-local.js",
-      "**/__test__/test-lib-crawl-fs.js"
+      "**/__test__/**/test*.[jt]s?(x)",
+      "**/__test__/-test-db-local.js",
+      "**/__test__/-test-lib-crawl-fs.js"
     ],
     "roots": [
       "./src/",
