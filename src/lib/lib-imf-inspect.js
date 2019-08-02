@@ -44,6 +44,7 @@ const xml2js = require('xml2js');
 let parser = new xml2js.Parser();
 
 let file_type = require('../asset_types.json')
+const blank_asset = JSON.stringify(require('../asset_empty.json'))
 
 //must be bigger than 65548 for MXF logic to work
 const buffer_size = 100000
@@ -58,7 +59,8 @@ module.exports = class IMF_inspect {
         this.ns_prefix = ""
         this.file_path = ""
         this.buffer_initialised = false
-        this.asset_record = require('../asset_empty.json')
+        //clone the empty object we create from the JSON file
+        this.asset_record = JSON.parse(blank_asset)
     }
 
     /** return the buffer or false
@@ -235,7 +237,7 @@ module.exports = class IMF_inspect {
             let parse = new mxf_parser(this.buf)
             if (parse.is_mxf()) {
                 this.asset_record.file_size = stat.size
-                this.asset_record.identifiers.push(parse.get_track_file_id())
+                this.asset_record.identifiers.push(parse.get_track_file_id_string())
                 this.asset_record.file_type = file_type.alias.mxf
                 //now check to see if we can extract a known file descriptor
                 //let mxf_coding = parse.get_essence_coding()

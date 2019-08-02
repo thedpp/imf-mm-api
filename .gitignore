@@ -1,3 +1,6 @@
+# and local databases resulting from running the code
+db*.*
+
 # configuration data (npm-config) is not in git *.sample is in git
 config/*nogit.json
 config/*nogit.yaml
