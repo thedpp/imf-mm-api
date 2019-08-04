@@ -7,6 +7,9 @@ const config = require('config')
 const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
+const path = require('path')
+const _module = path.basename(__filename)
+log.debug(`${rJ(_module)} init`)
 
 const iterate = require('./lib-crawl-fs-iterate')
 const imf_inspect = require('./lib-imf-inspect')
@@ -36,7 +39,7 @@ module.exports.crawl = async (folder) => {
             length = files.length
             //log.debug(`${rJ('fs crawl:')} ${files.length} files in ${folder}`)
 
-            //now inspect the files one by one - current is 
+            //now inspect the files one by one with a new, clean inspect instance
             for (current = 0; current < length; current++) {
                 let inspect = new imf_inspect()
                 var asset = await inspect.imf_asset_record(files[current])

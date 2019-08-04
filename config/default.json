@@ -7,6 +7,12 @@
         "Mr MXF"
     ],
     "api_prefix": "1",
+    "enable":{
+        "www": true,
+        "assets": true,
+        "crawl": true,
+        "scan": true
+    },
     "default_get_limit": 20,
     "provider_id": "imf-mm-api Demo App",
     "database": {

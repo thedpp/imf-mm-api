@@ -21,19 +21,28 @@ server.mm_init = async function (option) {
             //load the utility functions
             var u = require('./lib/util')
 
-            //load all the api modules
-            var api_assets = require('./api-assets.js')
-            var api_crawl_fs = require('./api-crawl-fs.js')
-            var api_scan_s3 = require('./api-scan-s3.js')
-
             //log access if required
             if (config.get('log_options').log_api_access) {
                 server.use(pino)
             }
 
-            server.use(api_assets.routes())
-            server.use(api_crawl_fs.routes())
-            server.use(api_scan_s3.routes())
+            //load all the server modules depending on what was configured
+            if (config.get('enable.www')) {
+                let www = require('koa-static')
+                server.use(www('docs/www/', {}))
+            }
+            if (config.get('enable.assets')) {
+                let api = require('./api-assets.js')
+                server.use(api.routes())
+            }
+            if (config.get('enable.crawl')) {
+                let api = require('./api-crawl-fs.js')
+                server.use(api.routes())
+            }
+            if (config.get('enable.scan')) {
+                let api = require('./api-scan-s3.js')
+                server.use(api.routes())
+            }
         })
         .catch((e) => {
             log.error(`${rJ('server did not init')}: ${e}`)

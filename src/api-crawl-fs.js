@@ -25,7 +25,6 @@
 const config = require('config')
 const moment = require('moment')
 const path = require('path')
-
 const log = require('pino')(config.get('log_options'))
 const u = require('./lib/util')
 const rJ = u.left_pad_for_logging

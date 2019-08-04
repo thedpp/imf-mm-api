@@ -1,5 +1,5 @@
 # and local databases resulting from running the code
-db*.*
+/db-*.*
 
 # configuration data (npm-config) is not in git *.sample is in git
 config/*nogit.json
