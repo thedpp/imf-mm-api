@@ -12,7 +12,6 @@ let env_check_failed = (undefined == process.env.NODE_ENV) || (undefined == proc
 //try pulling in a.env file to see if it fulfils requirements
 if (env_check_failed) {
     require('dotenv').config()
-    console.log(`Environment variables not set, trying .env file`)
     env_check_failed = (undefined == process.env.NODE_ENV) || (undefined == process.env.AWS_ACCESS_KEY_ID) || (undefined == process.env.AWS_SECRET_ACCESS_KEY)
     //If we still don't have everything then abort
     if (env_check_failed) {
@@ -20,6 +19,9 @@ if (env_check_failed) {
         console.log(msg)
         throw new Error(msg)
     }
+    console.log(`Environment set from .env file`)
+}else{
+    console.log(`Environment set from parent process`)
 }
 
 /* config management load order described here: https://github.com/lorenwest/node-config/wiki/Configuration-Files

@@ -159,4 +159,12 @@ module.exports = class MXF_Lazy_Parse {
     return track_file_id_buf
   }
 
+  /** return the Track File Id as a String
+   * 
+   */
+  get_track_file_id_string() {
+    let id = this.get_track_file_id().toString('hex')
+    return 'urn:uuid:' + id.substr(0, 8) + '-' + id.substr(8, 4) + '-' + id.substr(13, 4) + '-' + id.substr(16, 4) + '-' + id.substr(20)
+  }
+
 }
