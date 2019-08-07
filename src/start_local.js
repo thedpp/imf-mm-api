@@ -15,13 +15,13 @@ if (env_check_failed) {
     env_check_failed = (undefined == process.env.NODE_ENV) || (undefined == process.env.AWS_ACCESS_KEY_ID) || (undefined == process.env.AWS_SECRET_ACCESS_KEY)
     //If we still don't have everything then abort
     if (env_check_failed) {
-        let msg = "ERROR: Environment variables not set aborting - see README.md"
+        let msg = `ERROR: Environment variables not set aborting - see README.md (config: ${process.env.NODE_ENV})`
         console.log(msg)
         throw new Error(msg)
     }
-    console.log(`Environment set from .env file`)
+    console.log(`Environment set from .env file (config: ${process.env.NODE_ENV})`)
 }else{
-    console.log(`Environment set from parent process`)
+    console.log(`Environment set from parent process (config: ${process.env.NODE_ENV})`)
 }
 
 /* config management load order described here: https://github.com/lorenwest/node-config/wiki/Configuration-Files
@@ -36,10 +36,17 @@ if (env_check_failed) {
  * 
  */
 const config = require('config')
-const log = require('pino')(config.get('log_options'))
+const pino = require('pino')
+//log to stderr
+const log = pino(config.get('log_options'), pino.destination(2))
 const u = require('./lib/util')
 //define a right Justification helper function to make logs more readable
 const rJ = u.left_pad_for_logging
+let listen_on_port = config.get('port')
+if(process.env.PORT_OVERRIDE){
+  listen_on_port = process.env.PORT_OVERRIDE
+  console.log(`port: ${listen_on_port}`)
+}
 
 log.info(rJ('Using config') + config.get('annotation'))
 
@@ -59,15 +66,13 @@ const server = require('./imf-mm-api-server')
 server.mm_init()
     .catch((e) => {
         //server failed to initialise - abort with a log
-        log.info(rJ('Server init failed:') + `port was ${config.get('port')}`)
+        log.info(rJ('Server init failed:') + `port was ${listen_on_port}`)
     })
     .then(() => {
         //We should be ready to go now, so start the server on the required port
-        log.info(rJ('Listening on port:') + `${config.get('port')}`)
+        log.info(rJ('Listening on port:') + `${listen_on_port}`)
         log.info(rJ('Listening for api:') + `/${config.get('api_prefix')}/*`)
-        server.mm_http_instance = server.listen({
-            "port": config.get('port'),
-        })
+        server.mm_http_instance = server.listen({ "port": listen_on_port, })
     })
 
 // The exports lines is only for the Jest test harness
