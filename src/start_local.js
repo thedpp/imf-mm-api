@@ -70,6 +70,13 @@ server.mm_init()
         })
     })
 
+//if we have enabled serving of web pages then ask the OS to go to the home page
+if (config.get('enable.www')){
+    (async() =>{
+        await open(`https://localhost:${config.get('port')}`)
+    })
+}
+
 // The exports lines is only for the Jest test harness
 // It is not needed in development or production
 module.exports.server = server

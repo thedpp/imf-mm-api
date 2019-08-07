@@ -39,40 +39,15 @@
                     <thead>
                         <tr>
                             <th align="right"></th>
-                            <th align="left">Execute API call below via button or new tab via arrow</th>
+                            <th align="left">Execute API call by clicking button below</th>
                         </tr>
                     </thead>
                     <tbody id="api-button-table">
-                        <tr>
-                            <td align="right">GET with no end-point</td>
-                            <td align="left"><a href="/" target="_blank">↗</a> <button class="btn-default"
-                                    onClick="update_div_from_api('api_res', 'GET', '/')">GET /</button> (should return the
-                                website home page to prove script is working)</td>
-                        </tr>
-                        <tr>
-                            <td align="right">get all assets</td>
-                            <td align="left"><a href="/dev/assets" target="_blank">↗</a> <button class="btn-info"
-                                    onClick="update_div_from_api('api_res', 'GET', '/dev/assets')">GET /assets</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="right">get an asset by id</td>
-                            <td align="left"><a href="/dev/assets/urn:uuid:52a5343e-1184-44b4-86e3-43477636ae69"
-                                    target="_blank">↗</a> <button class="btn-info"
-                                    onClick="update_div_from_api('api_res', 'GET', '/dev/assets/urn:uuid:52a5343e-1184-44b4-86e3-43477636ae69')">GET
-                                    /assets/urn:uuid:52a5343e-1184-44b4-86e3-43477636ae69</button></td>
-                        </tr>
-                        <tr>
-                            <td align="right">get an asset by hash</td>
-                            <td align="left"><a href="/dev/assets/urn:sha1:DlAQYbKnFQUXwC8VTSjYOyT2OFk="
-                                    target="_blank">↗</a> <button class="btn-info"
-                                    onClick="update_div_from_api('api_res', 'GET', '/dev/assets/urn:sha1:DlAQYbKnFQUXwC8VTSjYOyT2OFk=')">GET
-                                    /assets/urn:sha1:DlAQYbKnFQUXwC8VTSjYOyT2OFk=</button></td>
-                        </tr>
+                        <!-- filled in on document load from demo-scripts.js -->
                     </tbody>
                 </table>
             </main>
-            <h3>API response:</h3><div id="api_res">Output will appear here...</div><p>
+            <h3>API response:</h3><div id="api_res" style="border: solid 1px #9A3A73;padding:1px;">Output will appear here...</div>
         </div>
         <footer id="footer">
             <div class="row">

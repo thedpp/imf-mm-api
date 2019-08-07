@@ -116,12 +116,14 @@ const post = async function (asset) {
 }
 
 /** Get all records
- * @param {Integer} max_count the maximum number of queries to return 
+ * @param {Integer} skip the number of queries to skip
+ * @param {Integer} limit the maximum number of queries to return 
  * @returns {Array} of asset objects
  */
-const get = async function (max_count) {
+const get = async function (skip, limit) {
     return new Promise((resolve, reject) => {
         var data = db.get('assets')
+            .slice(skip, skip + limit)
             .value()
 
         let assets = []

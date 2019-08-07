@@ -62,6 +62,7 @@
     "koa-static": "^5.0.0",
     "lowdb": "^1.0.0",
     "moment": "^2.24.0",
+    "open": "^6.4.0",
     "pino": "^5.12.6",
     "serverless-http": "^1.10.1",
     "simpledb": "^0.2.0",
