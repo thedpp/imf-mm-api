@@ -31,6 +31,10 @@ server.mm_init = async function (option) {
                 let www = require('koa-static')
                 server.use(www('docs/www/', {}))
             }
+            if (config.get('enable.admin')) {
+                let api = require('./api-admin.js')
+                server.use(api.routes())
+            }
             if (config.get('enable.assets')) {
                 let api = require('./api-assets.js')
                 server.use(api.routes())

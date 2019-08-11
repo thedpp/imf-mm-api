@@ -39,7 +39,6 @@ log.debug(`${rJ(_module)} init`)
 
 const mxf_parser = require('./lib-mxf-lazy-parse')
 
-
 const fs = require('fs');
 const util = require('util')
 const xml2js = require('xml2js');
@@ -63,6 +62,7 @@ module.exports = class IMF_inspect {
         this.buffer_initialised = false
         //clone the empty object we create from the JSON file
         this.asset_record = JSON.parse(blank_asset_json)
+        this.hash_table=[]
     }
 
     /** return the buffer or false
@@ -205,9 +205,40 @@ module.exports = class IMF_inspect {
      */
     is_pkl() {
         //check the root object of the XML (namespace prefix aware check)
-        return (undefined !== this.xmljs[`${this.ns_prefix}PackingList`])
+        let has_pkl_root= (undefined !== this.xmljs[`${this.ns_prefix}PackingList`])
+
+        if(has_pkl_root){
+            this.update_hash_table()
+        }
+
+        return has_pkl_root
     }
-    /** common asset properties
+
+    /** udpate the hash table while we have the PKL loaded
+     * 
+     */
+    update_hash_table(){
+        let pkl_root= this.xmljs[`${this.ns_prefix}PackingList`]
+        let assetlist_array = pkl_root[`${this.ns_prefix}AssetList`][0][`${this.ns_prefix}Asset`]
+
+        //iterate through all the assets in the assetlist array
+        for (const a in assetlist_array) {
+
+                const asset = assetlist_array[a]
+                let hash = {}
+                hash.id = asset[`${this.ns_prefix}Id`][0]
+                //the algorithm is an attribute of the value of the HashAlgorithm element
+                hash.hash_algorithm = asset[`${this.ns_prefix}HashAlgorithm`][0].$.Algorithm
+                //use node's Buffer module to parse the base64 string and create a series of bytes
+                const hash_buffer = Buffer.from( asset[`${this.ns_prefix}Hash`][0], 'base64')
+                //now use the buffer's hex function to make a hex string with leading zeroes
+                hash.hash_hex_str = 'urn:sha1:'+hash_buffer.toString('hex')
+                this.hash_table.push(hash)
+        }
+
+    }
+
+        /** common asset properties
      * 
      */
     update_common_asset_properties(file_path){
@@ -256,5 +287,16 @@ module.exports = class IMF_inspect {
             }
             resolve(false)
         })
+    }
+    /**return the hash_table
+     * @returns {Array} an array of has ID-hash value associations:
+     * ```
+     * hash_table[n].id = 'urn:uuid:f234296b-25ee-4b0e-ba0f-099c5f161d51'
+     * hash_table[n].hash_hex_str = 'b742938681fcb6267657d3698b5d064e8af5c3f2'
+     * hash_table[n].hash_algorithm = 'http://www.w3.org/2000/09/xmldsig#sha1'
+     * ```
+     */
+    get_hash_table(){
+        return this.hash_table
     }
 }

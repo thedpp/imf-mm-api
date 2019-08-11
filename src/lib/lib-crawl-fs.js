@@ -13,6 +13,7 @@ log.debug(`${rJ(_module)} init`)
 
 const iterate = require('./lib-crawl-fs-iterate')
 const imf_inspect = require('./lib-imf-inspect')
+let file_type = require('../asset_types.json')
 
 /* Set up some variables to allow monitoring progress for large crawls
  */
@@ -31,6 +32,7 @@ module.exports.crawl = async (folder) => {
     active = true
     let files = []
     let current = 0
+    let hash_table = []
 
     return new Promise(async (resolve, reject) => {
         try {
@@ -49,7 +51,23 @@ module.exports.crawl = async (folder) => {
                 } else {
                     report.skipped.push(files[current])
                 }
+                //append any hash table generated
+                hash_table = hash_table.concat(inspect.get_hash_table())
             }
+
+            //finally go through the list of assets to match any hashes that we found
+            for (const a in assets) {
+                let asset = assets[a]
+                let asset_ids = asset.identifiers
+                for (const h in hash_table) {
+                    for (const i in asset_ids) {
+                        if (asset_ids[i] == hash_table[h].id) {
+                            asset.identifiers.push(hash_table[h].hash_hex_str)
+                        }
+                    }
+                }
+            }
+
             //tidy up for asynchronous calls
             active = false
             files = []
@@ -65,8 +83,8 @@ module.exports.crawl = async (folder) => {
 /** populate the database from the crawl
  */
 module.exports.populate_db = async (db) => {
-  //check that we have something to add to the database
-  
+    //check that we have something to add to the database
+
 }
 module.exports.length = length
 module.exports.files = files

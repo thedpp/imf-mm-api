@@ -103,7 +103,7 @@ const start_crawl_in_folder = async (ctx, next) => {
       id: crawl_id,
       active: crawler.active,
       root: path.resolve(config.get('imf_asset_folders')[0]),
-      activity: "startting",
+      activity: "start",
       progress: 0,
     }
   )
@@ -113,8 +113,8 @@ const start_crawl_in_folder = async (ctx, next) => {
 
 router.get(`/`, get_crawl_status)
 router.get(`/:id`, get_crawl_status)
-router.get(`/start`, start_crawl_in_folder)
 router.post(`/start`, start_crawl_in_folder)
+router.delete(`/`, get_crawl_status)
 
 log.info(`${rJ('module:')} crawl-fs initialised`)
 

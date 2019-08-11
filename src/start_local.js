@@ -20,7 +20,7 @@ if (env_check_failed) {
         throw new Error(msg)
     }
     console.log(`Environment set from .env file (config: ${process.env.NODE_ENV})`)
-}else{
+} else {
     console.log(`Environment set from parent process (config: ${process.env.NODE_ENV})`)
 }
 
@@ -36,6 +36,7 @@ if (env_check_failed) {
  * 
  */
 const config = require('config')
+const open = require('open')
 const pino = require('pino')
 //log to stderr
 const log = pino(config.get('log_options'), pino.destination(2))
@@ -43,9 +44,9 @@ const u = require('./lib/util')
 //define a right Justification helper function to make logs more readable
 const rJ = u.left_pad_for_logging
 let listen_on_port = config.get('port')
-if(process.env.PORT_OVERRIDE){
-  listen_on_port = process.env.PORT_OVERRIDE
-  console.log(`port: ${listen_on_port}`)
+if (process.env.PORT_OVERRIDE) {
+    listen_on_port = process.env.PORT_OVERRIDE
+    console.log(`port: ${listen_on_port}`)
 }
 
 log.info(rJ('Using config') + config.get('annotation'))
@@ -76,10 +77,8 @@ server.mm_init()
     })
 
 //if we have enabled serving of web pages then ask the OS to go to the home page
-if (config.get('enable.www')){
-    (async() =>{
-        await open(`https://localhost:${config.get('port')}`)
-    })
+if (config.get('enable.www')) {
+    open(`http://localhost:${listen_on_port}`)
 }
 
 // The exports lines is only for the Jest test harness
