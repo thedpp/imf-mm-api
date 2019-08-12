@@ -1,0 +1,42 @@
+{
+    "annotation": "Default config file. Credentials go in .env. OpenAPI reserved elements in default.yaml",
+    "port": 3000,
+    "app_name": "imf-mm-api-server-js",
+    "app_version": "0.1",
+    "app_authors": [
+        "Mr MXF"
+    ],
+    "api_prefix": "1",
+    "default_get_limit": 20,
+    "provider_id": "imf-mm-api Demo App",
+    "database": {
+        "type": "aws-simple-db",
+        "local_filename": "db-imf-mm-api-local.json",
+        "simpledb_domain_name": "imf-mm-api-server-js"
+    },
+    "imf_asset_folders":[],
+    "lambda": {
+        "params": {
+            "name": "imf-api-staging-test",
+            "role": "arn:aws:iam::217890066136:role/service-role/mm-lambda-api-gateway-role"
+        },
+        "options": {
+            "region": "eu-east-2",
+            "profile": "default"
+        }
+    },
+    "s3_asset_buckets": [{
+        "comment": "hierarichally scan below this public bs500 root for IMF assets",
+        "arn": "arn:aws:s3:::imf-mm-api-media",
+        "bucket": "imf-mm-api-media",
+        "root": "media/bs500",
+        "region": "us-east-2"
+    }],
+    "log_options": {
+        "commment": "levels: fatal error warn info debug trace silent",
+        "level": "error",
+        "prettyPrint": false,
+        "show_config_sources": false,
+        "log_api_access": true
+    }
+}

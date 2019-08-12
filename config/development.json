@@ -1,0 +1,15 @@
+{
+    "annotation": "Development Configuration",
+    "port": 3333,
+    "api_prefix": "dev",
+    "log_options": {
+        "prettyPrint": true,
+        "show_config_sources": true
+    },
+    "database":{
+        "type":"local"
+    },
+    "imf_asset_folders":[
+        "__test__/assets_imf"
+    ]
+}

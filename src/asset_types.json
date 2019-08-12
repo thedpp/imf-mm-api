@@ -1,0 +1,30 @@
+{
+    "version": "0.2",
+    "annotation": "software_symbol: api_json_reponse_value",
+    "alias": {
+        "am": "ft.map",
+        "cpl": "ft.cpl",
+        "mxf": "ft.mxf",
+        "mxf.app2e": "ft.mxf.app2e",
+        "mxf.app2e.tsp2121-4": "ft.mxf.app2e.tsp2112-4",
+        "mxf.app4": "ft.mxf.app4",
+        "mxf.app5": "ft.mxf.app5",
+        "mxf.audio": "ft.mxf.audio",
+        "mxf.iab": "ft.mxf.iab",
+        "mxf.rdd45": "ft.mxf.rdd45",
+        "mxf.rdd45.tsp2121-1": "ft.mxf.rdd45.tsp2121-1",
+        "opl": "ft.opl",
+        "pkl": "ft.pkl",
+        "png": "ft.png",
+        "scm": "ft.sidecar-map",
+        "ttf": "ft.ttf",
+        "ttml": "ft.ttml",
+        "xml": "ft.xml"
+    },
+    "changes":[
+        "Removed DCinema Types",
+        "Removed imf- prefixes",
+        "Replaced ft.as-02.subtype with ft.mxf.subtype",
+        "Sorted elements by alias"
+    ]
+}

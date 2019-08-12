@@ -1,0 +1,12 @@
+{
+  "MaterialPackage": {
+    "key": "urn:smpte:ul:060E2B34.02530101.0D010101.01013600"
+  },
+  "SourcePackage": {
+    "key": "urn:smpte:ul:060E2B34.02530101.0D010101.01013700"
+  },
+  "PackageUID": {
+    "key": "urn:smpte:ul:060E2B34.01010101.01011510.00000000",
+    "tag": "4401"
+  }
+}

@@ -1,0 +1,657 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "IMF Asset Registration API",
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "paths": {
+    "/assets": {
+      "get": {
+        "tags": [
+          "Asset Registration API"
+        ],
+        "summary": "Get list of assets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/skipParam"
+          },
+          {
+            "$ref": "#/components/parameters/limitParam"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get List of assets",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetListSchema"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetListSchema"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Asset Registration API"
+        ],
+        "summary": "Create Asset Reference",
+        "description": "Create a mapping between one or more asset identifiers, and one or more locations. At least one identifier provided must a digest type.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ifNoneMatch"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/registerRequestBody"
+        },
+        "responses": {
+          "201": {
+            "description": "Asset registration created. If submitted identifier already exist the system locations are added to the existing registration entry (duplicates are removed).",
+            "headers": {
+              "Location": {
+                "description": "URL for the newly created asset.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMessage"
+                },
+                "example": {
+                  "message": "Resource created: '/assets/urn:sha1:0R5e2nhq3NjcIeaUqnDwc3t6XRo='.",
+                  "status": 201,
+                  "status_label": "Created"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMessage"
+                },
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response_message><message>Resource created: '/assets/urn:sha1:0R5e2nhq3NjcIeaUqnDwc3t6XRo=</message><status>201</status><status_label>Created</status_label></response_message>"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request. ",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMessage"
+                },
+                "example": {
+                  "message": "Bad Request",
+                  "status": 400,
+                  "status_label": "Bad Request"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMessage"
+                },
+                "example": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><response_message><message>test</message><status>400</status><status_label>Bad Request</status_label></response_message>"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/assets/{id}": {
+      "get": {
+        "tags": [
+          "Asset Registration API"
+        ],
+        "summary": "Get asset registration info.",
+        "responses": {
+          "200": {
+            "description": "Get asset info.",
+            "headers": {
+               "ETag": {
+                "description": "Entity Tag",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetInfoSchema"
+                },
+                "example": {
+                    "$ref": "#/components/examples/assetInfoJSONExample/value"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/assetInfoSchema"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Asset Registration API"
+        ],
+        "summary": "Replace asset registration info.",
+        "parameters": [
+            {
+                "$ref":"#/components/parameters/ifMatch"
+            }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/registerRequestBody"
+        },
+        "responses": {
+          "204": {
+            "description": "No Content (asset replaced)."
+          },
+          "404": {
+            "description": "Asset ID not found"
+          },
+          "412": {
+            "description": "Precondition failed. ETag did not match for update."
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Asset Registration API"
+        ],
+        "summary": "Remove an asset registration info.",
+        "responses": {
+          "204": {
+            "description": "No Content (Asset registration removed)."
+          },
+          "404": {
+            "description": "Asset registration not found"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/assetId"
+        }
+      ]
+    },
+    "/assets/{id}/locations": {
+      "post": {
+        "tags": [
+          "Locations"
+        ],
+        "summary": "Add one or more locations to an existing registration entry",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/locationsRequestBody"
+        },
+        "responses": {
+          "201": {
+            "description": "Location added",
+            "headers": {
+              "Location": {
+                "description": "URL for the updated asset.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Locations"
+        ],
+        "summary": "Replace locations for an existing registration entry",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/locationsRequestBody"
+        },
+        "responses": {
+          "204": {
+            "description": "No Content (locations updated)",
+            "headers": {
+              "Location": {
+                "description": "URL for the newly updated asset.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Locations"
+        ],
+        "summary": "Get asset locations",
+        "responses": {
+          "200": {
+            "description": "Get asset locations"
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/assetId"
+        }
+      ]
+    },
+    "/assets/{id}/locations/{location}": {
+      "delete": {
+        "tags": [
+          "Locations"
+        ],
+        "summary": "Delete location from an existing registration entry.",
+        "responses": {
+          "204": {
+            "description": "Location removed"
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/assetId"
+        },
+        {
+          "$ref": "#/components/parameters/location"
+        }
+      ]
+    },
+    "/assets/{id}/identifiers": {
+      "post": {
+        "tags": [
+          "Identifiers"
+        ],
+        "summary": "Add one or more identifiers to an existing registration entry",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/identifiersRequestBody"
+        },
+        "description": "This results in the union of the existing identifiers and the submitted identifiers",
+        "responses": {
+          "201": {
+            "description": "Identifier added",
+            "headers": {
+              "Location": {
+                "description": "URL for the updated asset.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Identifiers"
+        ],
+        "summary": "Replace existing set of identifiers for an existing registration entry",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/identifiersRequestBody"
+        },
+        "responses": {
+          "204": {
+            "description": "No Content (Identifiers successfully replaced)"
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Identifiers"
+        ],
+        "summary": "Get asset identifiers",
+        "responses": {
+          "200": {
+            "description": "Get asset locations"
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/assetId"
+        }
+      ]
+    },
+    "/assets/{id}/identifiers/{id}": {
+      "delete": {
+        "tags": [
+          "Identifiers"
+        ],
+        "summary": "Delete identifier from an existing registration entry.",
+        "responses": {
+          "204": {
+            "description": "Idenfier removed"
+          },
+          "400": {
+            "description":"Bad Request. Cannot delete the last identifier. (use DELETE /assets/{id} to delete the entire record)",
+            "content": {
+                "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMessage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/responseMessage"
+                }
+             }
+            }
+          },
+          "404": {
+            "description": "Asset ID not found"
+          }
+        }
+      },
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/assetId"
+        }
+      ]
+    }
+  },
+  "components": {
+    "headers": {
+      "Location": {
+        "description": "Location URL for newly registered asset",
+        "schema": {
+          "type": "string"
+        }
+      }
+      
+    },
+    "parameters": {
+      "assetId": {
+        "required": true,
+        "in": "path",
+        "description": "Asset ID.",
+        "name": "id",
+        "schema": {
+          "$ref":"#/components/schemas/assetIdSchema"
+        }
+      },
+      "skipParam": {
+        "in": "query",
+        "name": "skip",
+        "description": "Number of records to skip before returning list.",
+        "schema": {
+          "type": "integer",
+          "default": 0
+        }
+      },
+      "limitParam": {
+        "in": "query",
+        "name": "limit",
+        "description": "Maxiumum number of records to return.",
+        "schema": {
+          "type": "integer",
+          "default": 20
+        }
+      },
+      "location": {
+        "required": true,
+        "in": "path",
+        "description": "A url encoded location value",
+        "name": "location",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ifNoneMatch": {
+        "in":"header",
+        "name":"If-None-Match",
+        "description": "Used for conditional creation of initial asset entry.",
+        "schema": {
+          "type": "string",
+          "enum":["*"]
+        }
+      },
+      "etag": {
+        "in":"header",
+        "name":"ETag",
+        "description": "Entity Tag",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "ifMatch": {
+        "in":"header",
+        "name":"If-Match",
+        "description": "Used for conditional update of initial asset entry. Value should be set to ETag header value of get request.",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "registerRequestBody": {
+        "description": "Register asset request body",
+        "required":true,
+        
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/assetInfoSchema"
+            },
+            "example": {
+                "$ref":"#/components/examples/assetInfoJSONExample/value"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/assetInfoSchema"
+            }
+          }
+        }
+      },
+      "locationsRequestBody": {
+        "description": "Locations",
+        "required":true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/locationsRequestBodySchema"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/locationsRequestBodySchema"
+            }
+          }
+        }
+      },
+      "identifiersRequestBody": {
+        "description": "Identifiers",
+        "required":true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/identifiersRequestBodySchema"
+            }
+          },
+          "application/xml": {
+            "schema": {
+              "$ref": "#/components/schemas/identifiersRequestBodySchema"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "assetIdSchema": {
+        "description": "Digest value to uniquely identify asset. Digest string values shall be prefixed (see pattern) to discriminate between possible equivalent alternatives.",
+        "type": "string",
+        "pattern": "^(urn:uuid|urn:sha1|urn:c4|urn:x-).*"
+      },
+      "locationsSchema": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "xml": {
+            "name": "location"
+          }
+        },
+        "xml": {
+          "wrapped": true,
+          "name": "locations"
+        }
+      },
+      "identifiersSchema": {
+        "description": "Asset identifiers.",
+        "type": "array",
+        "items": {
+          "type": "string",
+          "xml": {
+            "name": "identifer"
+          }
+        },
+        "xml": {
+          "wrapped": true,
+          "name": "identifiers"
+        }
+      },
+      "assetListSchema": {
+        "type": "object",
+        "properties": {
+          "skip": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/assetInfoSchema"
+            },
+            "xml": {
+              "name": "results",
+              "wrapped": true
+            }
+          }
+        },
+        "xml": {
+          "name": "asset_list"
+        }
+      },
+      "assetInfoSchema": {
+        "type": "object",
+        "required": [
+          "identifiers",
+          "locations"
+        ],
+        "properties": {
+          "identifiers": {
+            "$ref": "#/components/schemas/identifiersSchema"
+          },
+          "file_size": {
+            "type": "integer"
+          },
+          "file_type": {
+            "description":"Use Wailua file types here (eg. asdcp-jp2k-j2c, asdcp-jp2k-j2c).",
+            "type": "string"
+          },
+          "locations": {
+            "$ref": "#/components/schemas/locationsSchema"
+          }
+        },
+        "xml": {
+          "name": "asset_info"
+        }
+      },
+      "responseMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status code.",
+            "type": "integer"
+          },
+          "status_label": {
+            "type": "string"
+          }
+        },
+        "xml": {
+            "name":"response_message"
+        }
+      },
+      "locationsRequestBodySchema": {
+        "type": "object",
+        "properties": {
+          "locations": {
+            "$ref": "#/components/schemas/locationsSchema"
+          }
+        }
+      },
+      "identifiersRequestBodySchema": {
+        "type": "object",
+        "properties": {
+          "identifiers": {
+            "$ref": "#/components/schemas/identifiersSchema"
+          }
+        }
+      }
+    },
+    "examples": {
+        "assetInfoJSONExample": {
+            "value":{
+                "identifiers":[
+                    "urn:uuid:08db5408-2177-0580-dc08-06bfc80c2073",
+                    "urn:sha1:0R5e2nhq3NjcIeaUqnDwc3t6XRo="
+               ],
+              "locations": [
+                "E:\\x-media\\IMF\\imf-plugfest-wip\\disney-source\\IO_Plugfest_ENG_mxf_v0.mxf",
+                "/mnt/near_line/vol6/IO_Plugfest_ENG_mxf_v0.mxf",
+                "https://s3-us-west-2.amazonaws.com/region-test-us-west-2/imf-plugfest-wip/IO_Plugfest_ENG_mxf_v0.mxf"
+              ],
+              "file_size": 456345,
+              "file_type": "cpl"
+            }
+        }
+    }
+  }
+}

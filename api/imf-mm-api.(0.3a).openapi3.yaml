@@ -1,0 +1,515 @@
+openapi: 3.0.2
+info:
+  title: IMF Asset Registration API
+  version: '0.3'
+security:
+  - type:
+      - http
+servers:
+  - url: /
+paths:
+  /assets:
+    post:
+      tags:
+        - Asset Registration API
+      summary: Create an asset registration entry.
+      description: >
+        Create a mapping between one or more asset identifiers, and one or more
+        locations. 
+
+        At least one identifier provided must be a digest type (e.g.
+        urn:sha1:...,  urn:c4id:...) that uniquely identifies the asset. 
+
+
+        Systems may require a specific identifier type to act as a primery id. 
+        Pakanu requires 'x-short-digest:' type for every POST interaction.
+
+        The If-None-Match: * header may be used to disallow re-registering an asset. 
+        Without the If-None-Match header subsequent registrations for a given asset will
+        result in the union of identifiers and locations.
+        
+        If the submitted registration entry contains identifiers or locations
+        that already exist for different registration entries this will result in a
+        409 Conflict.
+      parameters:
+        - $ref: '#/components/parameters/ifNoneMatch'
+      requestBody:
+        $ref: '#/components/requestBodies/registerRequestBody'
+      responses:
+        '201':
+          description: >
+            Asset registration created. 
+
+            If an asset registration already exists and the If-None-Match header
+            is not specified, the system will match all existing hash-based
+            identifiers before locations are added to the existing registration
+            entry (duplicates are removed).
+          content:
+            application/json:
+              example:
+                message: 'Resource created: ''/assets/urn:sha1:adc83b19e793491b1c6ea0fd8b46cd9f32e592fc''.'
+                status: 201
+                status_label: Created
+              schema:
+                $ref: '#/components/schemas/responseMessage'
+            application/xml:
+              example: >-
+                <?xml version="1.0"
+                encoding="UTF-8"?><response_message><message>Resource created:
+                '/assets/urn:sha1:adc83b19e793491b1c6ea0fd8b46cd9f32e592fc</message><status>201</status><status_label>Created</status_label></response_message>
+              schema:
+                $ref: '#/components/schemas/responseMessage'
+          headers:
+            Location:
+              description: URL for the newly created asset registration entry.
+              schema:
+                type: string
+        '400':
+          description: Primary identifier not found.
+        '409':
+          description: >-
+            Conflict. Identifiers and/or locations already belong to a different
+            registration entries.
+          content:
+            application/json:
+              example:
+                message: Ambiguous identifiers.
+                status: 409
+                status_label: Ambiguous identifiers
+              schema:
+                $ref: '#/components/schemas/responseMessage'
+              application/xml:
+                example: >-
+                  <?xml version="1.0"
+                  encoding="UTF-8"?><response_message><message>Registration
+                  conflict</message><status>409</status><status_label>Registration
+                  conflict</status_label></response_message>
+                schema:
+                  $ref: '#/components/schemas/responseMessage'
+            '412':
+              description: >-
+                Precondition failed. If-None-Match was set and the asset
+                registration entry already exists.
+              content:
+                application/json:
+                  example:
+                    message: Precondition failed
+                    status: 409
+                    status_label: Precondition failed
+                  schema:
+                    $ref: '#/components/schemas/responseMessage'
+                application/xml:
+                  example: >-
+                    <?xml version="1.0"
+                    encoding="UTF-8"?><response_message><message>Precondition
+                    failed</message><status>409</status><status_label>Precondition
+                    failed</status_label></response_message>
+                  schema:
+                    $ref: '#/components/schemas/responseMessage'
+    get:
+      tags:
+        - Asset Registration API
+      summary: Get list of asset registration entries.
+      description: >
+        Get a list of asset registration entries.
+
+        Query parameters 'skip' and 'limit' provide paging support for the results.
+      parameters:
+        - $ref: '#/components/parameters/skipParam'
+        - $ref: '#/components/parameters/limitParam'
+      responses:
+        '200':
+          description: Get List of asset registration entries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/assetListSchema'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/assetListSchema'
+    parameters:
+      - $ref:  '#/components/parameters/acceptHeader'
+  '/assets/{id}':
+    get:
+      tags:
+        - Asset Registration API
+      summary: Get asset registration information for identifier.
+      description: >-
+        Get asset registration information for identifier. If the identifier is
+        ambiguous an HTTP 300 Multiple Choice response is returned with the
+        ability to page through results using skip and limit parameters.
+      parameters:
+        - $ref: '#/components/parameters/assetId'
+        - $ref: '#/components/parameters/skipFor300'
+        - $ref: '#/components/parameters/limitFor300'
+      responses:
+        '200':
+          description: OK. Asset registration information returned.
+          content:
+            application/json:
+              example:
+                $ref: '#/components/examples/assetInfoJSONExample/value'
+              schema:
+                $ref: '#/components/schemas/assetInfoSchema'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/assetInfoSchema'
+          headers:
+            ETag:
+              description: Entity Tag
+              schema:
+                type: string
+        '300':
+          description: Multiple entries found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multiChoiceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/multiChoiceResponse'
+        '404':
+          description: Asset registration entry not found
+    put:
+      tags:
+        - Asset Registration API
+      summary: Update asset registration entry.
+      parameters:
+        - $ref: '#/components/parameters/ifMatch'
+      requestBody:
+        $ref: '#/components/requestBodies/registerRequestBody'
+      responses:
+        '204':
+          description: No Content. Asset registration entry updated.
+          headers:
+            Location:
+              description: URL for the updated asset registration entry.
+              schema:
+                type: string
+        '300':
+          description: Multiple entries found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multiChoiceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/multiChoiceResponse'
+        '400':
+          description: Primary identifier not found.
+        '404':
+          description: Asset registration entry not found.
+        '412':
+          description: Precondition failed. ETag did not match for update.
+        '428':
+          description: Precondition required. Expecting If-Match header.
+    delete:
+      tags:
+        - Asset Registration API
+      summary: Remove an asset registration entry.
+      responses:
+        '204':
+          description: No Content. Asset registration entry removed.
+        '300':
+          description: Multiple entries found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/multiChoiceResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/multiChoiceResponse'
+        '404':
+          description: Asset registration entry not found.
+    parameters:
+      - $ref: '#/components/parameters/assetId'
+      - $ref: '#/components/parameters/acceptHeader'
+
+components:
+  parameters:
+    acceptHeader:
+      name: Accept
+      description: Accept header.
+      in: header
+      schema:
+        type: string
+        enum:
+          - application/json
+          - application/xml
+    assetId:
+      name: id
+      description: Asset identifier.
+      required: true
+      in: path
+      schema:
+        $ref: '#/components/schemas/identifierSchema'
+    etag:
+      name: ETag
+      description: Entity Tag
+      in: header
+      schema:
+        type: string
+    ifMatch:
+      name: If-Match
+      description: >-
+        Used for conditional update of initial asset registration entry. Value
+        should be set to ETag header value of get request.
+      required: true
+      in: header
+      schema:
+        type: string
+    ifNoneMatch:
+      name: If-None-Match
+      description: Used for conditional creation of initial asset entry.
+      required: false
+      in: header
+      schema:
+        type: string
+        enum:
+          - '*'
+    limitFor300:
+      name: limit
+      description: >-
+        Maxiumum number of records to return. This is applicable only if the
+        return result is an HTTP 300 Multiple Choice response.
+      in: query
+      schema:
+        $ref: '#/components/schemas/limitSchema'
+    limitParam:
+      name: limit
+      description: Maxiumum number of records to return.
+      in: query
+      schema:
+        $ref: '#/components/schemas/limitSchema'
+    location:
+      name: location
+      description: A url encoded location value
+      required: true
+      in: path
+      schema:
+        type: string
+    queryParam:
+      name: q
+      description: >
+        The query parameter ('q') takes the following ABNF form: 
+
+        ``` search_expression = sub_expression / search_expression
+        sub_expression
+          
+        sub_expression = expr / expr WSP
+            
+        expr = tagname / value
+          
+        tagname = TOKEN COLON
+            
+        value = TOKEN
+            
+        TOKEN = SYMBOL / DQUOTE DQUOTE / DQUOTE CHARS DQUOTE
+            
+        SYMBOL = 1*ALPHANUM
+            
+        ALPHANUM = ALPHA / DIGIT / ("." / "!" / "#" / "%" / "&" / "_" / "~" /
+        "-")
+            
+        COLON = ":"
+            
+        CHARS = 1*CHAR
+            
+        CHAR = ALPHA / DIGIT / UNESCAPEDCHAR / ESCAPEDCHAR / UNICODECHAR / WSP
+            
+        UNESCAPEDCHAR = "!" / "#" / "-" / "/" / ":" / "-" / "@" / "\" / "[" /
+        "-" / "`" / "{" / "-" / "~"
+            
+        ESCAPEDCHAR = "\" ("\" / "b" / "f" / "n" / "r" / "t" / "/")
+            
+        UNICODECHAR = "\u" 4*HEXDIG
+         
+        ```
+      in: query
+      schema:
+        type: string
+    skipFor300:
+      name: skip
+      description: >-
+        Number of records to skip before returning list. This is applicable only
+        if the return result is an HTTP 300 Multiple Choice response.
+      in: query
+      schema:
+        $ref: '#/components/schemas/skipParamSchema'
+    skipParam:
+      name: skip
+      description: Number of records to skip before returning list.
+      in: query
+      schema:
+        $ref: '#/components/schemas/skipParamSchema'
+  examples:
+    assetInfoJSONExample:
+      value:
+        file_size: 456345
+        file_type: cpl
+        identifiers:
+          - 'urn:sha1:0R5e2nhq3NjcIeaUqnDwc3t6XRo='
+          - 'urn:uuid:08db5408-2177-0580-dc08-06bfc80c2073'
+          - 'urn:x-short-digest:0R5e2nhq3NjcIeaUqnDwc3t6XRo='
+        locations:
+          - >-
+            E:\x-media\IMF\imf-plugfest-wip\disney-source\IO_Plugfest_ENG_mxf_v0.mxf
+          - /mnt/near_line/vol6/IO_Plugfest_ENG_mxf_v0.mxf
+          - >-
+            https://s3-us-west-2.amazonaws.com/region-test-us-west-2/imf-plugfest-wip/IO_Plugfest_ENG_mxf_v0.mxf
+  headers:
+    Location:
+      description: Location url asset registration entry.
+      schema:
+        type: string
+  requestBodies:
+    registerRequestBody:
+      description: Asset registration request body
+      required: true
+      content:
+        application/json:
+          example:
+            $ref: '#/components/examples/assetInfoJSONExample/value'
+          schema:
+            $ref: '#/components/schemas/assetInfoSchema'
+        application/xml:
+          schema:
+            $ref: '#/components/schemas/assetInfoSchema'
+  schemas:
+    assetInfoSchema:
+      type: object
+      required:
+        - identifiers
+        - locations
+      properties:
+        file_size:
+          type: integer
+        file_type:
+          type: string
+          enum:
+            - cc.ft.xml
+            - cc.ft.mxf
+            - cc.ft.asdcp-mpeg2-ves
+            - cc.ft.asdcp-jp2k-j2c
+            - cc.ft.asdcp-jp2k-j2c-stereo
+            - cc.ft.asdcp-pcm
+            - cc.ft.asdcp-text
+            - cc.ft.asdcp-aux-data
+            - cc.ft.asdcp-atmos
+            - cc.ft.cinecanvas
+            - cc.ft.png
+            - cc.ft.ttf
+            - cc.ft.otf
+            - cc.ft.cpl
+            - cc.ft.pkl
+            - cc.ft.map
+            - cc.ft.kdm
+            - cc.ft.dcdm-text
+            - cc.ft.imf-cpl
+            - cc.ft.as-02-jp2k-j2c
+            - cc.ft.as-02-pcm
+            - cc.ft.as-02-text
+            - cc.ft.ttml
+            - cc.ft.quicktime
+            - cc.ft.as-02-prores
+            - cc.ft.imf-opl
+            - cc.ft.imf-sidecar
+        identifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/identifierSchema'
+          xml:
+            name: identifiers
+            wrapped: true
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/locationSchema'
+          xml:
+            name: locations
+            wrapped: true
+      xml:
+        name: asset_info
+    assetListSchema:
+      type: object
+      required:
+        - skip
+        - limit
+        - total
+        - results
+      properties:
+        limit:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/assetInfoSchema'
+          xml:
+            name: results
+            wrapped: true
+        skip:
+          type: integer
+        total:
+          type: integer
+      xml:
+        name: asset_list
+    identifierSchema:
+      description: >-
+        Values to identify asset. Digest string values shall be prefixed (see
+        pattern) to discriminate between possible equivalent alternatives.
+        Multiple identifiers may be associated with a given asset. Hash-based
+        (sha1, c4, etc) values shall be unique to each registration entry.
+      type: string
+      pattern: '^(urn:uuid:|urn:sha1:|urn:c4id:|urn:eidr:|urn:x-).*'
+    limitAllSchema:
+      description: >-
+        A value of ALL for limit will result in the maximum number of entries
+        allowed by the system (max limit)
+      type: string
+      enum:
+        - ALL
+    limitSchema:
+      oneOf:
+        - $ref: '#/components/schemas/limitValueSchema'
+        - $ref: '#/components/schemas/limitAllSchema'
+    limitValueSchema:
+      description: >-
+        A limit can be an integer value indicating the maximum of entries to
+        return in a query. A limit value set greater than the system's internal
+        max limit value will be clamped to the max limit value number.
+      type: integer
+      default: 20
+    locationSchema:
+      type: string
+      xml:
+        name: location
+    multiChoiceResponse:
+      type: object
+      properties:
+        limit:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/assetInfoSchema'
+        skip:
+          type: integer
+        total:
+          type: integer
+      xml:
+        name: multi_choice_response
+    responseMessage:
+      type: object
+      properties:
+        message:
+          type: string
+        status:
+          description: HTTP status code.
+          type: integer
+        status_label:
+          type: string
+      xml:
+        name: response_message
+    skipParamSchema:
+      type: integer
+      default: 0
