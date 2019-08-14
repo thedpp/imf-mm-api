@@ -10,6 +10,6 @@
         "type":"local"
     },
     "imf_asset_folders":[
-        "__test__/assets_imf"
+        "__test__/assets-imf"
     ]
 }

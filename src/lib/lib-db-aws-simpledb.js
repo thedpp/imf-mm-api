@@ -113,29 +113,39 @@ const init = async function (params) {
   return _create_domain()
 }
 
+/** reset the database
+ * 
+ * @param {Object} params 
+ * @param {String} params.domain_name
+ */
+const reset = async function (params) {
+  return new Promise((resolve, reject) => {
+    reject(new Error('Reset not implemented for SimpleDB'))
+  })
+}
+
 /** return information about a domain (i.e. database name)
  * 
  */
 const info = async function (params) {
   var domain_name = (undefined == params.domain_name) ? option.domain_name : params.domain_name
 
-  return new Promise(
-    (resolve, reject) => {
-      sdb.domainMetadata(domain_name, async function (err, res, meta) {
-        if (err) {
-          if (err.Code == "NoSuchDomain") {
-            reject(`No such Database: ${option.domain_name}`)
-          }
-          reject(err)
-        } else {
-          resolve({
-            db_type: 'aws simple db',
-            db_name: domain_name,
-            asset_count: res.ItemCount,
-          })
+  return new Promise((resolve, reject) => {
+    sdb.domainMetadata(domain_name, async function (err, res, meta) {
+      if (err) {
+        if (err.Code == "NoSuchDomain") {
+          reject(`No such Database: ${option.domain_name}`)
         }
-      })
+        reject(err)
+      } else {
+        resolve({
+          db_type: 'aws simple db',
+          db_name: domain_name,
+          asset_count: res.ItemCount,
+        })
+      }
     })
+  })
 }
 
 
@@ -193,3 +203,4 @@ module.exports.init = init
 module.exports.info = info
 module.exports.post = post
 module.exports.get = get
+module.exports.reset = reset

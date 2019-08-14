@@ -120,4 +120,3 @@ to replicate the s3 bucket storage and replicated the SimpleDB back end:
     ]
 }
 ```
-

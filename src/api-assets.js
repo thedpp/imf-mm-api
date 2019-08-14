@@ -21,8 +21,10 @@ const not_implemented = async function (ctx, next) {
 }
 
 const get_assets = async function (ctx, next) {
+  let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
+  let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
   // asynchronously fetch the first page from the database
-  let assets = await db.get(config.get('default_get_limit'))
+  let assets = await db.get(skip, limit)
 
   //format the results according to the API spec
   let api_response = dbtk.asset_TO_api_get_results(assets)
@@ -37,8 +39,10 @@ const get_assets = async function (ctx, next) {
 }
 
 const get_assets_by_id = async function (ctx, next) {
+  let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
+  let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
   // asynchronously fetch the first page from the database
-  let assets = await db.get(config.get('default_get_limit'))
+  let assets = await db.get(skip, limit)
 
   //format the results according to the API spec
   let all_assets = dbtk.asset_TO_api_get_results(assets)
