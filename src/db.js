@@ -30,3 +30,4 @@ module.exports.init = db.init
 module.exports.info = db.info
 module.exports.post = db.post
 module.exports.get = db.get
+module.exports.reset = db.reset

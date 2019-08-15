@@ -5,6 +5,7 @@
   */
 /* jshint node: true */
 'use strict'
+const fs = require('fs')
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const config = require('config')
@@ -61,23 +62,39 @@ const init = async function (params) {
 const info = async function (params) {
     let info_filename = __get_db_filename(params)
 
-    return new Promise(
-        (resolve, reject) => {
-            try {
-                const info_adapter = new FileSync(info_filename)
-                const info_db = low(info_adapter)
-                let asset_count = info_db.get('assets')
-                    .size()
-                    .value()
-                resolve({
-                    db_type: 'local db (lowdb)',
-                    db_name: db_filename,
-                    asset_count: asset_count,
-                })
-            } catch (err) {
-                reject(err)
-            }
-        })
+    return new Promise((resolve, reject) => {
+        try {
+            const info_adapter = new FileSync(info_filename)
+            const info_db = low(info_adapter)
+            let asset_count = info_db.get('assets')
+                .size()
+                .value()
+            resolve({
+                db_type: 'local db (lowdb)',
+                db_name: db_filename,
+                asset_count: asset_count,
+            })
+        } catch (err) {
+            reject(err)
+        }
+    })
+}
+
+/** reset the current database deleting all the assets in it
+ * 
+ */
+const reset = async function (params) {
+    let db_filename = __get_db_filename(params)
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            fs.unlinkSync(db_filename)
+            await init(params)
+            resolve('ok')
+        } catch (err) {
+            reject(err)
+        }
+    })
 }
 
 /** Add or update a record */
@@ -116,12 +133,14 @@ const post = async function (asset) {
 }
 
 /** Get all records
- * @param {Integer} max_count the maximum number of queries to return 
+ * @param {Integer} skip the number of queries to skip
+ * @param {Integer} limit the maximum number of queries to return 
  * @returns {Array} of asset objects
  */
-const get = async function (max_count) {
+const get = async function (skip, limit) {
     return new Promise((resolve, reject) => {
         var data = db.get('assets')
+            .slice(skip, skip + limit)
             .value()
 
         let assets = []
@@ -137,3 +156,4 @@ module.exports.init = init
 module.exports.info = info
 module.exports.post = post
 module.exports.get = get
+module.exports.reset = reset

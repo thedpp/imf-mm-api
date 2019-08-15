@@ -2,7 +2,7 @@
     "version": "0.2",
     "annotation": "software_symbol: api_json_reponse_value",
     "alias": {
-        "am": "ft.map",
+        "map": "ft.map",
         "cpl": "ft.cpl",
         "mxf": "ft.mxf",
         "mxf.app2e": "ft.mxf.app2e",

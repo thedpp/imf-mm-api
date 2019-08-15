@@ -25,10 +25,10 @@
 const config = require('config')
 const moment = require('moment')
 const path = require('path')
-
 const log = require('pino')(config.get('log_options'))
 const u = require('./lib/util')
 const rJ = u.left_pad_for_logging
+const _module = path.basename(__filename)
 
 const Router = require('koa-router');
 const fs = require('fs')
@@ -39,7 +39,12 @@ const router = Router({ prefix: `/crawl`, })
 //get our crawler library
 const crawler = require('./lib/lib-crawl-fs')
 let crawl_id = 'idle'
+let asset_list = []
+let posted_count = 0
 
+/** return the status of the crawl
+ * @returns {number} from 0-100 indicating completion where 0-60 is scanning and 60-100 is updating dB
+ */
 const get_crawl_status = async (ctx, next) => {
   ctx.status = 200
   ctx.set('Content-Type', 'application/json')
@@ -47,16 +52,22 @@ const get_crawl_status = async (ctx, next) => {
   let status = {
     id: "idle",
     active: crawler.active,
+    report: (crawler.report) ? crawler.report : 'No crawl performed',
   }
   if (crawler.active) {
     status.root = path.resolve(config.get('imf_asset_folders')[0])
     let num_files = crawler.files.length
     let done = (crawler.report.added) ? crawler.report.added.length : 0
     done += (crawler.report.skipped) ? crawler.report.skipped.length : 0
-    status.progress = (num_files > 0) ? 100 * done / num_files : 0
-  }else{
-    status.report = crawler.report
+    status.progress = (num_files > 0) ? 60 * done / num_files : 0
+  } else if (posted_count > 0) {
+    status.root = path.resolve(config.get('imf_asset_folders')[0])
+    let num_files = (crawler.report.added) ? crawler.report.added.length : 0
+    let done = (crawler.report.added) ? crawler.report.added.length : 0
+    status.progress = (num_files > 0) ? 60 + 40 * posted_count / num_files : 0
   }
+
+
   //prettify the JSON with an indent of 2
   ctx.body = JSON.stringify(status, undefined, 2)
 
@@ -69,15 +80,30 @@ const start_crawl_in_folder = async (ctx, next) => {
 
   // only crawl a single folder for now
   crawler.crawl(path.resolve(config.get('imf_asset_folders')[0]))
+    .then(async crawled_assets => {
+      asset_list = crawled_assets
+
+      let db = require('./db')
+
+      for (posted_count = 0; posted_count < asset_list.length; posted_count++) {
+        let posted = await db.post(asset_list[posted_count])
+          .catch(e => {
+            log.error(`${rJ(_module)}: Crawl db update: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+          })
+      }
+    })
+    .catch(e => {
+      log.error(`${rJ(_module)}: Crawl failed: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+    })
   //create a unique ID for this crawl
-  crawl_id = moment().format('crawl_YYYYMMDD-HHmmss.SSS')
+  crawl_id = "crawl-" + moment().format('YYYYMMDD-HHmmss.SS')
 
   ctx.body = JSON.stringify(
     {
       id: crawl_id,
       active: crawler.active,
       root: path.resolve(config.get('imf_asset_folders')[0]),
-      activity: "startting",
+      activity: "start",
       progress: 0,
     }
   )
@@ -87,8 +113,8 @@ const start_crawl_in_folder = async (ctx, next) => {
 
 router.get(`/`, get_crawl_status)
 router.get(`/:id`, get_crawl_status)
-router.get(`/start`, start_crawl_in_folder)
 router.post(`/start`, start_crawl_in_folder)
+router.delete(`/`, get_crawl_status)
 
 log.info(`${rJ('module:')} crawl-fs initialised`)
 
