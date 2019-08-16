@@ -149,9 +149,19 @@ const get = async function (skip, limit) {
     })
 }
 
+/** Get total count of all records
+ * @returns {Number} the number assets in the database
+ */
+const total = async function (skip, limit) {
+    return new Promise((resolve, reject) => {
+        resolve( db.get('assets').value().length )
+    })
+}
+
 //export the functions
+module.exports.get = get
 module.exports.init = init
 module.exports.info = info
-module.exports.post = post
-module.exports.get = get
 module.exports.reset = reset
+module.exports.post = post
+module.exports.total = total

@@ -28,7 +28,10 @@ const get_assets = async function (ctx, next) {
 
   //format the results according to the API spec
   let api_response = dbtk.asset_TO_api_get_results(assets)
-
+  api_response.skip = skip
+  api_response.limit = limit
+  api_response.total = await db.total()
+  
   //massage the response
   ctx.status = 200
   ctx.set('Content-Type', 'application/json')
@@ -45,12 +48,15 @@ const get_assets_by_id = async function (ctx, next) {
   let assets = await db.get(skip, limit)
 
   //format the results according to the API spec
-  let all_assets = dbtk.asset_TO_api_get_results(assets)
+  let api_response = dbtk.asset_TO_api_get_results(assets)
+  api_response.skip = skip
+  api_response.limit = limit
+  api_response.total = await db.total()
 
   let match
-  for (var i = 0; i < all_assets.results.length; i++) {
-    for (var j = 0; j < all_assets.results[i].identifiers.length; j++)
-      if (ctx.params.id == all_assets.results[i].identifiers[j]) {
+  for (var i = 0; i < api_response.results.length; i++) {
+    for (var j = 0; j < api_response.results[i].identifiers.length; j++)
+      if (ctx.params.id == api_response.results[i].identifiers[j]) {
         match = i
       }
   }
@@ -59,7 +65,7 @@ const get_assets_by_id = async function (ctx, next) {
 
   if (match) {
     ctx.status = 200
-    ctx.body = JSON.stringify([all_assets.results[match],])
+    ctx.body = JSON.stringify([api_response.results[match],])
   } else {
     ctx.status = 404
     ctx.body = `Asset ID not found ${ctx.params.id}`

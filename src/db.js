@@ -26,8 +26,9 @@ switch (config.get('database').type) {
 // export each method manually to help auto-complete
 // functions in IDE editors
 
-module.exports.init = db.init
-module.exports.info = db.info
-module.exports.post = db.post
 module.exports.get = db.get
+module.exports.info = db.info
+module.exports.init = db.init
+module.exports.post = db.post
 module.exports.reset = db.reset
+module.exports.total = db.total

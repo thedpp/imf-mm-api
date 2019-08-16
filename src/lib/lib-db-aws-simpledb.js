@@ -211,9 +211,33 @@ const get = async function (max_count) {
   })
 }
 
+/** Get total count of all records
+ * @returns {Number} the number assets in the database
+ * @todo handle big data:
+ * Amazon SimpleDB returns a single item called Domain with a Count attribute.
+ * If the count request takes more than five seconds, Amazon SimpleDB returns the number
+ *    of items that it could count and a next token to return additional results.
+ *    The client is responsible for accumulating the partial counts. 
+ * If Amazon SimpleDB returns a 408 Request Timeout, please resubmit the request. 
+ */
+const total = async function (skip, limit) {
+  return new Promise((resolve, reject) => {
+    var query = `select count(*) from \`${option.domain_name}\``
+
+    sdb.select(query, {}, function (err, res, meta) {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(res.count)
+      }
+    })
+  })
+}
+
 //export the functions - they should all be asynchronous!
+module.exports.get = get
 module.exports.init = init
 module.exports.info = info
 module.exports.post = post
-module.exports.get = get
 module.exports.reset = reset
+module.exports.total = total
