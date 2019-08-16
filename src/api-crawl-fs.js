@@ -88,12 +88,12 @@ const start_crawl_in_folder = async (ctx, next) => {
       for (posted_count = 0; posted_count < asset_list.length; posted_count++) {
         let posted = await db.post(asset_list[posted_count])
           .catch(e => {
-            log.error(`${rJ(_module)}: Crawl db update: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+            log.error(`${rJ(_module + ': ')}Crawl db update: ${e.message} from ${e.fileName}(${e.lineNumber})`)
           })
       }
     })
     .catch(e => {
-      log.error(`${rJ(_module)}: Crawl failed: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+      log.error(`${rJ(_module + ': ')}Crawl failed: ${e.message} from ${e.fileName}(${e.lineNumber})`)
     })
   //create a unique ID for this crawl
   crawl_id = "crawl-" + moment().format('YYYYMMDD-HHmmss.SS')
@@ -116,6 +116,6 @@ router.get(`/:id`, get_crawl_status)
 router.post(`/start`, start_crawl_in_folder)
 router.delete(`/`, get_crawl_status)
 
-log.info(`${rJ('module:')} crawl-fs initialised`)
+log.info(`${rJ('module: ')}crawl-fs initialised`)
 
 module.exports = router;

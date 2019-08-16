@@ -10,7 +10,7 @@ const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
 
-log.debug(`${rJ('mxf parse:')} init`)
+log.debug(`${rJ('mxf parse: ')}init`)
 
 const fs = require('fs')
 const path = require('path')

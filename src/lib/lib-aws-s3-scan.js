@@ -14,7 +14,7 @@ const metadata = {
 }
 
 var aws_auto_config = new AWS.Config();
-log.info(`${rJ('aws s3 scan key:')} ${aws_auto_config.credentials.accessKeyId}`)
+
 var s3 = new AWS.S3();
 
 //get the head metadata synchronously because we don't care about speed

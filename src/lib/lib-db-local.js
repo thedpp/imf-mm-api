@@ -119,14 +119,12 @@ const post = async function (asset) {
                 .find({ id: item_name, })
                 .assign({ value: asset, })
                 .write()
-                .then(resolve('ok'))
-                .catch(err => reject(err))
+            resolve('ok')
         } else {
             db.get('assets')
                 .push({ id: item_name, value: asset, })
                 .write()
-                .then(resolve('ok'))
-                .catch(err => reject(err))
+            resolve('ok')
         }
 
     })

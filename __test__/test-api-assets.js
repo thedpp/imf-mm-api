@@ -21,21 +21,21 @@ request = request(`http://localhost:${config.get('port')}`)
 let app
 
 beforeAll(async () => {
-    log.info(`${rJ('Jest starting:')} server booting on http://localhost:${config.get('port')}.`);
-    log.info(`${rJ('Jest db:')} ${config.get('port')}.`);
+    log.info(`${rJ('Jest starting: ')}server booting on http://localhost:${config.get('port')}.`);
+    log.info(`${rJ('Jest db: ')}${config.get('port')}.`);
     /// prevent race conditions by waiting for the server to be listening on its port
     try {
         app = require('../src/start_local')
         await request.get('/')
     } catch (e) {
-        log.error(`${rJ('Server failed to start:')} ${e}.`);
+        log.error(`${rJ('Server failed to start: ')}${e}.`);
     }
 });
 
 // close koa's http after each test
 afterAll(() => {
     app.server.mm_http_instance.close();
-    log.info(`${rJ('Jest finishing:')} ${__test} server shutdown.`);
+    log.info(`${rJ('Jest finishing: ')}${__test} server shutdown.`);
 });
 
 // Local test database may be empty here so check basic functions

@@ -19,19 +19,25 @@ const rJ = u.left_pad_for_logging
  * the AWS automatic mechanisms
 */
 var aws_auto_config = new AWS.Config();
-const sdb = new simpledb.SimpleDB({
-  keyid: aws_auto_config.credentials.accessKeyId,
-  secret: aws_auto_config.credentials.secretAccessKey,
-}) //, simpledb.debuglogger)
 
 //set the default domain name (i.e.table name) for simpledb
 // e.g. imf-mm-api-server-js-production
 let option = {}
 option.domain_name = `${config.get('app_name')}-${process.env.NODE_ENV}`
 
-log.info(`${rJ('aws sdb domain:')} ${option.domain_name}`)
-log.info(`${rJ('aws sdb    key:')} ${aws_auto_config.credentials.accessKeyId}`)
-
+/* The preferred way to provide credentials is via the environment variables
+ * If they are mising then don't initialise sdb and therefore nothing will
+ * ever run. An error will be thrown when init is called
+ */
+let sdb
+if (aws_auto_config.credentials) {
+  const sdb_instance = new simpledb.SimpleDB({
+    keyid: aws_auto_config.credentials.accessKeyId,
+    secret: aws_auto_config.credentials.secretAccessKey,
+  }) //, simpledb.debuglogger)
+  sdb = sdb_instance
+  log.info(`${rJ('aws sdb domain: ')}${option.domain_name}`)
+}
 
 //remember if we have initialised the library or not (to make external code easy)
 //initialised= false, pending, complete or failed
@@ -106,6 +112,13 @@ const _prepare_sdb_asset = function (asset) {
  * @param {String} params.domain_name
  */
 const init = async function (params) {
+  /* if the sdb object was not initialised then
+   * 99% of the time it's becaue of not credentials
+   * supplied
+   */
+  if (!sdb) {
+    throw(new Error('SimpleDB could not initialise - were credentials set in the Environment?'))
+  }
   initialised = 'pending'
   if (params && params.domain_name) {
     option.domain_name = params.domain_name

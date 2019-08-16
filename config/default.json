@@ -1,27 +1,38 @@
 {
-    "annotation": "Default config file. Credentials go in .env. OpenAPI reserved elements in default.yaml",
+    "_help": [
+        "Environemnt variable NODE_ENV controls the order that config files are loaded - see README.md",
+        "Credentials go in .env and are never checked into github",
+        "API messages are defined in the OpenAPI spec which is renamed and loaded as default.yaml",
+        "the default port is 3000 assuming any serious use of this demo software is behing a proxy like NGINX",
+        "config.api_prefix is the integer published version number for the url e.g. localhost:3000/1/assets",
+        "config.imf_asset_folders enumenrates a list of folders that the crawl API will search",
+        "default_get_limit controls the number of values returned in a page of the assets API"
+    ],
     "port": 3000,
-    "app_name": "imf-mm-api-demo-app(jack)",
-    "app_version": "0.1",
+    "app_name": "imf-mm-api-demo-app",
+    "app_version": "0.3",
     "app_authors": [
         "Mr MXF"
     ],
     "api_prefix": "1",
+    "database": {
+        "_help": "databsae.type is either 'local' or 'aws-simple-db'",
+        "type": "aws-simple-db",
+        "local_filename": "imf-mm-api-lowdb.json",
+        "simpledb_domain_name": "imf-mm-api-server-js"
+    },
+    "default_get_limit": 20,
     "enable":{
+        "_help": "these booleans turn individual APIs on or off depending on how you want the software to work",
         "admin": true,
         "assets": true,
         "crawl": true,
         "scan": true,
         "www": true
     },
-    "default_get_limit": 20,
-    "provider_id": "imf-mm-api Demo App",
-    "database": {
-        "type": "aws-simple-db",
-        "local_filename": "db-imf-mm-api-local.json",
-        "simpledb_domain_name": "imf-mm-api-server-js"
-    },
-    "imf_asset_folders":[],
+    "imf_asset_folders":[
+        "__test__/assets-imf"
+    ],
     "lambda": {
         "params": {
             "name": "imf-api-staging-test",
@@ -32,18 +43,19 @@
             "profile": "default"
         }
     },
+    "log_options": {
+        "_help": "you can set logging levels: fatal error warn info debug trace silent. prettyPrint and log_api_acces slow the world down",
+        "level": "error",
+        "prettyPrint": false,
+        "show_config_sources": false,
+        "log_api_access": false
+    },
+    "provider_id": "imf-mm-api Demo App",
     "s3_asset_buckets": [{
         "comment": "hierarichally scan below this public bs500 root for IMF assets",
         "arn": "arn:aws:s3:::imf-mm-api-media",
         "bucket": "imf-mm-api-media",
         "root": "media/bs500",
         "region": "us-east-2"
-    }],
-    "log_options": {
-        "commment": "levels: fatal error warn info debug trace silent",
-        "level": "error",
-        "prettyPrint": false,
-        "show_config_sources": false,
-        "log_api_access": true
-    }
+    }]
 }

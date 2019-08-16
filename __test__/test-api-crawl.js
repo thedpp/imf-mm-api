@@ -30,8 +30,8 @@ let test_db_type = "local"
 let test_db_path = path.join(__dirname, "__db__", "db-local-test-crawl")
 
 beforeAll(async () => {
-    log.info(`${rJ('Jest starting:')} server booting on http://localhost:${config.get('port')}.`);
-    log.info(`${rJ('Jest db:')} ${test_db_type} (${test_db_path}).`);
+    log.info(`${rJ('Jest starting: ')}server booting on http://localhost:${config.get('port')}.`);
+    log.info(`${rJ('Jest db: ')}${test_db_type} (${test_db_path}).`);
     /// prevent race conditions by waiting for the server to be listening on its port
     try {
         app = require('../src/start_local')
@@ -44,7 +44,7 @@ beforeAll(async () => {
 // AFTER: close koa's http after each test
 afterAll(async () => {
     app.server.mm_http_instance.close();
-    log.info(`${rJ('Jest finishing:')} server shutdown.`);
+    log.info(`${rJ('Jest finishing: ')}server shutdown.`);
 });
 
 // - - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -

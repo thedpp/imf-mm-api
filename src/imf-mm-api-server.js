@@ -49,10 +49,10 @@ server.mm_init = async function (option) {
             }
         })
         .catch((e) => {
-            log.error(`${rJ('server did not init')}: ${e}`)
-            log.error(`${rJ('NODE_ENV mode')}: ${process.env.NODE_ENV}`)
-            log.error(`${rJ('using db')}: ${config.get('database.type')}`)
-            log.error(`${rJ('will use  port')}: ${config.get('port')}`)
+            log.error(`${rJ('server did not init: ')}${e}`)
+            log.error(`${rJ('NODE_ENV mode: ')}${process.env.NODE_ENV}`)
+            log.error(`${rJ('using db: ')}${config.get('database.type')}`)
+            log.error(`${rJ('will use  port: ')}${config.get('port')}`)
             process.exit(1)
         })
 }

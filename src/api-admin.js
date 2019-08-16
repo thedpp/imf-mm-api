@@ -41,7 +41,7 @@ const get_system_info = async (ctx, next) => {
   // log all the config files used if needed
   if (config.get("log_options").show_config_sources) {
     let sources = config.util.getConfigSources()
-    status.config= []
+    status.config = []
     let n = 0
     sources.forEach((source) => {
       status.config.push(`${n++} from ${source.name}`)
@@ -77,7 +77,7 @@ const reset_db = async (ctx, next) => {
   let db = require('./db')
   let posted = await db.reset()
     .catch(e => {
-      log.error(`${rJ(_module)}: reset db: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+      log.error(`${rJ(_module + ': ')}reset db: ${e.message} from ${e.fileName}(${e.lineNumber})`)
       ctx.body = JSON.stringify(
         {
           db_type: db.type,
@@ -98,6 +98,6 @@ router.get(`/info`, get_system_info)
 router.get(`/db-info`, get_database_info)
 router.delete(`/db`, reset_db)
 
-log.info(`${rJ('module:')} api-admin initialised`)
+log.info(`${rJ('module: ')}api-admin initialised`)
 
 module.exports = router;

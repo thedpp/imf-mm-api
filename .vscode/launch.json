@@ -8,14 +8,13 @@
     "configurations": [{
             "type": "node",
             "request": "launch",
-            "name": "local-Windows",
-            "program": "${workspaceFolder}\\src\\start_local.js",
-            "envFile": "${workspaceFolder}/.env",
+            "name": "local",
+            "program": "${workspaceFolder}/src/start_local.js",
             "outputCapture": "std",
         }, {
             "type": "node",
             "request": "launch",
-            "name": "local-Linux",
+            "name": "local (use .env)",
             "program": "${workspaceFolder}/src/start_local.js",
             "envFile": "${workspaceFolder}/.env",
             "outputCapture": "std",

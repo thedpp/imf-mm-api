@@ -52,6 +52,6 @@ const scan_s3_bucket = async function (ctx, next) {
 router.use('/', not_implemented)
 router.get('/s3', scan_s3_bucket)
 
-log.info(`${rJ('module:')} scan s3 initialised`)
+log.info(`${rJ('module: ')}scan s3 initialised`)
 
 module.exports = router;

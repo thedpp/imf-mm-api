@@ -91,6 +91,6 @@ router.post(`/${config.get('api_prefix')}/assets/:id`, not_implemented)
 
 router.delete(`/${config.get('api_prefix')}/assets:id`, not_implemented)
 
-log.info(`${rJ('module:')} api-assets initialised`)
+log.info(`${rJ('module: ')}api-assets initialised`)
 
 module.exports = router;

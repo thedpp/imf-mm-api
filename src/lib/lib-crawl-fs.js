@@ -39,7 +39,7 @@ module.exports.crawl = async (folder) => {
             // get a list of all the files
             files = await iterate(folder)
             length = files.length
-            //log.debug(`${rJ('fs crawl:')} ${files.length} files in ${folder}`)
+            //log.debug(`${rJ('fs crawl: ')}${files.length} files in ${folder}`)
 
             //now inspect the files one by one with a new, clean inspect instance
             for (current = 0; current < length; current++) {
