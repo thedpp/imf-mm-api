@@ -19,16 +19,7 @@ const file_type = require('../src/asset_types.json')
 var test_root = path.join(__dirname, 'assets-imf')
 var empty_root = path.join(__dirname, 'assets-imf', 'empty')
 
-var asset0 = path.join(test_root, 'tones', 'imf-mm-api-test00')
-var asset1 = path.join(test_root, 'tones', 'imf-mm-api-test01')
-var asset2 = path.join(test_root, 'tones', 'imf-mm-api-test02')
-var asset3 = path.join(test_root, 'noise', 'imf-mm-api-test03')
-
-var v_path = path.join(asset0, 'test00-imf-mm-api_v0.mxf')
-var a_path = path.join(asset1, 'test01-imf-mm-api_a0.mxf')
-var map_path = path.join(asset0, 'ASSETMAP.xml')
-var cpl_path = path.join(asset1, 'CPL_210ff802-c83f-4235-a5cd-c334447f98e6.xml')
-var pkl_path = path.join(asset2, 'PKL_bee099d5-f6e6-4e78-a408-c608a15960a9.xml')
+let tt = require('./test-data/test-asset-ids')
 
 describe(`${__test}: validate lib-imf-inspect`, () => {
     describe('test config', () => {
@@ -55,102 +46,105 @@ describe(`${__test}: validate lib-imf-inspect`, () => {
             expect(files.length).toEqual(1)
         })
 
-        test(`ASSETMAP file exists   (${map_path})`, () => {
-            expect(fs.statSync(map_path).isFile()).toEqual(true)
+        test(`ASSETMAP file exists   (${tt.map00_path})`, () => {
+            expect(fs.statSync(tt.map00_path).isFile()).toEqual(true)
         })
 
-        test(`CPL file exists (${cpl_path})`, () => {
-            expect(fs.statSync(cpl_path).isFile()).toEqual(true)
+        test(`CPL file exists (${tt.cpl02_path})`, () => {
+            expect(fs.statSync(tt.cpl02_path).isFile()).toEqual(true)
         })
 
-        test(`PKL file exists (${pkl_path})`, () => {
-            expect(fs.statSync(pkl_path).isFile()).toEqual(true)
+        test(`PKL file exists (${tt.pkl03_path})`, () => {
+            expect(fs.statSync(tt.pkl03_path).isFile()).toEqual(true)
         })
     })
 
     describe(`asset logic`, () => {
         test('read ASSETMAP', () => {
             let inspect = new imf_inspect()
-            return inspect.from(map_path)
+            return inspect.from(tt.map00_path)
                 .then(() => {
-                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(map_path).size, inspect.buffer_max_length))
+                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(tt.map00_path).size, inspect.buffer_max_length))
                 })
         })
         test('read CPL', () => {
             let inspect = new imf_inspect()
-            return inspect.from(cpl_path)
+            return inspect.from(tt.cpl02_path)
                 .then(() => {
-                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(cpl_path).size, inspect.buffer_max_length))
+                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(tt.cpl02_path).size, inspect.buffer_max_length))
                 })
         })
         test('read PKL', () => {
             let inspect = new imf_inspect()
-            return inspect.from(pkl_path)
+            return inspect.from(tt.pkl03_path)
                 .then(() => {
-                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(pkl_path).size, inspect.buffer_max_length))
+                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(tt.pkl03_path).size, inspect.buffer_max_length))
                 })
         })
         test('read video', () => {
             let inspect = new imf_inspect()
-            return inspect.from(v_path)
+            return inspect.from(tt.v00_path)
                 .then(() => {
-                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(v_path).size, inspect.buffer_max_length))
+                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(tt.v00_path).size, inspect.buffer_max_length))
                 })
         })
         test('read audio', () => {
             let inspect = new imf_inspect()
-            return inspect.from(a_path)
+            return inspect.from(tt.a01_path)
                 .then(() => {
-                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(a_path).size, inspect.buffer_max_length))
+                    expect(inspect.buf_length).toEqual(Math.min(fs.statSync(tt.a01_path).size, inspect.buffer_max_length))
                 })
         })
         test('ASSETMAP is_xml, is_map, !is_cpl, !is_pkl', async () => {
             let inspect = new imf_inspect()
-            await inspect.from(map_path)
+            await inspect.from(tt.map00_path)
             expect(inspect.is_xml()).toEqual(true)
             expect(inspect.is_map()).toEqual(true)
             expect(inspect.is_cpl()).toEqual(false)
             expect(inspect.is_pkl()).toEqual(false)
-            expect(inspect.imf_xml_id()).toEqual('urn:uuid:87c7dc7c-8087-4f24-b29f-1ba925e93ff9')
+            expect(inspect.imf_xml_id()).toEqual(tt.map00_id)
         })
         test('PKL is_xml, is_pkl, !is_map, !is_cpl', async () => {
             let inspect = new imf_inspect()
-            await inspect.from(pkl_path)
+            await inspect.from(tt.pkl03_path)
             expect(inspect.is_xml()).toEqual(true)
             expect(inspect.is_map()).toEqual(false)
             expect(inspect.is_cpl()).toEqual(false)
             expect(inspect.is_pkl()).toEqual(true)
-            expect(inspect.imf_xml_id()).toEqual('urn:uuid:bee099d5-f6e6-4e78-a408-c608a15960a9')
+            expect(inspect.imf_xml_id()).toEqual(tt.pkl03_id)
         })
         let inspect = new imf_inspect()
         test('CPL is_xml, is_cpl, !is_map, !is_pkl', async () => {
             let inspect = new imf_inspect()
-            await inspect.from(cpl_path)
+            await inspect.from(tt.cpl02_path)
             expect(inspect.is_xml()).toEqual(true)
             expect(inspect.is_map()).toEqual(false)
             expect(inspect.is_cpl()).toEqual(true)
             expect(inspect.is_pkl()).toEqual(false)
-            expect(inspect.imf_xml_id()).toEqual('urn:uuid:210ff802-c83f-4235-a5cd-c334447f98e6')
+            expect(inspect.imf_xml_id()).toEqual(tt.cpl02_id)
         })
     })
     describe(`is_imf logic`, () => {
         test('ASSETMAP is_imf', async () => {
             let inspect = new imf_inspect()
-            let imf = await inspect.imf_asset_record(map_path)
-            expect(imf.file_size).toEqual(fs.statSync(map_path).size)
-            expect(imf.file_type).toEqual(file_type.alias.mapl)
+            let imf = await inspect.imf_asset_record(tt.map00_path)
+            expect(imf.file_size).toEqual(fs.statSync(tt.map00_path).size)
+            expect(imf.file_type).toEqual(file_type.alias.map)
+            expect(imf.identifiers[0]).toEqual(tt.map00_id)
         })
         test('CPL is_imf', async () => {
             let inspect = new imf_inspect()
-            let imf = await inspect.imf_asset_record(cpl_path)
-            expect(imf.file_size).toEqual(fs.statSync(cpl_path).size)
+            let imf = await inspect.imf_asset_record(tt.cpl02_path)
+            expect(imf.file_size).toEqual(fs.statSync(tt.cpl02_path).size)
             expect(imf.file_type).toEqual(file_type.alias.cpl)
+            expect(imf.identifiers[0]).toEqual(tt.cpl02_id)
         })
         test('PKL is_imf', async () => {
             let inspect = new imf_inspect()
-            let imf = await inspect.imf_asset_record(pkl_path)
-            expect(imf.file_size).toEqual(fs.statSync(pkl_path).size)
+            let imf = await inspect.imf_asset_record(tt.pkl03_path)
+            expect(imf.file_size).toEqual(fs.statSync(tt.pkl03_path).size)
             expect(imf.file_type).toEqual(file_type.alias.pkl)
+            expect(imf.identifiers[0]).toEqual(tt.pkl03_id)
         })
     })
 })

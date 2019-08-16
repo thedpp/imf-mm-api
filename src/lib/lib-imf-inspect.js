@@ -267,6 +267,13 @@ module.exports = class IMF_inspect {
                 if (this.is_map()) {
                     this.asset_record.file_type = file_type.alias.map
                 }
+
+                // @todo - figure out how to return XML assets referenced by a SCM
+                // currently they will have no identifiers and will crash the parser
+                if(this.asset_record.file_type == file_type.alias.xml){
+                    resolve(false)
+                }
+
                 this.asset_record.file_size = stat.size
                 this.asset_record.identifiers.push(this.imf_xml_id())
                 this.update_common_asset_properties(file_path)

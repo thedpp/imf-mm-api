@@ -23,19 +23,10 @@ const imf_inspect = require('../src/lib/lib-imf-inspect')
 var test_root = path.join(__dirname, 'assets-imf')
 var empty_root = path.join(__dirname, 'assets-imf', 'empty')
 
-var asset0 = path.join(test_root, 'tones', 'imf-mm-api-test00')
-var asset1 = path.join(test_root, 'tones', 'imf-mm-api-test01')
-var asset2 = path.join(test_root, 'tones', 'imf-mm-api-test02')
-var asset3 = path.join(test_root, 'noise', 'imf-mm-api-test03')
+let tt = require('./test-data/test-asset-ids')
 
-var v_path = path.join(asset0, 'test00-imf-mm-api_v0.mxf')
-var a_path = path.join(asset1, 'test01-imf-mm-api_a0.mxf')
-var map_path = path.join(asset0, 'ASSETMAP.xml')
-var cpl_path = path.join(asset1, 'CPL_210ff802-c83f-4235-a5cd-c334447f98e6.xml')
-var pkl_path = path.join(asset2, 'PKL_bee099d5-f6e6-4e78-a408-c608a15960a9.xml')
-
-let v_tf_id = new mxf_lazy_parse().buffer_from_uuid('urn:uuid:b824189d.0a3049d3.82a8ea2b.758f50a7')
-let a_tf_id = new mxf_lazy_parse().buffer_from_uuid('urn:uuid:5682564a.66a74d51.979b9444.3748258f')
+let v_tf_id = new mxf_lazy_parse().buffer_from_uuid(tt.v00_id)
+let a_tf_id = new mxf_lazy_parse().buffer_from_uuid(tt.a01_id)
 
 describe(`${__test}: validate mxf-parse`, () => {
     describe('test config', () => {
@@ -62,12 +53,12 @@ describe(`${__test}: validate mxf-parse`, () => {
             expect(files.length).toEqual(1)
         })
 
-        test(`Video file exists   (${v_path})`, () => {
-            expect(fs.statSync(v_path).isFile()).toEqual(true)
+        test(`Video file exists   (${tt.v00_path})`, () => {
+            expect(fs.statSync(tt.v00_path).isFile()).toEqual(true)
         })
 
-        test(`Audio file exists (${a_path})`, () => {
-            expect(fs.statSync(a_path).isFile()).toEqual(true)
+        test(`Audio file exists (${tt.a01_path})`, () => {
+            expect(fs.statSync(tt.a01_path).isFile()).toEqual(true)
         })
     })
 
@@ -124,23 +115,23 @@ describe(`${__test}: validate mxf-parse`, () => {
             let parse
             let buf
 
-            await inspect.from( v_path )
+            await inspect.from( tt.v00_path )
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(true)
             
-            await inspect.from( a_path )
+            await inspect.from( tt.a01_path )
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(true)
             
-            await inspect.from( map_path )
+            await inspect.from( tt.map00_path )
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(false)
             
-            await inspect.from( cpl_path )
+            await inspect.from( tt.cpl02_path )
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(false)
             
-            await inspect.from( pkl_path )
+            await inspect.from( tt.pkl03_path )
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(false)
         })
@@ -150,9 +141,9 @@ describe(`${__test}: validate mxf-parse`, () => {
             expect(Buffer.isBuffer(parse.buffer_from_uuid(mxf_keys.MaterialPackage.key))).toEqual(true)
             expect(Buffer.isBuffer(parse.buffer_from_uuid(mxf_keys.SourcePackage.key))).toEqual(true)
         })
-        test(`video TrackFile ID (UMID) ${v_path}`, async () => {
+        test(`video TrackFile ID (UMID) ${tt.v00_path}`, async () => {
             let inspect = new imf_inspect()
-            await inspect.from(v_path)
+            await inspect.from(tt.v00_path)
             let parse = new mxf_lazy_parse(inspect.buffer())
 
             let umid = parse.get_source_package_umid()
@@ -162,9 +153,9 @@ describe(`${__test}: validate mxf-parse`, () => {
             //check the track file id is what we expect
             expect(umid.compare(v_tf_id, 0, 16, 16)).toEqual(0)
         })
-        test(`audio TrackFile ID (UMID) ${a_path}`, async () => {
+        test(`audio TrackFile ID (UMID) ${tt.a01_path}`, async () => {
             let inspect = new imf_inspect()
-            await inspect.from(a_path)
+            await inspect.from(tt.a01_path)
             let parse = new mxf_lazy_parse(inspect.buffer())
 
             let umid = parse.get_source_package_umid()
@@ -174,18 +165,18 @@ describe(`${__test}: validate mxf-parse`, () => {
             //check the track file id is what we expect
             expect(umid.compare(a_tf_id, 0, 16, 16)).toEqual(0)
         })
-        test(`video TrackFile ID (direct) ${v_path}`, async () => {
+        test(`video TrackFile ID (direct) ${tt.v00_path}`, async () => {
             let inspect = new imf_inspect()
-            await inspect.from(v_path)
+            await inspect.from(tt.v00_path)
             let parse = new mxf_lazy_parse(inspect.buffer())
 
             let tf_id = parse.get_track_file_id()
             expect(tf_id.length).toEqual(16)
             expect(tf_id.compare(v_tf_id)).toEqual(0)
         })
-        test(`audio TrackFile ID (direct) ${a_path}`, async () => {
+        test(`audio TrackFile ID (direct) ${tt.a01_path}`, async () => {
             let inspect = new imf_inspect()
-            await inspect.from(a_path)
+            await inspect.from(tt.a01_path)
             let parse = new mxf_lazy_parse(inspect.buffer())
 
             let tf_id = parse.get_track_file_id()
