@@ -1,0 +1,30 @@
+{
+  "application": "#2e",
+  "mode": "Strict",
+  "impParametersXML": "\u003c?xml version\u003d\"1.0\" encoding\u003d\"UTF-8\" standalone\u003d\"yes\"?\u003e\r\n\u003cimfparameters xmlns\u003d\"http://www.dalet.com/imf/parameters\" \r\n    xmlns:xsi\u003d\"http://www.w3.org/2001/XMLSchema-instance\"\u003e\r\n    \u003cinput\u003e\r\n        \u003cfile path\u003d\"D:\\Media\\imf-mm-api-src\\testP2-imf-mm-api-put-post-2.mxf\" IncludeInPKL\u003d\"true\" CreateTrackFileBy\u003d\"transcode\"\u003e\r\n            \u003ctrackfilealias id\u003d\"V_OV\"/\u003e\r\n            \u003ctrackfilealias id\u003d\"A_OV\" index\u003d\"0\"/\u003e\r\n        \u003c/file\u003e\r\n    \u003c/input\u003e\r\n\r\n    \u003cdescriptors\u003e\r\n        \u003ccore\u003e\r\n            \u003cAnnotation language\u003d\"en\"\u003eimf-mm-api IMF CPL - testP2\u003c/Annotation\u003e\r\n            \u003cIssueDate\u003e2019-08-15T18:00:00-00:00\u003c/IssueDate\u003e\r\n            \u003cIssuer language\u003d\"en\"\u003eMr MXF Ltd\u003c/Issuer\u003e\r\n            \u003cCreator language\u003d\"en\"\u003eAmberFin V11.8.0.0.323521\u003c/Creator\u003e\r\n            \u003cContentOriginator language\u003d\"en\"\u003eMr MXF Ltd\u003c/ContentOriginator\u003e\r\n            \u003cContentTitle language\u003d\"en\"\u003eimf-mm-api-testP2 - PUT, POST and Delete #2\u003c/ContentTitle\u003e\r\n            \u003cContentKind\u003etest\u003c/ContentKind\u003e\r\n            \u003cContentVersionList\u003e\r\n                \u003cContentVersion\u003e\r\n                    \u003cId\u003etag:mrmxf.com,2019-08:imf-mm-api/testP2\u003c/Id\u003e\r\n                    \u003cLabelText\u003eimf-mm-api testP2\u003c/LabelText\u003e\r\n                \u003c/ContentVersion\u003e\r\n            \u003c/ContentVersionList\u003e\r\n        \u003c/core\u003e\r\n        \u003cpcm track\u003d\"AUDIO_eng_stereo\"\u003e\r\n            \u003cAudioChannelLabelSubDescriptor\u003e\r\n                \u003cMCATagSymbol\u003echLt\u003c/MCATagSymbol\u003e\r\n            \u003c/AudioChannelLabelSubDescriptor\u003e\r\n            \u003cAudioChannelLabelSubDescriptor\u003e\r\n                \u003cMCATagSymbol\u003echRt\u003c/MCATagSymbol\u003e\r\n            \u003c/AudioChannelLabelSubDescriptor\u003e\r\n            \u003cSoundfieldGroupLabelSubDescriptor\u003e\r\n                \u003cMCATagSymbol\u003esgLtRt\u003c/MCATagSymbol\u003e\r\n                \u003cRFC5646SpokenLanguage\u003een\u003c/RFC5646SpokenLanguage\u003e\r\n                \u003cMCATitleVersion\u003eEnglish\u003c/MCATitleVersion\u003e\r\n                \u003cMCAAudioElementKind\u003etest\u003c/MCAAudioElementKind\u003e\r\n            \u003c/SoundfieldGroupLabelSubDescriptor\u003e\r\n        \u003c/pcm\u003e\r\n    \u003c/descriptors\u003e\r\n    \u003coutput path \u003d \"D:\\Media\\testP2-imf-mm-api-put-post-2\"\u003e\r\n        \u003csegment\u003e\r\n            \u003csequence\u003e\r\n                \u003cresource trackfilealias\u003d\"V_OV\" /\u003e\r\n            \u003c/sequence\u003e\r\n            \u003csequence track\u003d\"AUDIO_eng_stereo\"\u003e\r\n                \u003cresource trackfilealias\u003d\"A_OV\" /\u003e\r\n            \u003c/sequence\u003e\r\n        \u003c/segment\u003e\r\n    \u003c/output\u003e\r\n\u003c/imfparameters\u003e\r\n",
+  "extensionXML": "",
+  "conversion": {
+    "template": "imf-mm-api",
+    "conversion": "api-App2eTrackFiles"
+  },
+  "mxfFileList": [
+    "D:\\Media\\testP2-imf-mm-api-put-post-2\\testP2-imf-mm-api-put-post-2_v0.mxf",
+    "D:\\Media\\testP2-imf-mm-api-put-post-2\\testP2-imf-mm-api-put-post-2_a0.mxf"
+  ],
+  "outputFolderPath": "D:\\Media\\testP2-imf-mm-api-put-post-2",
+  "appDataList": [
+    "D:\\Media\\testP2-imf-mm-api-put-post-2\\testP2-imf-mm-api-put-post-2_a0.mxf"
+  ],
+  "fileMapping": {
+    "V_OV": {
+      "type": "VIDEO",
+      "fileName": "D:\\Media\\testP2-imf-mm-api-put-post-2\\testP2-imf-mm-api-put-post-2_v0.mxf"
+    },
+    "A_OV": {
+      "type": "AUDIO",
+      "fileName": "D:\\Media\\testP2-imf-mm-api-put-post-2\\testP2-imf-mm-api-put-post-2_a0.mxf",
+      "associatedVideoId": "V_OV"
+    }
+  },
+  "notStrictMode": false
+}
