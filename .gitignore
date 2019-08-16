@@ -1,5 +1,6 @@
-# and local databases resulting from running the code
+# local databases resulting from running / testing the code
 /db/*.json
+__test__/__db-local__/*.json
 
 # all .env files
 **/*.env

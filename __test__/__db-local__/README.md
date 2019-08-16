@@ -1,0 +1,1 @@
+Just a dummy file to ensure that git does not optimize the folder away

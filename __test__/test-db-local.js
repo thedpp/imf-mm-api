@@ -23,7 +23,7 @@ var params = {
     local_filename: path.join(test_folder, config.get('database').local_filename),
 }
 var error_params = {
-    local_filename: path.join(test_folder, '^j:\\illegal%:filename'),
+    local_filename: path.join(test_folder, '^j:\\illegal%:filename.json'),
 }
 
 describe(`${__test}: local db`, () => {
