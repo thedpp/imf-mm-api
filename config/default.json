@@ -1,12 +1,19 @@
 {
     "annotation": "Default config file. Credentials go in .env. OpenAPI reserved elements in default.yaml",
     "port": 3000,
-    "app_name": "imf-mm-api-server-js",
+    "app_name": "imf-mm-api-demo-app(jack)",
     "app_version": "0.1",
     "app_authors": [
         "Mr MXF"
     ],
     "api_prefix": "1",
+    "enable":{
+        "admin": true,
+        "assets": true,
+        "crawl": true,
+        "scan": true,
+        "www": true
+    },
     "default_get_limit": 20,
     "provider_id": "imf-mm-api Demo App",
     "database": {
