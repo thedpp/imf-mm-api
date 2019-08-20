@@ -8,6 +8,7 @@ const Koa = require('koa');
 const pino = require('koa-pino-logger')({ prettyPrint: true, })
 const config = require('config')
 const process = require('process')
+var bodyParser = require('koa-bodyparser');
 
 const db = require('./db')
 const log = require('pino')(config.get('log_options'))
@@ -27,6 +28,9 @@ server.mm_init = async function (option) {
             if (config.get('log_options').log_api_access) {
                 server.use(pino)
             }
+
+            //load teh body parser
+            server.use(bodyParser())
 
             //load all the server modules depending on what was configured
             if (config.get('enable.www')) {

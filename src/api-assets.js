@@ -32,7 +32,7 @@ const get_assets = async function (ctx, next) {
   api_response.skip = skip
   api_response.limit = limit
   api_response.total = await db.total()
-  
+
   //massage the response
   ctx.status = 200
   ctx.set('Content-Type', 'application/json')
@@ -75,6 +75,22 @@ const get_assets_by_id = async function (ctx, next) {
   await next()
 }
 
+const add_new_asset = async function (ctx, next) {
+  let asset = ctx.request.body
+  if (asset) {
+    let ret = await db.post(asset)
+    if (ret = 'ok') {
+      ctx.status = 200
+    } else {
+      ctx.status = 400
+      let msg = config.get('paths./assets/post/responses/401/deescription')
+      ctx.body = msg
+    }
+  }
+
+  await next()
+}
+
 /* this instance of the app is configured to route one of:
  *    /staging/xxx
  *    /beta/xxx
@@ -94,7 +110,7 @@ router.get(`/${config.get('api_prefix')}/assets/:id`, get_assets_by_id)
 
 router.put(`/${config.get('api_prefix')}/assets/:id`, not_implemented)
 
-router.post(`/${config.get('api_prefix')}/assets/:id`, not_implemented)
+router.post(`/${config.get('api_prefix')}/assets/`, add_new_asset)
 
 router.delete(`/${config.get('api_prefix')}/assets:id`, not_implemented)
 

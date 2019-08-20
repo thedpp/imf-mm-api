@@ -1,4 +1,4 @@
-var update_div_from_api = function (element_id, mode, url) {
+var update_div_from_api = function (element_id, mode, url, data) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
@@ -13,8 +13,8 @@ var update_div_from_api = function (element_id, mode, url) {
             }
             // Typical action to be performed when the document is ready:
             document.getElementById(element_id).innerHTML =
-                `<strong>Status</strong>: ${this.status}` +
-                `<br><strong>URL</strong>: ${xhr.responseURL}` +
+            `<strong>Status</strong>: ${this.status}<br>` +
+            `<strong>URL</strong>: ${xhr.responseURL}` +
                 ((num_assets) ? `<br><strong>results</strong>: ${num_assets}` : '') +
                 '<div id="api_res" style="border: solid 1px #9A3A73;padding:1px;">' +
                 `<br>${msg}</div><br>`
@@ -22,6 +22,23 @@ var update_div_from_api = function (element_id, mode, url) {
     };
     xhr.open(mode, url, true);
     document.getElementById(element_id).innerHTML = mode + url;
+    if (data) {
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.send(JSON.stringify(data))
+    } else (
+        xhr.send()
+    )
+}
+
+var get_data = function (url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            msg = xhr.responseText
+            callback(msg)
+        }
+    };
+    xhr.open('GET', url, true);
     xhr.send();
 }
 
@@ -41,6 +58,19 @@ let get_app_info = function () {
     xhr.send();
 }
 
+let get_test_data = function (callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            let data = JSON.parse(xhr.responseText)
+            callback(data)
+        }
+    };
+    //wait for the response of the call
+    xhr.open("GET", "/assets/js/demo-records.json", true);
+    xhr.send();
+}
+
 let synth = function (opt) {
     //tr
     let row = document.createElement('tr')
@@ -53,9 +83,13 @@ let synth = function (opt) {
     let button_cell = document.createElement('td')
     button_cell.setAttribute('align', 'left')
     let button = document.createElement('button')
-    button.addEventListener('click', function () { update_div_from_api(opt.element_id, opt.mode, opt.url) })
+    button.addEventListener('click', function () { update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) })
     button.innerHTML = `${opt.mode} ${opt.url} `
     button_cell.appendChild(button)
+    let help_text = document.createElement('span')
+    help_text.setAttribute('style', 'font-size:75%;font-style:italic;')
+    help_text.innerHTML = ` ${opt.help}`
+    button_cell.appendChild(help_text)
     //button styles: bootstrap default to match  swaggerhub default
     let button_style = {
         GET: 'btn-primary',
@@ -67,5 +101,5 @@ let synth = function (opt) {
     row.appendChild(button_cell)
     return row
 }
-
-get_app_info()
+var demo
+get_app_info();

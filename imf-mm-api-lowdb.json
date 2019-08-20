@@ -281,7 +281,7 @@
           "urn:uuid:3c6102bf-7049-4d13-be87-bff2544d920b"
         ],
         "locations": [
-          "/home/bruce/git-mmhub/imf-mm-api/__test__/assets-imf/testP1-imf-mm-api-put-post-1/ASSETMAP.xml"
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/ASSETMAP.xml"
         ],
         "providers": [
           "imf-mm-api Demo App"
