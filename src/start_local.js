@@ -4,6 +4,7 @@
 const u = require('./lib/util')
 //define a right Justification helper function to make logs more readable
 const rJ = u.left_pad_for_logging
+const _module = require('path').basename(__filename)
 
 /** This app requires a few environment variables to work properly
  *  these environment variables control which config is loaded
@@ -51,6 +52,9 @@ if (process.env.PORT_OVERRIDE) {
     listen_on_port = process.env.PORT_OVERRIDE
     console.log(`port: ${listen_on_port}`)
 }
+
+const demo = require('./demo-localize-test-data.js')
+demo.localize()
 
 log.info(rJ('Using config') + config.get('_help'))
 

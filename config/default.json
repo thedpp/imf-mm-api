@@ -23,10 +23,11 @@
     },
     "default_get_limit": 20,
     "enable":{
-        "_help": "these booleans turn individual APIs on or off depending on how you want the software to work",
+        "_help": "these booleans turn individual features and APIs on or off depending on how you want the software to work",
         "admin": true,
         "assets": true,
         "crawl": true,
+        "demo_localization": true,
         "scan": true,
         "www": true
     },

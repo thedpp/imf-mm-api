@@ -6,6 +6,8 @@
  */
 
 const config = require('config')
+const u = require('./lib/util')
+const _module = require('path').basename(__filename)
 
 let db
 let params = {}

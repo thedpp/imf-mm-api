@@ -13,6 +13,8 @@ const db = require('./db')
 const log = require('pino')(config.get('log_options'))
 const u = require('./lib/util')
 const rJ = u.left_pad_for_logging
+const _module = require('path').basename(__filename)
+
 let server = new Koa();
 
 server.mm_init = async function (option) {

@@ -9,6 +9,7 @@ const fs = require('fs')
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const config = require('config')
+const _module = require('path').basename(__filename)
 
 //the name of the local file to store the database is in config
 let adapter, db, db_filename

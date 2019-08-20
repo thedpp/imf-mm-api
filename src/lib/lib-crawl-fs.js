@@ -8,7 +8,8 @@ const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
 const path = require('path')
-const _module = path.basename(__filename)
+const _module = require('path').basename(__filename)
+
 log.debug(`${rJ(_module)} init`)
 
 const iterate = require('./lib-crawl-fs-iterate')

@@ -4,6 +4,7 @@ const config = require('config')
 const log = require('pino')(config.get('log_options'))
 const u = require('./lib/util')
 const rJ = u.left_pad_for_logging
+const _module = require('path').basename(__filename)
 
 const Router = require('koa-router');
 const router = Router({
