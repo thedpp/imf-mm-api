@@ -1,6 +1,7 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
+require('dotenv').config({ path: '__test__/.env', })
 
 /** lib-crawl-fs-inspect tester
  *
@@ -27,39 +28,39 @@ describe(`${__test}: validate lib-imf-inspect`, () => {
             expect(process.env.NODE_ENV).toEqual('test')
         })
 
-        test(`test_root folder exists   (${test_root})`, () => {
+        test(`test_root  exists   (${test_root})`, () => {
             expect(fs.statSync(test_root).isDirectory()).toEqual(true)
         })
 
-        test(`test_root folder has files (${test_root})`, () => {
+        test(`test_root has files (${test_root})`, () => {
             let files = fs.readdirSync(test_root)
             expect(files.length).toBeGreaterThan(0)
         })
 
-        test(`empty_root folder exists   (${empty_root})`, () => {
+        test(`empty_root exists (${empty_root})`, () => {
             expect(fs.statSync(empty_root).isDirectory()).toEqual(true)
         })
 
-        test(`empty_root folder is empty (${empty_root})`, () => {
+        test(`empty_root is empty (${empty_root})`, () => {
             let files = fs.readdirSync(empty_root)
             // a single .gitignore file to force git to commit and checkout the folder
             expect(files.length).toEqual(1)
         })
 
-        test(`ASSETMAP file exists   (${tt.map00_path})`, () => {
+        test(`ASSETMAP exists (${tt.map00_path})`, () => {
             expect(fs.statSync(tt.map00_path).isFile()).toEqual(true)
         })
 
-        test(`CPL file exists (${tt.cpl02_path})`, () => {
+        test(`CPL exists (${tt.cpl02_path})`, () => {
             expect(fs.statSync(tt.cpl02_path).isFile()).toEqual(true)
         })
 
-        test(`PKL file exists (${tt.pkl03_path})`, () => {
+        test(`PKL exists (${tt.pkl03_path})`, () => {
             expect(fs.statSync(tt.pkl03_path).isFile()).toEqual(true)
         })
     })
 
-    describe(`asset logic`, () => {
+    describe(`logic`, () => {
         test('read ASSETMAP', () => {
             let inspect = new imf_inspect()
             return inspect.from(tt.map00_path)

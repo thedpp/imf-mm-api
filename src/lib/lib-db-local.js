@@ -137,6 +137,9 @@ const post = async function (asset) {
  * @returns {Array} of asset objects
  */
 const get = async function (skip, limit) {
+    skip = (undefined == skip) ? 0 : skip
+    limit = (undefined == limit) ? config.get('default_get_limit') : limit
+    
     return new Promise((resolve, reject) => {
         var data = db.get('assets')
             .slice(skip, skip + limit)

@@ -1,6 +1,7 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
+require('dotenv').config({ path: '__test__/.env', })
 
 /** SimpleDb storage tester
  *

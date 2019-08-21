@@ -1,6 +1,11 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
+require('dotenv').config({ path: '__test__/.env', })
+
+/* jshint node: true */
+/* globals afterAll, beforeAll, describe, expect, test */
+'use strict'
 
 //ensure all the paths to the local node resources are found properly in lambda
 process.env.PATH = `${process.env.PATH}:${process.env.LAMBDA_TASK_ROOT}`;

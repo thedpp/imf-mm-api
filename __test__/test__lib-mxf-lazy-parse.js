@@ -1,6 +1,7 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
+require('dotenv').config({ path: '__test__/.env', })
 
 /** lib-crawl-fs-inspect tester
  *
@@ -28,26 +29,26 @@ let tt = require('./test-data/test-asset-ids')
 let v_tf_id = new mxf_lazy_parse().buffer_from_uuid(tt.v00_id)
 let a_tf_id = new mxf_lazy_parse().buffer_from_uuid(tt.a01_id)
 
-describe(`${__test}: validate mxf-parse`, () => {
-    describe('test config', () => {
+describe(`${__test}:`, () => {
+    describe('config', () => {
         test('process.env.NODE_ENV is "test"', () => {
             expect(process.env.NODE_ENV).toEqual('test')
         })
 
-        test(`test_root folder exists   (${test_root})`, () => {
+        test(`test_root exists (${test_root})`, () => {
             expect(fs.statSync(test_root).isDirectory()).toEqual(true)
         })
 
-        test(`test_root folder has files (${test_root})`, () => {
+        test(`test_root has files (${test_root})`, () => {
             let files = fs.readdirSync(test_root)
             expect(files.length).toBeGreaterThan(0)
         })
 
-        test(`empty_root folder exists   (${empty_root})`, () => {
+        test(`empty_root exists   (${empty_root})`, () => {
             expect(fs.statSync(empty_root).isDirectory()).toEqual(true)
         })
 
-        test(`empty_root folder is empty (${empty_root})`, () => {
+        test(`empty_root empty (${empty_root})`, () => {
             let files = fs.readdirSync(empty_root)
             // a single .gitignore file to force git to commit and checkout the folder
             expect(files.length).toEqual(1)
@@ -94,15 +95,9 @@ describe(`${__test}: validate mxf-parse`, () => {
         })
         test('buffer_from_uuid', () => {
             let parse = new mxf_lazy_parse()
-            function bad_uuid1() {
-                parse.buffer_from_uuid('this is an error')
-            }
-            function bad_uuid2() {
-                parse.buffer_from_uuid('urn:uuid:123456781234567812345678123456789')
-            }
             expect(_.isFunction(parse.buffer_from_uuid)).toEqual(true)
-            expect(bad_uuid1).toThrow(/ERROR: buffer_from_uuid/)
-            expect(bad_uuid2).toThrow(/ERROR: buffer_from_uuid/)
+            expect(() => { parse.buffer_from_uuid('this is an error') }).toThrow(/ERROR: buffer_from_uuid/)
+            expect(() => { parse.buffer_from_uuid('urn:uuid:123456781234567812345678123456789') }).toThrow(/ERROR: buffer_from_uuid/)
             let test_str = 'urn:uuid:12345678.12345678.12345678.12345678'
             let test_arr = [0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78, 0x12, 0x34, 0x56, 0x78,]
             let test_buf = Buffer.from(test_arr)
@@ -115,23 +110,23 @@ describe(`${__test}: validate mxf-parse`, () => {
             let parse
             let buf
 
-            await inspect.from( tt.v00_path )
+            await inspect.from(tt.v00_path)
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(true)
-            
-            await inspect.from( tt.a01_path )
+
+            await inspect.from(tt.a01_path)
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(true)
-            
-            await inspect.from( tt.map00_path )
+
+            await inspect.from(tt.map00_path)
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(false)
-            
-            await inspect.from( tt.cpl02_path )
+
+            await inspect.from(tt.cpl02_path)
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(false)
-            
-            await inspect.from( tt.pkl03_path )
+
+            await inspect.from(tt.pkl03_path)
             parse = new mxf_lazy_parse(inspect.buffer())
             expect(parse.is_mxf()).toEqual(false)
         })

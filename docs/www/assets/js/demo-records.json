@@ -76,7 +76,8 @@
     "file_size": 1346966,
     "file_type": "ft.mxf",
     "identifiers": [
-      "urn:uuid:3cbd6a6a-de57-745a-a47b-e16069e3581b"
+      "urn:uuid:3cbd6a6a-de57-4745-a47b-e16069e3581b",
+      "urn:sha1:4e7ff1b3f166e8864a42eb80161f5664b7551e79"
     ],
     "locations": [
       "/home/bruce/git-hub/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/testP1-imf-mm-api-put-post-1_a0.mxf"
@@ -100,7 +101,8 @@
     "file_size": 3295789,
     "file_type": "ft.mxf",
     "identifiers": [
-      "urn:uuid:987bfc4f-ecd2-246a-ada5-abf315d7a588"
+      "urn:uuid:987bfc4f-ecd2-4246-ada5-abf315d7a588",
+      "urn:sha1:285cc0a920040dc22099a5f0fec65cb5a7ec337b"
     ],
     "locations": [
       "/home/bruce/git-hub/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/testP1-imf-mm-api-put-post-1_v0.mxf"
@@ -197,7 +199,8 @@
     "file_size": 1346966,
     "file_type": "ft.mxf",
     "identifiers": [
-      "urn:uuid:f412b426-f1ad-2548-8f03-28df13ff9e50"
+      "urn:uuid:f412b426-f1ad-4254-8f03-28df13ff9e50",
+      "urn:sha1:c7c135673983bf30c0616913e7479cb609b4fb88"
     ],
     "locations": [
       "/home/bruce/git-hub/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/testP2-imf-mm-api-put-post-2_a0.mxf"
@@ -221,7 +224,8 @@
     "file_size": 3294509,
     "file_type": "ft.mxf",
     "identifiers": [
-      "urn:uuid:3670998f-7f1a-b0d8-88d7-f100433e2515"
+      "urn:uuid:3670998f-7f1a-4b0d-88d7-f100433e2515",
+      "urn:sha1:160867e202eb7d8ceaf484b5887bd56f7261b752"
     ],
     "locations": [
       "/home/bruce/git-hub/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/testP2-imf-mm-api-put-post-2_v0.mxf"

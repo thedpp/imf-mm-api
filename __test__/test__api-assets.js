@@ -1,64 +1,57 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
+require('dotenv').config({ path: '__test__/.env', })
 
-/** api-crawl jest test scripts
+/** api-assets jest test scripts
  * 
  */
 const config = require('config')
 const log = require('pino')(config.get('log_options'))
 const u = require('../src/lib/util')
 const rJ = u.left_pad_for_logging
-
 const path = require('path')
 const __test = path.basename(__filename)
 
-//The crawl API is not versioned and has no prefix
-const api = `crawl`
+const prefix = config.get('api_prefix')
+const api = `${config.get('api_prefix')}/assets`
 
 // Test the server using the test port (you can replace this with any URL)
 let request = require('supertest');
-let app
-//redefine request so that it uses the test port
 request = request(`http://localhost:${config.get('port')}`)
-
-
-// - - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -
-
-//BEFORE: to test the crawler we always use local database
-let test_db_type = "local"
-let test_db_path = path.join(__dirname, "__db__", "db-local-test-crawl")
+let app
 
 beforeAll(async () => {
     log.info(`${rJ('Jest starting: ')}server booting on http://localhost:${config.get('port')}.`);
-    log.info(`${rJ('Jest db: ')}${test_db_type} (${test_db_path}).`);
+    log.info(`${rJ('Jest db: ')}${config.get('port')}.`);
     /// prevent race conditions by waiting for the server to be listening on its port
     try {
         app = require('../src/start_local')
         await request.get('/')
     } catch (e) {
-        //nothing
+        log.error(`${rJ('Server failed to start: ')}${e}.`);
     }
 });
 
-// AFTER: close koa's http after each test
-afterAll(async () => {
+// close koa's http after each test
+afterAll(() => {
     app.server.mm_http_instance.close();
-    log.info(`${rJ('Jest finishing: ')}server shutdown.`);
+    log.info(`${rJ('Jest finishing: ')}${__test} server shutdown.`);
 });
 
-// - - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -
+// Local test database may be empty here so check basic functions
 
 describe(`${__test}: testing GET /${api}`, () => {
-    test.only(`GET /${api}`, async () => {
+    test(`GET /${api}`, async () => {
         //assert code 200, json content type and the body contains required 
         return request
             .get(`/${api}`)
             .expect(200)
             .expect('Content-Type', /json/)
-            .expect(/(\"id\")\:/)
-            .expect(/("id"):/)
-            .expect(/("active"):/)
+            .expect(/"limit":/)
+            .expect(/"results":/)
+            .expect(/"skip":/)
+            .expect(/"total":/)
     });
     test(`GET /${api}/`, async () => {
         //assert code 200, json content type and the body contains required 
@@ -66,10 +59,11 @@ describe(`${__test}: testing GET /${api}`, () => {
             .get(`/${api}/`)
             .expect(200)
             .expect('Content-Type', /json/)
-            .expect(/(\"id\")\:/)
-            .expect(/("id"):/)
-            .expect(/("active"):/)
+            .expect(/"limit":/)
+            .expect(/"results":/)
+            .expect(/"skip":/)
+            .expect(/"total":/)
     });
 });
 
-// Scan the test folder and build a local database (asssume that bit's working)
+// Scan the test folder and build a local database (asssum that bit's working)

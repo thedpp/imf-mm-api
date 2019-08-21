@@ -14,13 +14,13 @@
   },
   "jest": {
     "testMatch": [
-      "**/__test__/**/test*.[jt]s?(x)",
-      "**/__test__/-test-db-local.js",
-      "**/__test__/-test-lib-crawl-fs.js"
+      "**/test__*.[jt]s?(x)",
+      "**/xtest__db-local.js",
+      "**/xest__lib-crawl-fs.js"
     ],
     "roots": [
-      "./src/",
-      "./__test__"
+      "__test__/",
+      "src/"
     ],
     "reporters": [
       "default",

@@ -1,13 +1,14 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
-
+require('dotenv').config({ path: '__test__/.env',})
+console.log(process.env.NODE_ENV)
 /** db-local storage tester
  *
  */
 const fs = require('fs')
 const path = require('path')
-const __test = path.basename(__filename)
+const _module = path.basename(__filename)
 
 const config = require('config')
 const log = require('pino')(config.get('log_options'))
@@ -26,8 +27,8 @@ var error_params = {
     local_filename: path.join(test_folder, '^j:\\illegal%:filename.json'),
 }
 
-describe(`${__test}: local db`, () => {
-    describe('test config', () => {
+describe(`${_module}: local db`, () => {
+    describe('config', () => {
         test('process.env.NODE_ENV is "test"', () => {
             expect(process.env.NODE_ENV).toEqual('test')
         })
@@ -36,13 +37,13 @@ describe(`${__test}: local db`, () => {
             expect(fs.statSync(test_folder).isDirectory()).toEqual(true)
         })
 
-        test(`test_folder can be written (${test_folder})`, () => {
+        test(`can write test_folder (${test_folder})`, () => {
             //we get an exception if we can't write to the file
             let random_file = path.join(test_folder, `testy${Math.floor(Math.random()*1000)+1}.json`)
             fs.writeFileSync(random_file, '{"Just some test data":42}','utf8')
         })
 
-        test('we can delete all files in test folder', () => {
+        test('can delete files in test folder', () => {
             let files = fs.readdirSync(test_folder)
             //console.log('Files in test folder ....')
             //console.dir(files)
@@ -56,45 +57,63 @@ describe(`${__test}: local db`, () => {
 
     describe('dB core', () => {
 
-        test('info(db) rejects a promise if the dB cannot be used', () => {
+        test('info(bad_db) rejects a promise', () => {
             return local_db.info(error_params)
                 .catch(e =>
                     expect(e.message).toMatch(/ENOENT(.*)/)
                 )
         })
 
-        test('init a dB', () => {
+        test('init()', () => {
             return local_db.init(params)
                 .then(data => {
                     expect(data).toEqual('ok')
                 })
         })
 
-        test('returns metadata if the dB exists', () => {
+        test('db.info()', () => {
             return local_db.info()
                 .then(data => {
                     expect(data.db_name).toEqual(params.local_filename)
                 })
         })
 
-        test('add test_asset1 to a new dB', () => {
+        test('db.post(asset1)', () => {
             return local_db.post(test_asset1)
                 .then(data => {
                     expect(data).toEqual('ok')
                 })
         })
 
-        test('add test_asset2 to a new dB', () => {
+        test('db.post(asset2)', () => {
             return local_db.post(test_asset2)
                 .then(data => {
                     expect(data).toEqual('ok')
                 })
         })
 
-        test('get all assets from dB', () => {
-            return local_db.get(100)
+        test('db.get()', () => {
+            return local_db.get()
                 .then(data => {
                     expect(data.length).toEqual(2)
+                })
+        })
+        test('db.get(0,1)', () => {
+            return local_db.get(0, 1)
+                .then(data => {
+                    expect(data.length).toEqual(1)
+                })
+        })
+        test('db.get(1,1)', () => {
+            return local_db.get(1, 1)
+                .then(data => {
+                    expect(data.length).toEqual(1)
+                })
+        })
+        test('db.get(2,100)', () => {
+            return local_db.get(2, 100)
+                .then(data => {
+                    expect(data.length).toEqual(0)
                 })
         })
     })

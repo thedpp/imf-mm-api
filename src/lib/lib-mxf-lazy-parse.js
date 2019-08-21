@@ -93,7 +93,7 @@ module.exports = class MXF_Lazy_Parse {
       if (lower_str.startsWith(prefix[i])) {
         //remove prefix, dots and dodgy spaces
         uuid_digits = lower_str.substr(prefix[i].length)
-        uuid_digits = uuid_digits.replace(/[.\s]/g, '')
+        uuid_digits = uuid_digits.replace(/[-.\s]/g, '')
       }
     }
 
@@ -165,7 +165,7 @@ module.exports = class MXF_Lazy_Parse {
    */
   get_track_file_id_string() {
     let id = this.get_track_file_id().toString('hex')
-    return 'urn:uuid:' + id.substr(0, 8) + '-' + id.substr(8, 4) + '-' + id.substr(13, 4) + '-' + id.substr(16, 4) + '-' + id.substr(20)
+    return 'urn:uuid:' + id.substr(0, 8) + '-' + id.substr(8, 4) + '-' + id.substr(12, 4) + '-' + id.substr(16, 4) + '-' + id.substr(20)
   }
 
 }

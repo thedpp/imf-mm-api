@@ -11,14 +11,21 @@ let make_demo_buttons = function (response_element_id, data) {
         mode: "GET",
         url: '/',
         element_id: response_element_id,
-        help: 'should return the website home page to prove script is working',
+        help: 'return the website home page to prove script is working',
     }))
     rows.push(synth({
         label: "all assets",
         mode: "GET",
         url: `${api_prefix}/assets`,
         element_id: response_element_id,
-        help: 'should return first page of assets using default paging',
+        help: 'return first page of assets using default paging (defined in config file)',
+    }))
+    rows.push(synth({
+        label: "all assets",
+        mode: "GET",
+        url: `${api_prefix}/assets?limit=200`,
+        element_id: response_element_id,
+        help: 'return first page of assets - up to 200 assets',
     }))
     rows.push(synth({
         label: "assets (paging)",
