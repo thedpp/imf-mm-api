@@ -27,7 +27,7 @@ var error_params = {
     local_filename: path.join(test_folder, '^j:\\illegal%:filename.json'),
 }
 
-describe(`${_module}: local db`, () => {
+describe(`${_module}`, () => {
     describe('config', () => {
         test('process.env.NODE_ENV is "test"', () => {
             expect(process.env.NODE_ENV).toEqual('test')

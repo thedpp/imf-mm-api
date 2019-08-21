@@ -9,6 +9,7 @@ const _module = require('path').basename(__filename)
 const Router = require('koa-router')
 const router = Router()
 
+const validate_asset = require('./lib/lib-validate-asset-api-record')
 //get our database
 const db = require('./db')
 const dbtk = require('./lib/lib-db-toolkit')
@@ -77,14 +78,36 @@ const get_assets_by_id = async function (ctx, next) {
 
 const add_new_asset = async function (ctx, next) {
   let asset = ctx.request.body
-  if (asset) {
-    let ret = await db.post(asset)
-    if (ret = 'ok') {
-      ctx.status = 200
+
+  if (!validate_asset.request_headers(ctx)) {
+    ctx.status = 415
+    let status_label = config.get(`paths./assets.post.responses.${ctx.status}.content.application/json.example.status_label`)
+    let description = config.get(`paths./assets.post.responses.${ctx.status}.description`)
+    ctx.body = `${status_label} ${description}`
+  } else {
+    let good_json= validate_asset.json_values(asset)
+    if (good_json.statu<200) {
+      let ret = await db.post(asset)
+      if (ret = 'ok') {
+        ctx.status = 415
+        let status_label = config.get(`paths./assets.post.responses.${ctx.status}.content.application/json.example.status_label`)
+        let description = config.get(`paths./assets.post.responses.${ctx.status}.description`)
+        ctx.body = status_label
+
+        //Set the location header according to the API spec
+        ctx.set('Location', `${ctx.request.href}${asset.identifiers[0]}`)
+      } else {
+        ctx.status = 415
+        let status_label = config.get(`paths./assets.post.responses.${ctx.status}.content.application/json.example.status_label`)
+        let description = config.get(`paths./assets.post.responses.${ctx.status}.description`)
+        ctx.body = `${status_label} ${description}`
+      }
     } else {
-      ctx.status = 400
-      let msg = config.get('paths./assets/post/responses/401/deescription')
-      ctx.body = msg
+      //could not validate payload so reject with 415
+      ctx.status = good_json.status
+      let status_label = config.get(`paths./assets.post.responses.${ctx.status}.content.application/json.example.status_label`)
+      let description = config.get(`paths./assets.post.responses.${ctx.status}.description`)
+      ctx.body = `${status_label} ${good_json.help}\n${description}`
     }
   }
 

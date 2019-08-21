@@ -123,3 +123,11 @@ to replicate the s3 bucket storage and replicated the SimpleDB back end:
     ]
 }
 ```
+
+## API Change Log
+
+* 2019-08-23 v0.4 of the API
+   * Added 415 response when POST body cannot be parsed by server
+   * Documented ETag behaviour in GET /asset/{id}
+   * Changed locationProviderId to an array of strings and added documentation on aggregation
+* 2019-06-10 v0.3 of the API and its initial publication

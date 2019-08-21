@@ -105,6 +105,26 @@ paths:
                 failed</status_label></response_message>
               schema:
                 $ref: '#/components/schemas/responseMessage'
+        '415':
+          description: >
+            Unsupported Media Type. Parsing or other error during validation
+            of supplied registration data. 
+          content:
+            application/json:
+              example:
+                message: Unsupported Media Type
+                status: 415
+                status_label: Unsupported Media Type
+              schema:
+                $ref: '#/components/schemas/responseMessage'
+            application/xml:
+              example: >-
+                <?xml version="1.0"encoding="UTF-8"?>
+                <response_message><message>Unsupported Media Type</message>
+                <status>415</status>
+                <status_label>Unsupported Media Type</status_label></response_message>
+              schema:
+                $ref: '#/components/schemas/responseMessage'
     get:
       tags:
         - Asset Registration API
