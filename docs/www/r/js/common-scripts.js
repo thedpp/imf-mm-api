@@ -67,7 +67,7 @@ let get_test_data = function (callback) {
         }
     };
     //wait for the response of the call
-    xhr.open("GET", "/assets/js/demo-records.json", true);
+    xhr.open("GET", "/r/js/demo-records.json", true);
     xhr.send();
 }
 
