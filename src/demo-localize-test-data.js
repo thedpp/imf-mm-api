@@ -16,7 +16,8 @@ const path = require('path')
 const _module = require('path').basename(__filename)
 const fs = require('fs')
 
-const demo_json_filepath = 'docs/www/assets/js/demo-records.json'
+const demo_json_filepath = 'docs/www/r/js/test-records.json'
+const put_post_json_filepath = 'docs/www/r/js/put-post-records.json'
 
 module.exports.localize = async function () {
     if (!config.get('enable.demo_localization')) {
@@ -25,19 +26,34 @@ module.exports.localize = async function () {
     }
 
     const crawler = require('./lib/lib-crawl-fs')
-    crawler.crawl(path.resolve('__test__/assets-put-post/'))
+
+    //crawl the put post assets so that the web page can test properly
+    await crawler.crawl(path.resolve('__test__/assets-imf/'))
         .then(async crawled_assets => {
             asset_list = crawled_assets
             let asset_json = JSON.stringify(asset_list, undefined, 2)
-            try{
+            try {
                 fs.writeFileSync(demo_json_filepath, asset_json, 'utf-8')
-            } catch(e){
+            } catch (e) {
                 log.error(`${rJ(_module + ': ')}Crawl succeded but cannot write results to ${demo_json_filepath} from ${_module}.localize)`)
             }
         })
         .catch(e => {
-            log.error(`${rJ(_module + ': ')}Crawl failed: ${e.message} from ${_module}.localize)`)
+            log.error(`${rJ(_module + ': ')}Demo Crawl failed: ${e.message} from ${_module}.localize)`)
         })
 
-
+    //crawl the put post assets so that the web page can test properly
+    await crawler.crawl(path.resolve('__test__/assets-put-post/'))
+        .then(async crawled_assets => {
+            asset_list = crawled_assets
+            let asset_json = JSON.stringify(asset_list, undefined, 2)
+            try {
+                fs.writeFileSync(put_post_json_filepath, asset_json, 'utf-8')
+            } catch (e) {
+                log.error(`${rJ(_module + ': ')}Crawl succeded but cannot write results to ${put_post_json_filepath} from ${_module}.localize)`)
+            }
+        })
+        .catch(e => {
+            log.error(`${rJ(_module + ': ')}PUT POST Crawl failed: ${e.message} from ${_module}.localize)`)
+        })
 }

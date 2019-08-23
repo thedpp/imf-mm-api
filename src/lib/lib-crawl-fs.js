@@ -24,18 +24,26 @@ let current = 0
 let active = false
 let assets = []
 let report = { added: [], skipped: [], }
+let hash_table = []
 
 /** crawl a folder for IMF assets
  * 
  */
 module.exports.crawl = async (folder) => {
-    //reset the variables so we can track progress
-    active = true
-    let files = []
-    let current = 0
-    let hash_table = []
 
     return new Promise(async (resolve, reject) => {
+        if (active) {
+            reject('Crawl already in progress')
+        }
+        //reset the variables so we can track progress
+        active = true
+        length = 0
+        files = []
+        current = 0
+        assets = []
+        report = { added: [], skipped: [], }
+        hash_table = []
+
         try {
             // get a list of all the files
             files = await iterate(folder)

@@ -1,4 +1,7 @@
-var update_div_from_api = function (element_id, mode, url, data) {
+var data = {}
+data.total_results = 20
+
+var update_div_from_api = function (element_id, mode, url, payload) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
@@ -9,22 +12,29 @@ var update_div_from_api = function (element_id, mode, url, data) {
                 msg = JSON.parse(msg)
                 num_assets = msg.length
                 num_assets = (msg.results) ? msg.results.length : num_assets
+                data.total_results = (msg.total) ? msg.total : data.total_results
                 msg = `<pre>${JSON.stringify(msg, undefined, 2)}</pre>`
             }
+            let mclass = ' class="api500"'
+            if (this.status < 500) mclass = ' class="api400"' 
+            if (this.status < 400) mclass = ' class="api300"' 
+            if (this.status < 300) mclass = ' class="api200"' 
+            if (this.status < 200) mclass = ' class="api100"' 
+
             // Typical action to be performed when the document is ready:
             document.getElementById(element_id).innerHTML =
-            `<strong>Status</strong>: ${this.status}<br>` +
+            `<strong>Status</strong>: <span ${mclass}>${this.status} (${this.statusText})</span><br>` +
             `<strong>URL</strong>: ${xhr.responseURL}` +
                 ((num_assets) ? `<br><strong>results</strong>: ${num_assets}` : '') +
-                '<div id="api_res" style="border: solid 1px #9A3A73;padding:1px;">' +
-                `<br>${msg}</div><br>`
+                `<pre id="api_headers">${xhr.getAllResponseHeaders()}</pre>` +
+                `<div id="api_res_body">${msg}</div><br>`
         }
     };
     xhr.open(mode, url, true);
     document.getElementById(element_id).innerHTML = mode + url;
-    if (data) {
+    if (payload) {
         xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send(JSON.stringify(data))
+        xhr.send(JSON.stringify(payload))
     } else (
         xhr.send()
     )
@@ -67,7 +77,20 @@ let get_test_data = function (callback) {
         }
     };
     //wait for the response of the call
-    xhr.open("GET", "/r/js/demo-records.json", true);
+    xhr.open("GET", "/r/js/test-records.json", true);
+    xhr.send();
+}
+
+let get_put_post_data = function (callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+            let data = JSON.parse(xhr.responseText)
+            callback(data)
+        }
+    };
+    //wait for the response of the call
+    xhr.open("GET", "/r/js/put-post-records.json", true);
     xhr.send();
 }
 
@@ -86,6 +109,9 @@ let synth = function (opt) {
     button.addEventListener('click', function () { update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) })
     button.innerHTML = `${opt.mode} ${opt.url} `
     button_cell.appendChild(button)
+    if(opt.id){
+        button.setAttribute('id', opt.id)
+    }
     let help_text = document.createElement('span')
     help_text.setAttribute('style', 'font-size:75%;font-style:italic;')
     help_text.innerHTML = ` ${opt.help}`

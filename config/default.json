@@ -18,7 +18,7 @@
     "database": {
         "_help": "databsae.type is either 'local' or 'aws-simple-db'",
         "type": "aws-simple-db",
-        "local_filename": "imf-mm-api-lowdb.json",
+        "local_filename": "db/imf-mm-api-lowdb.json",
         "simpledb_domain_name": "imf-mm-api-server-js"
     },
     "default_get_limit": 20,
@@ -27,9 +27,10 @@
         "admin": true,
         "assets": true,
         "crawl": true,
-        "demo_localization": true,
         "scan": true,
-        "www": true
+        "www": true,
+        "demo_localization": true,
+        "extended_status_messages": true
     },
     "imf_asset_folders":[
         "__test__/assets-imf"

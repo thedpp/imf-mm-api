@@ -32,7 +32,7 @@ let json_values = (asset) => {
         status: 201,
         help: config.get('paths./assets.post.responses.201.content.application/json.example.status_label'),
     }
-    return true
+    return res
 }
 
 module.exports.request_headers = request_headers
