@@ -160,27 +160,10 @@ const delete_asset = async (ctx, next) => {
   await next()
 }
 
-/* this instance of the app is configured to route one of:
- *    /staging/xxx
- *    /beta/xxx
- *    /1/xxx
- * 
- * config.get('api_prefix') controls which of these
- */
-
-// router.get('/assets', get_assets)
-// router.get('/assets/:id', get_assets_by_id)
-// router.put('/assets/:id', not_implemented)
-// router.post('/assets/:id', not_implemented)
-// router.delete('/assets/:id', not_implemented)
-
 router.get(`/${config.get('api_prefix')}/assets`, get_assets)
 router.get(`/${config.get('api_prefix')}/assets/:id`, get_assets_by_id)
-
 router.put(`/${config.get('api_prefix')}/assets/:id`, not_implemented)
-
 router.post(`/${config.get('api_prefix')}/assets/`, add_new_asset)
-
 router.delete(`/${config.get('api_prefix')}/assets/:id`, delete_asset)
 
 log.info(`${rJ('module: ')}api-assets initialised`)

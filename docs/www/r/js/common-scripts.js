@@ -1,6 +1,3 @@
-var data = {}
-data.total_results = 20
-
 var update_div_from_api = function (element_id, mode, url, payload) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
@@ -12,22 +9,22 @@ var update_div_from_api = function (element_id, mode, url, payload) {
                 msg = JSON.parse(msg)
                 num_assets = msg.length
                 num_assets = (msg.results) ? msg.results.length : num_assets
-                data.total_results = (msg.total) ? msg.total : data.total_results
+                demo.total_results = (msg.total) ? msg.total : demo.total_results
                 msg = `<pre>${JSON.stringify(msg, undefined, 2)}</pre>`
             }
             let mclass = ' class="api500"'
-            if (this.status < 500) mclass = ' class="api400"' 
-            if (this.status < 400) mclass = ' class="api300"' 
-            if (this.status < 300) mclass = ' class="api200"' 
-            if (this.status < 200) mclass = ' class="api100"' 
+            if (this.status < 500) mclass = ' class="api400"'
+            if (this.status < 400) mclass = ' class="api300"'
+            if (this.status < 300) mclass = ' class="api200"'
+            if (this.status < 200) mclass = ' class="api100"'
 
             // Typical action to be performed when the document is ready:
             document.getElementById(element_id).innerHTML =
-            `<strong>Status</strong>: <span ${mclass}>${this.status} (${this.statusText})</span><br>` +
-            `<strong>URL</strong>: ${xhr.responseURL}` +
+                `<strong>Status</strong>: <span ${mclass}>${this.status} (${this.statusText})</span><br>` +
+                `<strong>URL</strong>: ${xhr.responseURL}` +
                 ((num_assets) ? `<br><strong>results</strong>: ${num_assets}` : '') +
-                `<pre id="api_headers">${xhr.getAllResponseHeaders()}</pre>` +
-                `<div id="api_res_body">${msg}</div><br>`
+                `<pre id="${demo.response_headers_id}">${xhr.getAllResponseHeaders()}</pre>` +
+                `<div id="${demo.response_body_id}">${msg}</div><br>`
         }
     };
     xhr.open(mode, url, true);
@@ -57,9 +54,12 @@ let get_app_info = function () {
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
             let inf = JSON.parse(xhr.responseText)
-            let h1 = document.getElementById('mode_info')
-            if (h1) {
-                h1.innerHTML = `<span style="font-size:50%">(${inf.app_name} v${inf.app_version} in ${inf.node_env} mode)</span>`
+            demo.info = inf
+            for (let z = 0; z < demo.overwrite_with_mode.length; z++) {
+                let thing = document.getElementById(demo.overwrite_with_mode[z])
+                if (thing) {
+                    thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} v${inf.app_version} in ${inf.node_env} mode)</span>`
+                }
             }
         }
     };
@@ -68,33 +68,47 @@ let get_app_info = function () {
     xhr.send();
 }
 
-let get_test_data = function (callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            let data = JSON.parse(xhr.responseText)
-            callback(data)
-        }
-    };
-    //wait for the response of the call
-    xhr.open("GET", "/r/js/test-records.json", true);
-    xhr.send();
+const get_test_data = async () => {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                let data = JSON.parse(xhr.responseText)
+                resolve(data)
+            }
+        };
+        //wait for the response of the call
+        xhr.open("GET", "/r/js/test-records.json", true);
+        xhr.send();
+    })
 }
 
-let get_put_post_data = function (callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            let data = JSON.parse(xhr.responseText)
-            callback(data)
+const get_non_crawl_data = async () => {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest()
+        xhr.open("GET", "/r/js/put-post-records.json", true);
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                let data = JSON.parse(xhr.responseText)
+                resolve(data)
+            }
         }
-    };
-    //wait for the response of the call
-    xhr.open("GET", "/r/js/put-post-records.json", true);
-    xhr.send();
+        //wait for the response of the call
+        xhr.send();
+    })
 }
 
 let synth = function (opt) {
+    if (opt.brk){
+        let row = document.createElement('tr')
+        let line = document.createElement('hr')
+        line.setAttribute('style', 'height:1;width:95%;margin:3px;')
+        let lcell = document.createElement('td')
+        lcell.setAttribute('colspan', 2)
+        lcell.appendChild(line)
+        row.appendChild(lcell)
+        return row
+    }
     //tr
     let row = document.createElement('tr')
     //td - label
@@ -109,7 +123,7 @@ let synth = function (opt) {
     button.addEventListener('click', function () { update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) })
     button.innerHTML = `${opt.mode} ${opt.url} `
     button_cell.appendChild(button)
-    if(opt.id){
+    if (opt.id) {
         button.setAttribute('id', opt.id)
     }
     let help_text = document.createElement('span')
@@ -127,5 +141,14 @@ let synth = function (opt) {
     row.appendChild(button_cell)
     return row
 }
-var demo
-get_app_info();
+const demo = {}
+demo.total_results = 20
+
+demo.overwrite_with_mode = ['mode_info',]
+demo.button_table_id = 'button-table'
+demo.response_body_id = 'api_res_body'
+demo.response_headers_id = 'api_headers'
+demo.response_id = 'api_res'
+
+//each page has its own script module that defines @async init_page()
+//@init_page() is executed as the last element in the HTNL page - poor man's race condition avoidance

@@ -18,12 +18,14 @@ let make_crawl_buttons = function (response_element_id) {
     return rows
 }
 
+const init_page = async() => {
+    await get_app_info()
 
-//synthesise the buttons
-let table_id = "crawl-button-table"
-let response_element_id = "api_res"
+    //synthesise the buttons
+    let response_element_id = demo.response_id
 
-let rows = make_crawl_buttons(response_element_id)
-for (row in rows){
-    document.getElementById(table_id).appendChild( rows[row] )
+    let rows = make_crawl_buttons(response_element_id)
+    for (let row in rows){
+        document.getElementById(demo.button_table_id).appendChild( rows[row] )
+    }
 }

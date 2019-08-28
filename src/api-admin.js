@@ -19,9 +19,19 @@ const fs = require('fs')
 //Prefix all routes for this API with /crawl
 const router = Router({ prefix: `/admin`, })
 
-
 /** return information about the system
- * @returns {JSON} 
+ *
+ * @typedef {Object} Admin_info_response
+ * @property {String} app_name the name of the app from the config
+ * @property {String} app_version the version of the app from the config
+ * @property {Array} app_authors the authors of the app from the config
+ * @property {String} api_prefix the prefix used for the Assets API from the config
+ * @property {String} provider_id the provider_id for assets registered by the running app from the config
+ * @property {String} db_type the database type of the running app from the config
+ * @property {String} log_level logging level from the config
+ * @property {String} node_env the environment variable NODE_ENV used in the running app
+
+ * @returns {Admin_info_response} 
  */
 const get_system_info = async (ctx, next) => {
   ctx.status = 200
@@ -55,6 +65,10 @@ const get_system_info = async (ctx, next) => {
 }
 
 /** return information about the databse
+ * 
+ * @typedef {Object} Database_info_response
+ * @property {String} app_name the name of the app from the config
+ * 
  * @returns {JSON} 
  */
 const get_database_info = async (ctx, next) => {

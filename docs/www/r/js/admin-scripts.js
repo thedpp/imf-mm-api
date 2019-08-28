@@ -26,11 +26,14 @@ let make_admin_buttons = function (response_element_id) {
     return rows
 }
 
-//synthesise the buttons
-let table_id = "admin-button-table"
-let response_element_id = "api_res"
+const init_page = async() => {
+    await get_app_info()
 
-let rows = make_admin_buttons(response_element_id)
-for (row in rows){
-    document.getElementById(table_id).appendChild( rows[row] )
+    //synthesise the buttons
+    let response_element_id = demo.response_id
+
+    let rows = make_admin_buttons(response_element_id)
+    for (let row in rows){
+        document.getElementById(demo.button_table_id).appendChild( rows[row] )
+    }
 }
