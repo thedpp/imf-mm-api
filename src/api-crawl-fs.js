@@ -38,38 +38,69 @@ const router = Router({ prefix: `/crawl`, })
 
 //get our crawler library
 const crawler = require('./lib/lib-crawl-fs')
+const crawl_ratio = 0.5
 let crawl_id = 'idle'
+let crawl_start
+let crawl_end
 let asset_list = []
 let posted_count = 0
 
 /** return the status of the crawl
+ * Depending on database and file system, we can be in a number of states:
+ *  - idle - nothing going on
+ *  - initialising - getting ready to crawl
+ *  - crawling #N - searching through file system #N
+ *  - posting #N - posting the results of file system #N to the database
+ *  - finishing - tidying up
  * @returns {number} from 0-100 indicating completion where 0-60 is scanning and 60-100 is updating dB
  */
 const get_crawl_status = async (ctx, next) => {
   ctx.status = 200
   ctx.set('Content-Type', 'application/json')
 
-  let status = {
-    id: "idle",
-    active: crawler.active,
-    report: (crawler.report) ? crawler.report : 'No crawl performed',
-  }
+  //determine the current state:
+  let state = 'idle'
   if (crawler.active) {
-    status.root = path.resolve(config.get('imf_asset_folders')[0])
-    let num_files = crawler.files.length
-    let done = (crawler.report.added) ? crawler.report.added.length : 0
-    done += (crawler.report.skipped) ? crawler.report.skipped.length : 0
-    status.progress = (num_files > 0) ? 60 * done / num_files : 0
-  } else if (posted_count > 0) {
-    status.root = path.resolve(config.get('imf_asset_folders')[0])
-    let num_files = (crawler.report.added) ? crawler.report.added.length : 0
-    let done = (crawler.report.added) ? crawler.report.added.length : 0
-    status.progress = (num_files > 0) ? 60 + 40 * posted_count / num_files : 0
+    state = 'crawling'
+  } else {
+    if (posted_count < asset_list.length) {
+      state = 'posting'
+    }
   }
 
+  let body = {
+    id: crawl_id,
+    start: crawl_start,
+    end: crawl_end,
+    state: state,
+    imf_asset_path: [],
+  }
+  for (let p = 0; p < 1; p++) {
+    let cstat = {
+      root: path.resolve(config.get('imf_asset_folders')[p]),
+    }
+
+    if (state == 'crawling') {
+      let num_files = crawler.files.length
+      let done = (crawler.report.added) ? crawler.report.added.length : 0
+      done += (crawler.report.skipped) ? crawler.report.skipped.length : 0
+      cstat.progress = (num_files > 0) ? crawl_ratio * done / num_files : 0
+      cstat.progress = `${Math.round(100 * cstat.progress)}%`
+    }
+
+    if (state == 'posting') {
+      let num_files = (crawler.report.added) ? crawler.report.added.length : 0
+      let done = (crawler.report.added) ? crawler.report.added.length : 0
+      cstat.progress = (num_files > 0) ? crawl_ratio + (1-crawl_ratio) *posted_count / num_files : 0
+      cstat.progress = `${Math.round(100 * cstat.progress)}%`
+    }
+    cstat.report = (crawler.report) ? crawler.report : 'No crawl performed'
+
+    body.imf_asset_path.push(cstat)
+  }
 
   //prettify the JSON with an indent of 2
-  ctx.body = JSON.stringify(status, undefined, 2)
+  ctx.body = JSON.stringify(body, undefined, 2)
 
   await next()
 }
@@ -101,9 +132,8 @@ const start_crawl_in_folder = async (ctx, next) => {
   ctx.body = JSON.stringify(
     {
       id: crawl_id,
-      active: crawler.active,
+      state: 'crawling',
       root: path.resolve(config.get('imf_asset_folders')[0]),
-      activity: "start",
       progress: 0,
     }
   )

@@ -85,13 +85,13 @@ const get_database_info = async (ctx, next) => {
 }
 
 const reset_db = async (ctx, next) => {
-  ctx.status = 201
   ctx.set('Content-Type', 'application/json')
 
   let db = require('./db')
   let posted = await db.reset()
     .catch(e => {
       log.error(`${rJ(_module + ': ')}reset db: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+      ctx.status = 500
       ctx.body = JSON.stringify(
         {
           db_type: db.type,
@@ -99,13 +99,14 @@ const reset_db = async (ctx, next) => {
         }
       )
     })
-    .then(x => {
-      ctx.body = JSON.stringify({
-        db_type: db.type,
-        db_status: 'reset',
-      })
+    .then(async (res) => {
+      ctx.status = 204
+      let info = await db.info()
+
+      //prettify the JSON with an indent of 2
+      ctx.body = JSON.stringify(info, undefined, 2)
+      await next()
     })
-  await next()
 };
 
 router.get(`/info`, get_system_info)
@@ -114,4 +115,4 @@ router.delete(`/db`, reset_db)
 
 log.info(`${rJ('module: ')}api-admin initialised`)
 
-module.exports = router;
+module.exports = router

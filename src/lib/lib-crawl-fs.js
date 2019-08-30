@@ -23,7 +23,7 @@ let files = []
 let current = 0
 let active = false
 let assets = []
-let report = { added: [], skipped: [], }
+const report = { added: [], skipped: [], }
 let hash_table = []
 
 /** crawl a folder for IMF assets
@@ -41,7 +41,8 @@ module.exports.crawl = async (folder) => {
         files = []
         current = 0
         assets = []
-        report = { added: [], skipped: [], }
+        report.added= []
+        report.skipped= []
         hash_table = []
 
         try {
@@ -79,11 +80,9 @@ module.exports.crawl = async (folder) => {
 
             //tidy up for asynchronous calls
             active = false
-            files = []
             resolve(assets)
         } catch (e) {
             active = false
-            files = []
             reject(e)
         }
     })

@@ -1,4 +1,10 @@
-var update_div_from_api = function (element_id, mode, url, payload) {
+const demo = {}
+
+demo.update_div_from_api = function (element_id, mode, url, payload) {
+    if (demo.close_danger_modal) {
+        //close and modal dialog
+        demo.close_danger_modal()
+    }
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
@@ -37,7 +43,7 @@ var update_div_from_api = function (element_id, mode, url, payload) {
     )
 }
 
-var get_data = function (url, callback) {
+demo.get_data = function (url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
@@ -49,7 +55,7 @@ var get_data = function (url, callback) {
     xhr.send();
 }
 
-let get_app_info = function () {
+demo.get_app_info = function () {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
@@ -58,7 +64,9 @@ let get_app_info = function () {
             for (let z = 0; z < demo.overwrite_with_mode.length; z++) {
                 let thing = document.getElementById(demo.overwrite_with_mode[z])
                 if (thing) {
-                    thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} v${inf.app_version} in ${inf.node_env} mode)</span>`
+                    thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} ` +
+                        `<span class="mm-highlight">v${inf.app_version}</span> in ` +
+                        `<span class="mm-highlight">${inf.node_env}</span> mode)</span>`
                 }
             }
         }
@@ -68,7 +76,7 @@ let get_app_info = function () {
     xhr.send();
 }
 
-const get_test_data = async () => {
+demo.get_test_data = async () => {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
@@ -83,7 +91,7 @@ const get_test_data = async () => {
     })
 }
 
-const get_non_crawl_data = async () => {
+demo.get_non_crawl_data = async () => {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest()
         xhr.open("GET", "/r/js/put-post-records.json", true);
@@ -98,8 +106,11 @@ const get_non_crawl_data = async () => {
     })
 }
 
-let synth = function (opt) {
-    if (opt.brk){
+/** this function is the standards button handler - it is removed for special buttons */
+demo.fn_update_div = function () { demo.update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) }
+
+demo.synth = function (opt) {
+    if (opt.brk) {
         let row = document.createElement('tr')
         let line = document.createElement('hr')
         line.setAttribute('style', 'height:1;width:95%;margin:3px;')
@@ -120,7 +131,11 @@ let synth = function (opt) {
     let button_cell = document.createElement('td')
     button_cell.setAttribute('align', 'left')
     let button = document.createElement('button')
-    button.addEventListener('click', function () { update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) })
+    if (opt.eventListener) {
+        button.addEventListener('click', opt.eventListener)
+    } else {
+        button.addEventListener('click', function () { demo.update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) })
+    }
     button.innerHTML = `${opt.mode} ${opt.url} `
     button_cell.appendChild(button)
     if (opt.id) {
@@ -141,7 +156,7 @@ let synth = function (opt) {
     row.appendChild(button_cell)
     return row
 }
-const demo = {}
+
 demo.total_results = 20
 
 demo.overwrite_with_mode = ['mode_info',]

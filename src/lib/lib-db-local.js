@@ -146,7 +146,7 @@ const get = async function (skip, limit) {
  * @param {String} id and identifier that you would find in the identifiers array
  * @returns {Array} of asset objects
  */
-const get_assets_by_id = async function (asset_id) {
+const get_assets_by_id = async function (skip, limit, asset_id) {
 
     return new Promise(async (resolve, reject) => {
         //look inside the identifiers array for the asset_id
@@ -193,7 +193,7 @@ const delete_assets_by_id = async function (asset_id) {
                 }
                 resolve(assets)
             } else {
-                // a single entry was foudn - return the 204 code
+                // a single entry was found - return the 204 code
                 data = await db.get('assets')
                     .remove({ value: { identifiers: [asset_id,], }, })
                     .write()

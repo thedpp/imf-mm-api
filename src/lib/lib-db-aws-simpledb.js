@@ -28,10 +28,8 @@ var aws_auto_config = new AWS.Config();
  * 
  */
 
-
-
 /* The preferred way to provide credentials is via the environment variables
- * If they are mising then don't initialise sdb and therefore nothing will
+ * If they are missing then don't initialise sdb and therefore nothing will
  * ever run. An error will be thrown when init is called
  */
 let sdb
@@ -42,6 +40,60 @@ if (aws_auto_config.credentials) {
   }) //, simpledb.debuglogger)
   sdb = sdb_instance
   log.info(`${rJ('aws sdb connect: ')}success`)
+}
+
+/**
+ * 
+ * @param {Simpledb_override_parameters} params 
+ */
+const _resolve_sdb_domain = (params) => {
+  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
+  sdb_domain = (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  return sdb_domain
+}
+
+/** promisify the select query to make the code easier to read
+ * 
+ */
+const _select = async (query, override) => {
+  return new Promise((resolve, reject) => {
+    if (!sdb) {
+      reject(new Error(`${rJ('aws sdb did not init: ')}select query failed`))
+    }
+    sdb.select(query, override, function (err, result, meta) {
+      if (err) {
+        reject(err)
+      }
+      resolve({ result: result, meta: meta, })
+    })
+  })
+}
+
+/** promisify a getNextToken query to make the code easier to read
+ * 
+ */
+const _getNextToken = async (skip, params) => {
+  let sdb_domain = _resolve_sdb_domain(params)
+
+  return new Promise(async (resolve, reject) => {
+    if (!sdb) {
+      reject(new Error(`${rJ('aws sdb did not init: ')}select query failed`))
+    }
+    if (skip == 0) {
+      //skip is zero so return undefined
+      resolve(undefined)
+    }
+    //do a dummy pointer reset of the database
+    let sdb_res = await _select(`select count(*) from \`${sdb_domain}\` limit ${skip}`)
+      .catch((err) => {
+        reject(err)
+      })
+    if (sdb_res && sdb_res.meta && sdb_res.meta.result && sdb_res.meta.result.SelectResult && sdb_res.meta.result.SelectResult.NextToken) {
+      resolve(sdb_res.meta.result.SelectResult.NextToken)
+    }
+    // we have run off the end of the data - return exactly false
+    resolve(false)
+  })
 }
 
 //remember if we have initialised the library or not (to make external code easy)
@@ -69,20 +121,41 @@ const handle_initialisation = function () {
  */
 const _create_domain = async function (simpledb_domain_name) {
   let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (simpledb_domain_name) ? simpledb_domain_name : sdb_domain
+  sdb_domain = (simpledb_domain_name) ? simpledb_domain_name : sdb_domain
 
   return new Promise((resolve, reject) => {
     sdb.createDomain(sdb_domain, function (err, res, meta) {
       if (err) {
-        reject(err)
         initialised = 'failed'
+        reject(err)
       } else {
-        resolve('ok')
         initialised = true
+        resolve('ok')
       }
     })
   })
 }
+
+/** Delete a domain
+ * @param {String} [simpledb_domain_name = config('database.simpledb_domain_name')]
+ */
+const _delete_domain = async function (simpledb_domain_name) {
+  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
+  sdb_domain = (simpledb_domain_name) ? simpledb_domain_name : sdb_domain
+
+  return new Promise((resolve, reject) => {
+    sdb.deleteDomain(sdb_domain, function (err, res, meta) {
+      if (err) {
+        //no change to initialised - state change is unknown
+        reject(err)
+      } else {
+        initialised = false
+        resolve('ok')
+      }
+    })
+  })
+}
+
 
 /** Clone a restored asset for returning to caller
  * @param {Object} sdb_asset returned from SimpleDB
@@ -121,8 +194,7 @@ const _prepare_sdb_asset = function (asset) {
  * @returns {String | Error} resolves to 'ok' or rejects with an error object
  */
 const init = async function (params) {
-  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  let sdb_domain = _resolve_sdb_domain(params)
 
   /* if the sdb object was not initialised then
    * 99% of the time it's becaue of not credentials
@@ -135,17 +207,19 @@ const init = async function (params) {
   return _create_domain(sdb_domain)
 }
 
-/** reset the database
+/** reset and recreate the database
  * 
  * @param {Simpledb_override_parameters} params 
  * @returns {String | Error} resolves to 'ok' or rejects with an error object
  */
 const reset = async function (params) {
-  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  let sdb_domain = _resolve_sdb_domain(params)
 
-  return new Promise((resolve, reject) => {
-    reject(new Error('Reset not implemented for SimpleDB'))
+  return new Promise(async (resolve, reject) => {
+    let deleted = await _delete_domain(sdb_domain)
+    if (deleted) {
+      resolve( _create_domain(sdb_domain))
+    }
   })
 }
 
@@ -158,8 +232,7 @@ const reset = async function (params) {
  * @returns {Simpledb_info_response}
  */
 const info = async function (params) {
-  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  let sdb_domain = _resolve_sdb_domain(params)
 
   return new Promise((resolve, reject) => {
     sdb.domainMetadata(sdb_domain, async function (err, res, meta) {
@@ -179,7 +252,6 @@ const info = async function (params) {
   })
 }
 
-
 /** Add or update a record 
  * 
  * @param {Sdb_asset} asset
@@ -188,8 +260,7 @@ const info = async function (params) {
  *
  */
 const post = async function (asset, params) {
-  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  let sdb_domain = _resolve_sdb_domain(params)
 
   return new Promise((resolve, reject) => {
     /* @todo use one of the identifiers (hash?) as the canonical record */
@@ -222,11 +293,52 @@ const post = async function (asset, params) {
  * @returns {Array | Error} resolves to array of asset objects or  rejects with an error object
  */
 const get = async function (skip, limit, params) {
-  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  let sdb_domain = _resolve_sdb_domain(params)
 
-  return new Promise((resolve, reject) => {
+  skip = (undefined == skip) ? 0 : skip
+  limit = (undefined == limit) ? config.get('default_get_limit') : limit
+
+  return new Promise(async (resolve, reject) => {
+    let token = await _getNextToken(skip, params)
+
+    //a value of false means that we've run off the end of the data
+    if (token == false) {
+      resolve([])
+    }
+
     var query = `select * from \`${sdb_domain}\``
+    query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
+
+    //if we are paging then set the NextToken
+    let override = (token) ? { NextToken: token, } : {}
+
+    sdb.select(query, override, function (err, res, meta) {
+      if (err) {
+        reject(err)
+      } else {
+        let assets = []
+        for (var r = 0; r < res.length; r++) {
+          assets.push(_clean_sdb_asset(res[r]))
+        }
+        resolve(assets)
+      }
+    })
+  })
+}
+
+/** Get (a single) asset by id
+ * @param {Integer} skip the number of entries to skip (for a 300 response)
+ * @param {Integer} limit the maximum number of queries to return (for a 300 response)
+ * @param {String} asset_id and identifier that you would find in the identifiers array
+ * @param {Simpledb_override_parameters} [params]
+ * @returns {Array | Error} resolves to array of asset objects or  rejects with an error object
+ */
+const get_assets_by_id = async function (skip, limit, asset_id, params) {
+  let sdb_domain = _resolve_sdb_domain(params)
+
+  return new Promise(async (resolve, reject) => {
+    var query = `select * from \`${sdb_domain}\``
+    query += ` where identifiers like '%"${asset_id}"%'`
     query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
 
     sdb.select(query, {}, function (err, res, meta) {
@@ -244,31 +356,44 @@ const get = async function (skip, limit, params) {
 }
 
 /** Get (a single) asset by id
- * @param {String} id and identifier that you would find in the identifiers array
- * @returns {Array} of asset objects
+ * @param {String} asset_id and identifier that you would find in the identifiers array
+ * @param {Simpledb_override_parameters} [params]
+ * @returns {Array | Error} resolves to array of asset objects or  rejects with an error object
  */
-const get_assets_by_id = async function (asset_id) {
+const delete_assets_by_id = async function (asset_id, params) {
+  let sdb_domain = _resolve_sdb_domain(params)
 
   return new Promise(async (resolve, reject) => {
-      //look inside the identifiers array for the asset_id
-      let data = await db.get('assets')
-          .find({ value: { identifiers: [asset_id,], }, })
-          .value()
-      if (data) {
-          //check if an array of records or a single record was returned
-          if (undefined == data.id) {
-              //multiple records were returned
-              let assets = []
-              for (let d = 0; d < data.length; d++) {
-                  assets.push(data[d].value)
-              }
-              resolve(assets)
-          } else {
-              //retun a single record in an array
-              resolve([data.value,])
-          }
+    //get an asset by id and then use its itemname to delete it
+    var query = `select * from \`${sdb_domain}\``
+    query += ` where identifiers like '%"${asset_id}"%'`
+    query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
+
+    sdb.select(query, {}, function (err, res, meta) {
+      if (err || (res && (res.length < 1))) {
+        //search error or nothing found - return 404
+        resolve(404)
+      } else if (res.length > 1) {
+        //there were multiple matches so return them and give a 300 error from the API
+        let assets = []
+        for (var r = 0; r < res.length; r++) {
+          assets.push(_clean_sdb_asset(res[r]))
+        }
+        resolve(assets)
       }
-      resolve(undefined)
+      else {
+        //we got the item, so try and delete it
+        let item_name = res[0].$ItemName
+        sdb.deleteItem(sdb_domain, item_name, undefined, undefined, (err, res, meta) => {
+          if (err) {
+            //@todo should probably be a 500 error but return 404 becuase it's a demo
+            reject(404)
+          }
+          //deletion succesful - return 204
+          resolve(204)
+        })
+      }
+    })
   })
 }
 
@@ -285,8 +410,7 @@ const get_assets_by_id = async function (asset_id) {
  * If Amazon SimpleDB returns a 408 Request Timeout, please resubmit the request. 
  */
 const total = async function (skip, limit, params) {
-  let sdb_domain = `${config.get('database.simpledb_domain_name')}`
-  sdb_domain =  (params && params.simpledb_domain_name) ? params.simpledb_domain_name : sdb_domain
+  let sdb_domain = _resolve_sdb_domain(params)
 
   return new Promise((resolve, reject) => {
     var query = `select count(*) from \`${sdb_domain}\``
@@ -295,13 +419,14 @@ const total = async function (skip, limit, params) {
       if (err) {
         reject(err)
       } else {
-        resolve(res.count)
+        resolve(parseInt(res[0].Count))
       }
     })
   })
 }
 
 //export the functions - they should all be asynchronous!
+module.exports.delete_assets_by_id = delete_assets_by_id
 module.exports.get = get
 module.exports.get_assets_by_id = get_assets_by_id
 module.exports.init = init

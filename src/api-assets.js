@@ -25,7 +25,7 @@ const not_implemented = async function (ctx, next) {
 const get_assets = async function (ctx, next) {
   let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
-  // asynchronously fetch the first page from the database
+  // asynchronously fetch a page from the database
   let assets = await db.get(skip, limit)
 
   //format the results according to the API spec
@@ -48,7 +48,10 @@ const get_assets_by_id = async function (ctx, next) {
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
 
   // asynchronously fetch the matching assets
-  let assets = await db.get_assets_by_id(ctx.params.id)
+  let assets = await db.get_assets_by_id(skip, limit, ctx.params.id)
+    .catch((err) => {
+      log.error(err.message)
+    })
 
   ctx.set('Content-Type', 'application/json')
 
@@ -62,7 +65,10 @@ const get_assets_by_id = async function (ctx, next) {
     //return the result as an array for consistency
     ctx.body = JSON.stringify(api_response)
 
-    if (api_response.results.length == 1) {
+    if (api_response.results.length < 1) {
+      ctx.status = 404
+      ctx.body = `Asset ID not found ${ctx.params.id}`
+    } else if (api_response.results.length == 1) {
       ctx.status = 200
     } else {
       //there are multiple results
@@ -135,17 +141,17 @@ const delete_asset = async (ctx, next) => {
 
   if (response) {
 
-    if ('number' == typeof response ){
+    if ('number' == typeof response) {
       ctx.status = response
-      switch(response){
+      switch (response) {
         case 204:
-            ctx.body = `No Content. Asset Removed.`
-            break
+          ctx.body = `No Content. Asset Removed.`
+          break
         case 404:
-            ctx.body = `Not Found`
-            break
+          ctx.body = `Not Found`
+          break
         default:
-            ctx.body = `Hmmm`
+          ctx.body = `Hmmm`
       }
     } else {
       /**  @todo there are multiple results */
