@@ -86,7 +86,7 @@ demo.get_test_data = async () => {
             }
         };
         //wait for the response of the call
-        xhr.open("GET", "/r/js/test-records.json", true);
+        xhr.open("GET", "/demo/r/js/test-records.json", true);
         xhr.send();
     })
 }
@@ -94,7 +94,7 @@ demo.get_test_data = async () => {
 demo.get_non_crawl_data = async () => {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest()
-        xhr.open("GET", "/r/js/put-post-records.json", true);
+        xhr.open("GET", "/demo/r/js/put-post-records.json", true);
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
                 let data = JSON.parse(xhr.responseText)
