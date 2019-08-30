@@ -1,5 +1,6 @@
 /* jshint node: true */
 'use strict'
+const _module = require('path').basename(__filename)
 
 let chokidar = require('chokidar')
 // Initialize watcher.

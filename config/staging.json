@@ -1,5 +1,11 @@
 {
     "annotation": "Staging Configuration",
     "port": 3002,
-    "api_prefix": "staging"
+    "api_prefix": "staging",
+    "database": {
+        "_help": "databsae.type is either 'local' or 'aws-simple-db'",
+        "type": "aws-simple-db",
+        "local_filename": "db/imf-mm-api-lowdb-staging.json",
+        "simpledb_domain_name": "imf-mm-api-staggin-test"
+    }
 }

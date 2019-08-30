@@ -6,6 +6,8 @@
  */
 
 const config = require('config')
+const u = require('./lib/util')
+const _module = require('path').basename(__filename)
 
 let db
 let params = {}
@@ -26,8 +28,11 @@ switch (config.get('database').type) {
 // export each method manually to help auto-complete
 // functions in IDE editors
 
-module.exports.init = db.init
-module.exports.info = db.info
-module.exports.post = db.post
+module.exports.delete_assets_by_id = db.delete_assets_by_id
 module.exports.get = db.get
+module.exports.get_assets_by_id = db.get_assets_by_id
+module.exports.info = db.info
+module.exports.init = db.init
+module.exports.post = db.post
 module.exports.reset = db.reset
+module.exports.total = db.total

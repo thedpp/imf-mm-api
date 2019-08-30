@@ -9,6 +9,7 @@
  * 
  */
 
+const _module = require('path').basename(__filename)
 
 const _map_asset_TO_api_get_result = function(asset) {
     let result = {

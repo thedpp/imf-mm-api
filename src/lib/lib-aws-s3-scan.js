@@ -5,6 +5,7 @@ const config = require('config')
 const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
+const _module = require('path').basename(__filename)
 
 const metadata = {
     awskey_for: {
@@ -14,7 +15,7 @@ const metadata = {
 }
 
 var aws_auto_config = new AWS.Config();
-log.info(`${rJ('aws s3 scan key:')} ${aws_auto_config.credentials.accessKeyId}`)
+
 var s3 = new AWS.S3();
 
 //get the head metadata synchronously because we don't care about speed

@@ -1,6 +1,6 @@
 # serverless.yml
 #
-# it is expected thatthat depoendencies in README.md will be fulfilled
+# it is expected that depoendencies in README.md will be fulfilled
 # crib sheet is here: https://serverless.com/framework/docs/providers/aws/guide/serverless.yml/
 #
 #upload lambda appliction:     $ serverless deploy

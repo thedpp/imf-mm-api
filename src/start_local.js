@@ -1,5 +1,11 @@
 /* jshint node: true */
 'use strict'
+
+const u = require('./lib/util')
+//define a right Justification helper function to make logs more readable
+const rJ = u.left_pad_for_logging
+const _module = require('path').basename(__filename)
+
 /** This app requires a few environment variables to work properly
  *  these environment variables control which config is loaded
  *  and the access keys for the AWS function.
@@ -13,15 +19,16 @@ let env_check_failed = (undefined == process.env.NODE_ENV) || (undefined == proc
 if (env_check_failed) {
     require('dotenv').config()
     env_check_failed = (undefined == process.env.NODE_ENV) || (undefined == process.env.AWS_ACCESS_KEY_ID) || (undefined == process.env.AWS_SECRET_ACCESS_KEY)
-    //If we still don't have everything then abort
+    //If we still don't have everything then assume production with no AWS keys
     if (env_check_failed) {
-        let msg = `ERROR: Environment variables not set aborting - see README.md (config: ${process.env.NODE_ENV})`
-        console.log(msg)
-        throw new Error(msg)
+        console.log(`${rJ('WARNING: ')}Environment variables not set - see README.md (config: ${process.env.NODE_ENV})`)
+        process.env.NODE_ENV = 'production'
+        console.log(`${rJ('INFO: ')}Setting environment variable NODE_ENV to ${process.env.NODE_ENV} and continuing`)
+    } else {
+        console.log(`${rJ('INFO: ')}Environment set from .env file (config: ${process.env.NODE_ENV})`)
     }
-    console.log(`Environment set from .env file (config: ${process.env.NODE_ENV})`)
 } else {
-    console.log(`Environment set from parent process (config: ${process.env.NODE_ENV})`)
+    console.log(`${rJ('INFO: ')}Environment set from parent process (config: ${process.env.NODE_ENV})`)
 }
 
 /* config management load order described here: https://github.com/lorenwest/node-config/wiki/Configuration-Files
@@ -40,16 +47,16 @@ const open = require('open')
 const pino = require('pino')
 //log to stderr
 const log = pino(config.get('log_options'), pino.destination(2))
-const u = require('./lib/util')
-//define a right Justification helper function to make logs more readable
-const rJ = u.left_pad_for_logging
 let listen_on_port = config.get('port')
 if (process.env.PORT_OVERRIDE) {
     listen_on_port = process.env.PORT_OVERRIDE
     console.log(`port: ${listen_on_port}`)
 }
 
-log.info(rJ('Using config') + config.get('annotation'))
+const demo = require('./demo-localize-test-data.js')
+demo.localize()
+
+log.info(rJ('Using config') + config.get('_help'))
 
 // log all the config files used if needed
 if (config.get("log_options").show_config_sources) {

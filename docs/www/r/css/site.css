@@ -1,0 +1,166 @@
+/* 
+   The main HTML pages are synthesised with Cuttlebelle (on the website generator)
+   and then copied here. This style sheet is used to add specific styling to the pages.
+*/
+h1,
+h2,
+#banner {
+  padding-left: 1rem;
+}
+
+h1 {
+  color: #FFEDB2;
+  background-color: #C2A649;
+  font-weight: bold;
+}
+
+h2 {
+  color: #C2A649;
+  font-weight: bold;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  color: #9A3A73;
+  font-weight: bold;
+  margin-left: 1rem;
+}
+
+.mm-highlight {
+  color: #9A3A73;
+}
+
+h3,
+.h3 {
+  font-size: 1.5rem;
+}
+
+h4,
+.h4 {
+  font-size: 1.3rem;
+}
+
+h5,
+.h5 {
+  font-size: 1.15rem;
+}
+
+h6,
+.h6 {
+  font-size: 1rem;
+  font-style: italic;
+}
+
+footer {
+  color: #333333;
+  background-color: #C2A649;
+}
+
+footer p {
+  font-size: 75%;
+}
+
+footer li[site-option="big"] {
+  font-size: 150%;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+footer li {
+  display: inline;
+}
+
+footer a {
+  color: #9A3A73;
+}
+
+#banner>div>div>p {
+  margin-top: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+#demo_output {
+  background-color: white;
+  font-family: "Ubuntu Mono", "Consolas", "Mono";
+  font-size: 0.9rem;
+  white-space: pre;
+}
+
+/* Styling for the API response output page */
+#api_res {
+  color: DarkSlateGrey;
+  background-color: whitesmoke;
+  border: solid 1px #9A3A73;
+  padding: 1px;
+}
+
+#api_headers {
+  color: navy;
+  background-color: lightblue;
+  border: solid 1px #9A3A73;
+  padding: 1px;
+}
+
+#api_res_body {
+  color: black;
+  background-color: white;
+  border: solid 1px #9A3A73;
+  padding: 1px;
+}
+
+/* style an API element with 100 status codes */
+.api100 {
+  color: darkgray;
+}
+
+/* style an API element with 200 status codes */
+.api200 {
+  color: darkgreen;
+}
+
+/* style an API element with 300 status codes */
+.api300 {
+  color: darkorange;
+}
+
+/* style an API element with 400 status codes */
+.api400 {
+  color: darkred;
+}
+
+/* style an API element with 500 status codes */
+.api500 {
+  color: purple;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 40em; /* Could be more or less, depending on text */
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}

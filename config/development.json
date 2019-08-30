@@ -4,7 +4,8 @@
     "api_prefix": "dev",
     "log_options": {
         "prettyPrint": true,
-        "show_config_sources": true
+        "show_config_sources": true,
+        "log_api_access": true
     },
     "database":{
         "type":"local"

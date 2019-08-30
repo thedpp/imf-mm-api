@@ -1,0 +1,15 @@
+{
+    "v00_path": "__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/test00-imf-mm-api-0500Hz_v0.mxf",
+    "v00_id": "urn:uuid:80156451-2f8e-4813-8100-3d39b0f1c5fc",
+    "v00_sha1":"urn:sha1:ef2fbafebdbc82117bab4f3ae5fb3c06f33430ca",
+    "a01_path": "__test__/assets-imf/tones/test01-imf-mm-api-1000Hz/test01-imf-mm-api-1000Hz_a0.mxf",
+    "a01_id": "urn:uuid:fb9ec264-e88d-471e-8a02-8611f2dc6861",
+    "a01_sha1": "urn:sha1:087b83dc174700537b9692fc56eeee2b5be5fc43",
+    "map00_path": "__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/ASSETMAP.xml",
+    "map00_id": "urn:uuid:f0fcc3c8-79d5-4a9c-a1ba-250e2738825b",
+    "cpl02_path": "__test__/assets-imf/tones/test02-imf-mm-api-2000Hz/CPL_7da8c0b7-1078-494d-be68-f54639c61662.xml",
+    "cpl02_id": "urn:uuid:7da8c0b7-1078-494d-be68-f54639c61662",
+    "cpl02_sha1": "urn:sha1:9ff0af71c888baefc8da63955d6044e794362528",
+    "pkl03_path": "__test__/assets-imf/noise/test03-imf-mm-api-wnoise/PKL_04085391-05d6-47c5-8dc3-ca7aefa79aa1.xml",
+    "pkl03_id": "urn:uuid:04085391-05d6-47c5-8dc3-ca7aefa79aa1"
+}

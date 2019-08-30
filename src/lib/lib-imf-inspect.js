@@ -34,8 +34,9 @@ const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
 const path = require('path')
-const _module = path.basename(__filename)
-log.debug(`${rJ(_module)} init`)
+const _module = require('path').basename(__filename)
+
+log.debug(`${rJ(_module) + ': '}init`)
 
 const mxf_parser = require('./lib-mxf-lazy-parse')
 
@@ -62,7 +63,7 @@ module.exports = class IMF_inspect {
         this.buffer_initialised = false
         //clone the empty object we create from the JSON file
         this.asset_record = JSON.parse(blank_asset_json)
-        this.hash_table=[]
+        this.hash_table = []
     }
 
     /** return the buffer or false
@@ -82,7 +83,7 @@ module.exports = class IMF_inspect {
     async from(source) {
         switch (typeof (source)) {
             case 'string':
-                //log.debug(`${rJ('lib-imf-inspect:')} loading buffer from ${source}`)
+                //log.debug(`${rJ('lib-imf-inspect: ')}loading buffer from ${source}`)
                 return this._from_file(source)
             default:
                 throw new Error(`lib-imf-inspec - cannot initialise buffer from parameter of type: ${typeof (source)}`)
@@ -99,13 +100,13 @@ module.exports = class IMF_inspect {
         return new Promise((resolve, reject) => {
             let obj = fread(fd, this.buf, 0, buffer_size, 0)
                 .catch(e => {
-                    log.error(`${rJ('fs crawl-inspect:')} cannot load file (${file_path}) into working buffer`)
+                    log.error(`${rJ('fs crawl-inspect: ')}cannot load file (${file_path}) into working buffer`)
                     this.buffer_initialised = false
                     reject(e)
                 }).then(async (bytes_read, the_buffer) => {
                     //never figured out why this function returns a number sometimes, an object at others
                     if (typeof (bytes_read) == 'number') {
-                        log.debug(`${rJ(__filename)}: returned a number not an object`)
+                        log.debug(`${rJ(__filename + ': ')}returned a number not an object`)
                         this.buf_length = bytes_read
                     } else {
                         this.buf_length = bytes_read.bytesRead
@@ -128,7 +129,7 @@ module.exports = class IMF_inspect {
         let handle_parse_result = (err, result) => {
             if (err) {
                 //bad XML resolves as not XML
-                log.debug(`${rJ('lib-imf-inspect:')} _parse_xml() could not parse buffer`)
+                log.debug(`${rJ('lib-imf-inspect: ')}_parse_xml() could not parse buffer`)
                 this.xmljs = {}
                 this.resolve(this)
             } else {
@@ -205,9 +206,9 @@ module.exports = class IMF_inspect {
      */
     is_pkl() {
         //check the root object of the XML (namespace prefix aware check)
-        let has_pkl_root= (undefined !== this.xmljs[`${this.ns_prefix}PackingList`])
+        let has_pkl_root = (undefined !== this.xmljs[`${this.ns_prefix}PackingList`])
 
-        if(has_pkl_root){
+        if (has_pkl_root) {
             this.update_hash_table()
         }
 
@@ -217,31 +218,31 @@ module.exports = class IMF_inspect {
     /** udpate the hash table while we have the PKL loaded
      * 
      */
-    update_hash_table(){
-        let pkl_root= this.xmljs[`${this.ns_prefix}PackingList`]
+    update_hash_table() {
+        let pkl_root = this.xmljs[`${this.ns_prefix}PackingList`]
         let assetlist_array = pkl_root[`${this.ns_prefix}AssetList`][0][`${this.ns_prefix}Asset`]
 
         //iterate through all the assets in the assetlist array
         for (const a in assetlist_array) {
 
-                const asset = assetlist_array[a]
-                let hash = {}
-                hash.id = asset[`${this.ns_prefix}Id`][0]
-                //the algorithm is an attribute of the value of the HashAlgorithm element
-                hash.hash_algorithm = asset[`${this.ns_prefix}HashAlgorithm`][0].$.Algorithm
-                //use node's Buffer module to parse the base64 string and create a series of bytes
-                const hash_buffer = Buffer.from( asset[`${this.ns_prefix}Hash`][0], 'base64')
-                //now use the buffer's hex function to make a hex string with leading zeroes
-                hash.hash_hex_str = 'urn:sha1:'+hash_buffer.toString('hex')
-                this.hash_table.push(hash)
+            const asset = assetlist_array[a]
+            let hash = {}
+            hash.id = asset[`${this.ns_prefix}Id`][0]
+            //the algorithm is an attribute of the value of the HashAlgorithm element
+            hash.hash_algorithm = asset[`${this.ns_prefix}HashAlgorithm`][0].$.Algorithm
+            //use node's Buffer module to parse the base64 string and create a series of bytes
+            const hash_buffer = Buffer.from(asset[`${this.ns_prefix}Hash`][0], 'base64')
+            //now use the buffer's hex function to make a hex string with leading zeroes
+            hash.hash_hex_str = 'urn:sha1:' + hash_buffer.toString('hex')
+            this.hash_table.push(hash)
         }
 
     }
 
-        /** common asset properties
-     * 
-     */
-    update_common_asset_properties(file_path){
+    /** common asset properties
+ * 
+ */
+    update_common_asset_properties(file_path) {
         this.asset_record.locations.push(path.resolve(file_path))
         this.asset_record.providers.push(config.get('provider_id'))
     }
@@ -267,6 +268,13 @@ module.exports = class IMF_inspect {
                 if (this.is_map()) {
                     this.asset_record.file_type = file_type.alias.map
                 }
+
+                // @todo - figure out how to return XML assets referenced by a SCM
+                // currently they will have no identifiers and will crash the parser
+                if(this.asset_record.file_type == file_type.alias.xml){
+                    resolve(false)
+                }
+
                 this.asset_record.file_size = stat.size
                 this.asset_record.identifiers.push(this.imf_xml_id())
                 this.update_common_asset_properties(file_path)
@@ -296,7 +304,7 @@ module.exports = class IMF_inspect {
      * hash_table[n].hash_algorithm = 'http://www.w3.org/2000/09/xmldsig#sha1'
      * ```
      */
-    get_hash_table(){
+    get_hash_table() {
         return this.hash_table
     }
 }

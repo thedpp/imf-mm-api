@@ -1,6 +1,7 @@
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
+require('dotenv').config({ path: '__test__/.env', })
 
 /**
  * Note that AWS will abort if arrow functions are used to define the handler!!
