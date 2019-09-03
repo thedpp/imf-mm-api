@@ -6,4 +6,8 @@
 #
 #  MAKE SURE config.log_options.prettyPrint is OFF
 #
+#
+# first make sure that the log folder exists
+if [ ! -d "./logs" ]; then  mkdir "./logs"; fi
+
 node src/start_local.js | node node_modules/pino-tee/tee.js warn ./logs/warning.log > ./logs/all.log

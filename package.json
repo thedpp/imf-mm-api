@@ -53,6 +53,7 @@
     "chokidar": "^3.0.2",
     "config": "^3.2.2",
     "dotenv": "^8.1.0",
+    "js-yaml": "^3.13.1",
     "json-format": "^1.0.1",
     "koa": "^2.8.1",
     "koa-body": "^4.1.1",
