@@ -47,15 +47,11 @@ const open = require('open')
 const pino = require('pino')
 //log to stderr
 const log = pino(config.get('log_options'), pino.destination(2))
-let listen_on_port = config.get('port')
-if (process.env.PORT_OVERRIDE) {
-    listen_on_port = process.env.PORT_OVERRIDE
-    console.log(`port: ${listen_on_port}`)
-}
 
 const demo = require('./demo-localize-test-data.js')
-if (config.get('enable.synth_local_test_data'))
-demo.localize()
+if (config.get('enable.synth_local_test_data')) {
+    demo.localize()
+}
 
 log.info(rJ('Using config') + config.get('_help'))
 
@@ -75,18 +71,19 @@ const server = require('./imf-mm-api-server')
 server.mm_init()
     .catch((e) => {
         //server failed to initialise - abort with a log
-        log.info(rJ('Server init failed:') + `port was ${listen_on_port}`)
+        log.info(rJ('Server init failed:') + `port was ${config.get('port')}`)
     })
     .then(() => {
         //We should be ready to go now, so start the server on the required port
-        log.info(rJ('Listening on port:') + `${listen_on_port}`)
+        log.info(rJ('Listening on port:') + `${config.get('port')}`)
         log.info(rJ('Listening for api:') + `/${config.get('api_prefix')}/*`)
-        server.mm_http_instance = server.listen({ "port": listen_on_port, })
+        server.mm_http_instance = server.listen({ "port": config.get('port'), })
     })
 
 //if we have enabled serving of web pages then ask the OS to go to the home page
+let home_page = ('/' == config.get('mount_point')) ? '/index.html': `${config.get('mount_point')}/index.html`
 if (config.get('enable.www') && config.get('enable.load_home_page_on_boot')) {
-    open(`http://localhost:${listen_on_port}${config.get('mount_point')}/index.html`)
+    open(`http://localhost:${config.get('port')}${home_page}`)
 }
 
 // The exports lines is only for the Jest test harness

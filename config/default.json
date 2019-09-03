@@ -18,7 +18,7 @@
     "database": {
         "_help": "databsae.type is either 'local' or 'aws-simple-db'",
         "type": "aws-simple-db",
-        "local_filename": "db/imf-mm-api-lowdb.json",
+        "local_filename": "db/imf-mm-api-lowdb.json", 
         "simpledb_domain_name": "imf-mm-api-server-js"
     },
     "default_get_limit": 20,
