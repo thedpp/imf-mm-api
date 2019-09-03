@@ -1,5 +1,13 @@
 {
     "annotation": "Beta Configuration",
     "port": 3001,
-    "prefix": "beta"
+    "prefix": "beta",
+
+    "log_options": {
+        "_help": "you can set logging levels: fatal error warn info debug trace silent. prettyPrint and log_api_acces slow the world down",
+        "level": "error",
+        "prettyPrint": false,
+        "show_config_sources": false,
+        "log_api_access": true
+    }
 }
