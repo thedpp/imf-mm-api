@@ -13,7 +13,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     rows.push(demo.synth({
         label: "home page",
         mode: "GET",
-        url: '/',
+        url: '',
         element_id: response_element_id,
         help: 'return the website home page to prove script is working',
     }))

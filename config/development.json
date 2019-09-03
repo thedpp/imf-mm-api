@@ -10,7 +10,7 @@
     "database":{
         "type":"local"
     },
-    "imf_asset_folders":[
+    "imf_asset_sources":[
         "__test__/assets-imf"
     ]
 }

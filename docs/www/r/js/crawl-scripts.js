@@ -4,14 +4,14 @@ demo.make_crawl_buttons = function (response_element_id) {
     rows.push(demo.synth({
         label: "Initiate a crawl",
         mode: "POST",
-        url: '/crawl/start',
+        url: 'crawl/start',
         element_id: response_element_id,
         help: 'start a crawl',
     }))
     rows.push(demo.synth({
         label: "Get crawl status",
         mode: "GET",
-        url: `/crawl`,
+        url: `crawl`,
         element_id: response_element_id,
         help: 'status of crawl',
     }))
