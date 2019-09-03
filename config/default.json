@@ -25,7 +25,7 @@
     "enable":{
         "_help": "these booleans turn individual features and APIs on or off depending on how you want the software to work - see README.md",
         "admin": true,
-        "admin_delete_db": false,
+        "admin_delete_db": true,
         "assets": true,
         "crawl": true,
         "www": true,

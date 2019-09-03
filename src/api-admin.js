@@ -123,7 +123,7 @@ const reset_db = async (ctx, next) => {
   } else {
     //deleting the dB has been disable
     ctx.status = 405
-    ctx.body = 'Deletion of the database has been disable. Please contact the administrator.'
+    ctx.body = 'Deletion of the database has been disabled. Please contact the administrator.'
   }
 };
 

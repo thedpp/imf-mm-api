@@ -70,7 +70,7 @@ demo.make_admin_buttons = function (response_element_id) {
     let yes_button = demo.synth({
         label: "Re-Init database",
         mode: "DELETE",
-        url: `/admin/db`,
+        url: `admin/db`,
         element_id: response_element_id,
         help: 'DANGER - this cannot be undone',
     })
