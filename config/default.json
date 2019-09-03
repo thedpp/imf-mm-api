@@ -17,7 +17,7 @@
     "api_prefix": "1",
     "database": {
         "_help": "databsae.type is either 'local' or 'aws-simple-db'",
-        "type": "aws-simple-db",
+        "type": "local",
         "local_filename": "db/imf-mm-api-lowdb.json", 
         "simpledb_domain_name": "imf-mm-api-server-js"
     },
