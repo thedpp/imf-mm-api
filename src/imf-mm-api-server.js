@@ -8,7 +8,8 @@ const Koa = require('koa');
 const pino = require('koa-pino-logger')({ prettyPrint: true, })
 const config = require('config')
 const process = require('process')
-var bodyParser = require('koa-bodyparser');
+const bodyParser = require('koa-bodyparser');
+const mount = require('koa-mount')
 
 const db = require('./db')
 const log = require('pino')(config.get('log_options'))
@@ -29,29 +30,25 @@ server.mm_init = async function (option) {
                 server.use(pino)
             }
 
-            //load teh body parser
+            //load the body parser
             server.use(bodyParser())
 
             //load all the server modules depending on what was configured
             if (config.get('enable.www')) {
                 let www = require('koa-static')
-                server.use(www('docs/www/', {}))
+                server.use(mount(config.get('mount_point'), www('docs/www/', {})))
             }
             if (config.get('enable.admin')) {
                 let api = require('./api-admin.js')
-                server.use(api.routes())
+                server.use(mount(config.get('mount_point'), api.routes()))
             }
             if (config.get('enable.assets')) {
                 let api = require('./api-assets.js')
-                server.use(api.routes())
+                server.use(mount(config.get('mount_point'), api.routes()))
             }
             if (config.get('enable.crawl')) {
                 let api = require('./api-crawl-fs.js')
-                server.use(api.routes())
-            }
-            if (config.get('enable.scan')) {
-                let api = require('./api-scan-s3.js')
-                server.use(api.routes())
+                server.use(mount(config.get('mount_point'), api.routes()))
             }
         })
         .catch((e) => {

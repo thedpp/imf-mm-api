@@ -1,3 +1,4 @@
+/** DEPRECATED - to be incorporated into crawl */
 /* jshint node: true */
 'use strict'
 const config = require('config')

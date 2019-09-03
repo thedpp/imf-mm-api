@@ -55,25 +55,45 @@ demo.get_data = function (url, callback) {
     xhr.send();
 }
 
-demo.get_app_info = function () {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            let inf = JSON.parse(xhr.responseText)
-            demo.info = inf
-            for (let z = 0; z < demo.overwrite_with_mode.length; z++) {
-                let thing = document.getElementById(demo.overwrite_with_mode[z])
-                if (thing) {
-                    thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} ` +
-                        `<span class="mm-highlight">v${inf.app_version}</span> in ` +
-                        `<span class="mm-highlight">${inf.node_env}</span> mode)</span>`
+demo.get_app_info = async () => {
+    var xhr = new XMLHttpRequest()
+
+    return new Promise((resolve, reject) => {
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                let inf = JSON.parse(xhr.responseText)
+                demo.info = inf
+                for (let z = 0; z < demo.overwrite_with_mode.length; z++) {
+                    let thing = document.getElementById(demo.overwrite_with_mode[z])
+                    if (thing) {
+                        thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} ` +
+                            `<span class="mm-highlight">v${inf.app_version}</span> in ` +
+                            `<span class="mm-highlight">${inf.node_env}</span> mode)</span>`
+                    }
                 }
+                resolve(demo.info)
             }
-        }
-    };
-    //wait for the response of the call
-    xhr.open("GET", "/admin/info", true);
-    xhr.send();
+        };
+        //wait for the response of the call
+        xhr.open("GET", "admin/info", true);
+        xhr.send();
+    })
+}
+
+demo.get_readme = async () => {
+    var xhr = new XMLHttpRequest();
+
+    return new Promise((resolve, reject) => {
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                demo.readme = xhr.responseText
+                resolve(demo.readme)
+            }
+        };
+        //wait for the response of the call
+        xhr.open("GET", "admin/readme", true);
+        xhr.send();
+    })
 }
 
 demo.get_test_data = async () => {
@@ -86,7 +106,7 @@ demo.get_test_data = async () => {
             }
         };
         //wait for the response of the call
-        xhr.open("GET", "/demo/r/js/test-records.json", true);
+        xhr.open("GET", "r/js/test-records.json", true);
         xhr.send();
     })
 }
@@ -94,7 +114,7 @@ demo.get_test_data = async () => {
 demo.get_non_crawl_data = async () => {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest()
-        xhr.open("GET", "/demo/r/js/put-post-records.json", true);
+        xhr.open("GET", "r/js/put-post-records.json", true);
         xhr.onreadystatechange = function () {
             if (this.readyState == 4) {
                 let data = JSON.parse(xhr.responseText)

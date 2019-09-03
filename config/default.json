@@ -5,7 +5,7 @@
         "API messages are defined in the OpenAPI spec which is renamed and loaded as default.yaml",
         "the default port is 3000 assuming any serious use of this demo software is behing a proxy like NGINX",
         "config.api_prefix is the integer published version number for the url e.g. localhost:3000/1/assets",
-        "config.imf_asset_folders enumenrates a list of folders that the crawl API will search",
+        "config.imf_asset_sources enumenrates a list of folders that the crawl API will search",
         "default_get_limit controls the number of values returned in a page of the assets API"
     ],
     "port": 3000,
@@ -23,16 +23,18 @@
     },
     "default_get_limit": 20,
     "enable":{
-        "_help": "these booleans turn individual features and APIs on or off depending on how you want the software to work",
+        "_help": "these booleans turn individual features and APIs on or off depending on how you want the software to work - see README.md",
         "admin": true,
+        "admin_delete_db": false,
         "assets": true,
         "crawl": true,
-        "scan": true,
         "www": true,
-        "demo_localization": true,
-        "extended_status_messages": true
+        "load_home_page_on_boot": true,
+        "extended_status_messages": true,
+        "synth_local_test_data": true
     },
-    "imf_asset_folders":[
+    "mount_point": "/demo",
+    "imf_asset_sources":[
         "__test__/assets-imf"
     ],
     "lambda": {
@@ -52,12 +54,5 @@
         "show_config_sources": false,
         "log_api_access": false
     },
-    "provider_id": "imf-mm-api Demo App",
-    "s3_asset_buckets": [{
-        "comment": "hierarichally scan below this public bs500 root for IMF assets",
-        "arn": "arn:aws:s3:::imf-mm-api-media",
-        "bucket": "imf-mm-api-media",
-        "root": "media/bs500",
-        "region": "us-east-2"
-    }]
+    "provider_id": "imf-mm-api Demo App"
 }

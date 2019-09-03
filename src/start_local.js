@@ -54,6 +54,7 @@ if (process.env.PORT_OVERRIDE) {
 }
 
 const demo = require('./demo-localize-test-data.js')
+if (config.get('enable.synth_local_test_data'))
 demo.localize()
 
 log.info(rJ('Using config') + config.get('_help'))
@@ -84,8 +85,8 @@ server.mm_init()
     })
 
 //if we have enabled serving of web pages then ask the OS to go to the home page
-if (config.get('enable.www')) {
-    open(`http://localhost:${listen_on_port}`)
+if (config.get('enable.www') && config.get('enable.load_home_page_on_boot')) {
+    open(`http://localhost:${listen_on_port}${config.get('mount_point')}/index.html`)
 }
 
 // The exports lines is only for the Jest test harness
@@ -98,7 +99,6 @@ module.exports.server = server
  *  Add config log access to aws Simple dB
  *  Create gulp task to generate documentation
  *    - documentation on methods
- *       - /scan
  *       - /docs
  *       - /crawl
  *  Create gulp task to upload via sftp to a server

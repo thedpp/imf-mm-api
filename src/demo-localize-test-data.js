@@ -16,8 +16,8 @@ const path = require('path')
 const _module = require('path').basename(__filename)
 const fs = require('fs')
 
-const demo_json_filepath = 'docs/www/demo/r/js/test-records.json'
-const put_post_json_filepath = 'docs/www/demo/r/js/put-post-records.json'
+const demo_json_filepath = 'docs/www/r/js/test-records.json'
+const put_post_json_filepath = 'docs/www/r/js/put-post-records.json'
 
 module.exports.localize = async function () {
     if (!config.get('enable.demo_localization')) {
