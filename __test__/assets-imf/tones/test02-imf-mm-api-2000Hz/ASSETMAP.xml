@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<AssetMap xmlns="http://www.smpte-ra.org/schemas/429-9/2007/AM">
+    <Id>urn:uuid:9c264810-48f6-4d2f-a8ae-4cba2c22e4bc</Id>
+    <AnnotationText language="en">imf-mm-api IMF CPL - test02</AnnotationText>
+    <Creator>AmberFin V11.8.0.0.323521</Creator>
+    <VolumeCount>1</VolumeCount>
+    <IssueDate>2019-08-15T18:00:00Z</IssueDate>
+    <Issuer>Mr MXF Ltd</Issuer>
+    <AssetList>
+        <Asset>
+            <Id>urn:uuid:450c4465-2013-4304-9df6-5a59a4001486</Id>
+            <AnnotationText></AnnotationText>
+            <PackingList>true</PackingList>
+            <ChunkList>
+                <Chunk>
+                    <Path>PKL_450c4465-2013-4304-9df6-5a59a4001486.xml</Path>
+                    <VolumeIndex>1</VolumeIndex>
+                    <Offset>0</Offset>
+                    <Length>2019</Length>
+                </Chunk>
+            </ChunkList>
+        </Asset>
+        <Asset>
+            <Id>urn:uuid:66c832b8-6c56-4c03-853c-32d572716f23</Id>
+            <AnnotationText></AnnotationText>
+            <PackingList>false</PackingList>
+            <ChunkList>
+                <Chunk>
+                    <Path>test02-imf-mm-api-2000Hz_v0.mxf</Path>
+                    <VolumeIndex>1</VolumeIndex>
+                    <Offset>0</Offset>
+                    <Length>3266285</Length>
+                </Chunk>
+            </ChunkList>
+        </Asset>
+        <Asset>
+            <Id>urn:uuid:70fa2807-8cc7-45eb-90dd-931e4a0c56a6</Id>
+            <AnnotationText></AnnotationText>
+            <PackingList>false</PackingList>
+            <ChunkList>
+                <Chunk>
+                    <Path>test02-imf-mm-api-2000Hz_a0.mxf</Path>
+                    <VolumeIndex>1</VolumeIndex>
+                    <Offset>0</Offset>
+                    <Length>1346978</Length>
+                </Chunk>
+            </ChunkList>
+        </Asset>
+        <Asset>
+            <Id>urn:uuid:7da8c0b7-1078-494d-be68-f54639c61662</Id>
+            <AnnotationText></AnnotationText>
+            <PackingList>false</PackingList>
+            <ChunkList>
+                <Chunk>
+                    <Path>CPL_7da8c0b7-1078-494d-be68-f54639c61662.xml</Path>
+                    <VolumeIndex>1</VolumeIndex>
+                    <Offset>0</Offset>
+                    <Length>16428</Length>
+                </Chunk>
+            </ChunkList>
+        </Asset>
+    </AssetList>
+</AssetMap>

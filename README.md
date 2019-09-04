@@ -11,18 +11,21 @@ A node server to implement the IMF Media Management API with a choice of databas
   are going to use AWS SimpleDB as your database
 
 ```bash
-# run time environment variables for imf-mm-api
+# run time environment variables for imf-mm-api (you can safely copy this to a .env file)
 #
 # what mode are we in? Uncomment one of these
-#
+#NODE_ENV=test
 NODE_ENV=development
 #NODE_ENV=staging
 #NODE_ENV=beta
 #NODE_ENV=production
 export NODE_ENV
 #
-# AWS keys to access your buckets and SimpleDB if you use your own cloud AWS SimpleDB database
+# Override the default port on this server
+PORT_OVERRIDE=3001
+export PORT_OVERRIDE
 #
+# AWS keys to access SimpleDB if you use your own cloud AWS SimpleDB database
 AWS_ACCESS_KEY_ID=XxXxXxXxXxXxXxXxXxXx
 AWS_SECRET_ACCESS_KEY=ZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZz
 export AWS_ACCESS_KEY_ID
@@ -120,3 +123,11 @@ to replicate the s3 bucket storage and replicated the SimpleDB back end:
     ]
 }
 ```
+
+## API Change Log
+
+* 2019-08-23 v0.4 of the API
+   * Added 415 response when POST body cannot be parsed by server
+   * Documented ETag behaviour in GET /asset/{id}
+   * Changed locationProviderId to an array of strings and added documentation on aggregation
+* 2019-06-10 v0.3 of the API and its initial publication

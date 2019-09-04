@@ -9,22 +9,12 @@ const fs = require('fs')
 const low = require('lowdb')
 const FileSync = require('lowdb/adapters/FileSync')
 const config = require('config')
+const _module = require('path').basename(__filename)
 
 //the name of the local file to store the database is in config
 let adapter, db, db_filename
 
-const get_asset = function (asset_id) {
-    var record = db.get('assets')
-        .find({ id: asset_id, })
-        .value()
 
-    if (undefined == record) {
-        return db.get('assets')
-            .find({ manifest: asset_id, })
-            .value()
-    }
-    return record
-}
 
 /** Extract filename from parameters
  *   if no filename specified then use config
@@ -102,7 +92,7 @@ const post = async function (asset) {
     return new Promise((resolve, reject) => {
         /* @todo use one of the identifiers (hash?) as the canonical record */
         /* @todo search first to see if the identifier exists elsewhere */
-        var item_name = asset.identifiers[0]
+        let item_name = asset.identifiers[0]
 
         asset.identifiers.forEach(element => {
             if (element.substr(0, 9) == "urn:sha1:") {
@@ -110,7 +100,7 @@ const post = async function (asset) {
             }
         });
 
-        var exists = db.get('assets')
+        let exists = db.get('assets')
             .find({ id: item_name, })
             .value()
 
@@ -119,14 +109,12 @@ const post = async function (asset) {
                 .find({ id: item_name, })
                 .assign({ value: asset, })
                 .write()
-                .then(resolve('ok'))
-                .catch(err => reject(err))
+            resolve('ok')
         } else {
             db.get('assets')
                 .push({ id: item_name, value: asset, })
                 .write()
-                .then(resolve('ok'))
-                .catch(err => reject(err))
+            resolve('ok')
         }
 
     })
@@ -138,22 +126,102 @@ const post = async function (asset) {
  * @returns {Array} of asset objects
  */
 const get = async function (skip, limit) {
+    skip = (undefined == skip) ? 0 : skip
+    limit = (undefined == limit) ? config.get('default_get_limit') : limit
+
     return new Promise((resolve, reject) => {
-        var data = db.get('assets')
+        let data = db.get('assets')
             .slice(skip, skip + limit)
             .value()
 
         let assets = []
-        for (var d = 0; d < data.length; d++) {
+        for (let d = 0; d < data.length; d++) {
             assets.push(data[d].value)
         }
         resolve(assets)
     })
 }
 
+/** Get (a single) asset by id
+ * @param {String} id and identifier that you would find in the identifiers array
+ * @returns {Array} of asset objects
+ */
+const get_assets_by_id = async function (skip, limit, asset_id) {
+
+    return new Promise(async (resolve, reject) => {
+        //look inside the identifiers array for the asset_id
+        let data = await db.get('assets')
+            .find({ value: { identifiers: [asset_id,], }, })
+            .value()
+        if (data) {
+            //check if an array of records or a single record was returned
+            if (undefined == data.id) {
+                //multiple records were returned
+                let assets = []
+                for (let d = 0; d < data.length; d++) {
+                    assets.push(data[d].value)
+                }
+                resolve(assets)
+            } else {
+                //retun a single record in an array
+                resolve([data.value,])
+            }
+        }
+        resolve(undefined)
+    })
+}
+
+/** Delete assets by id
+ * @param {String} id an identifier that you would find in the identifiers array
+ * @returns {Array} of asset objects
+ */
+const delete_assets_by_id = async function (asset_id) {
+
+    return new Promise(async (resolve, reject) => {
+        //look inside the identifiers array for the asset_id
+        let data = await db.get('assets')
+            .find({ value: { identifiers: [asset_id,], }, })
+            .write()
+        //check if an array of records or a single record was returned
+        if (data) {
+            //check if an array of records or a single record was returned
+            if (undefined == data.id) {
+                //return the matching records
+                let assets = []
+                for (let d = 0; d < data.length; d++) {
+                    assets.push(data[d].value)
+                }
+                resolve(assets)
+            } else {
+                // a single entry was found - return the 204 code
+                data = await db.get('assets')
+                    .remove({ value: { identifiers: [asset_id,], }, })
+                    .write()
+                resolve(204)
+            }
+        } else {
+            //nothing found - return 404
+            resolve(404)
+        }
+    })
+}
+
+/** Get total count of all records
+ * @returns {Number} the number assets in the database
+ */
+const total = async function (skip, limit) {
+    return new Promise((resolve, reject) => {
+        resolve(db.get('assets').value().length)
+    })
+}
+
 //export the functions
+module.exports.delete_assets_by_id = delete_assets_by_id
+module.exports.get = get
+module.exports.get_assets_by_id = get_assets_by_id
 module.exports.init = init
 module.exports.info = info
-module.exports.post = post
-module.exports.get = get
 module.exports.reset = reset
+module.exports.post = post
+module.exports.total = total
+

@@ -1,5 +1,7 @@
 /* jshint node: true */
 'use strict'
+const _module = require('path').basename(__filename)
+
 var cache = [
   '',
   ' ',

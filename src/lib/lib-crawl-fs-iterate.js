@@ -12,8 +12,9 @@ const config = require('config')
 const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
+const _module = require('path').basename(__filename)
 
-log.debug(rJ('crawl-fs-iterate:') + `init`)
+log.debug(rJ(`${_module}: `) + `init`)
 
 fs.readdirAsync = function(folder_path) {
     return new Promise(function(resolve, reject) {

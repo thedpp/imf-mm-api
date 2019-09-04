@@ -8,7 +8,8 @@ const log = require('pino')(config.get('log_options'))
 const u = require('./util')
 const rJ = u.left_pad_for_logging
 const path = require('path')
-const _module = path.basename(__filename)
+const _module = require('path').basename(__filename)
+
 log.debug(`${rJ(_module)} init`)
 
 const iterate = require('./lib-crawl-fs-iterate')
@@ -22,24 +23,33 @@ let files = []
 let current = 0
 let active = false
 let assets = []
-let report = { added: [], skipped: [], }
+const report = { added: [], skipped: [], }
+let hash_table = []
 
 /** crawl a folder for IMF assets
  * 
  */
 module.exports.crawl = async (folder) => {
-    //reset the variables so we can track progress
-    active = true
-    let files = []
-    let current = 0
-    let hash_table = []
 
     return new Promise(async (resolve, reject) => {
+        if (active) {
+            reject('Crawl already in progress')
+        }
+        //reset the variables so we can track progress
+        active = true
+        length = 0
+        files = []
+        current = 0
+        assets = []
+        report.added= []
+        report.skipped= []
+        hash_table = []
+
         try {
             // get a list of all the files
             files = await iterate(folder)
             length = files.length
-            //log.debug(`${rJ('fs crawl:')} ${files.length} files in ${folder}`)
+            //log.debug(`${rJ('fs crawl: ')}${files.length} files in ${folder}`)
 
             //now inspect the files one by one with a new, clean inspect instance
             for (current = 0; current < length; current++) {
@@ -70,11 +80,9 @@ module.exports.crawl = async (folder) => {
 
             //tidy up for asynchronous calls
             active = false
-            files = []
             resolve(assets)
         } catch (e) {
             active = false
-            files = []
             reject(e)
         }
     })

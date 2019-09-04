@@ -2,7 +2,7 @@
 'use strict'
 //Note that lambda behaves strangely for filenames with "-" hyphens
 //ensure this start file has underscores.
-
+const _module = require('path').basename(__filename)
 
 //ensure all the paths to the local node resources are found properly in lambda
 process.env.PATH = `${process.env.PATH}:${process.env.LAMBDA_TASK_ROOT}`

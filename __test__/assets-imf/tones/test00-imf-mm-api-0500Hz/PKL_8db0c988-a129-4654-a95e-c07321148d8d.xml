@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:PackingList xmlns="http://www.w3.org/2000/09/xmldsig#" xmlns:ns2="http://www.smpte-ra.org/schemas/2067-2/2016/PKL">
+    <ns2:Id>urn:uuid:8db0c988-a129-4654-a95e-c07321148d8d</ns2:Id>
+    <ns2:AnnotationText>imf-mm-api IMF CPL - test00</ns2:AnnotationText>
+    <ns2:IssueDate>2019-08-15T18:00:00Z</ns2:IssueDate>
+    <ns2:Issuer>Mr MXF Ltd</ns2:Issuer>
+    <ns2:Creator>AmberFin V11.8.0.0.323521</ns2:Creator>
+    <ns2:AssetList>
+        <ns2:Asset>
+            <ns2:Id>urn:uuid:32e351c6-bf02-4b35-b4eb-36a283caf989</ns2:Id>
+            <ns2:AnnotationText></ns2:AnnotationText>
+            <ns2:Hash>pZ8RDb7Zh+uGthaeJ4Z3RYBttK0=</ns2:Hash>
+            <ns2:Size>16431</ns2:Size>
+            <ns2:Type>text/xml</ns2:Type>
+            <ns2:OriginalFileName>CPL_32e351c6-bf02-4b35-b4eb-36a283caf989.xml</ns2:OriginalFileName>
+            <ns2:HashAlgorithm Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        </ns2:Asset>
+        <ns2:Asset>
+            <ns2:Id>urn:uuid:80156451-2f8e-4813-8100-3d39b0f1c5fc</ns2:Id>
+            <ns2:AnnotationText></ns2:AnnotationText>
+            <ns2:Hash>7y+6/r28ghF7q0865fs8BvM0MMo=</ns2:Hash>
+            <ns2:Size>3277927</ns2:Size>
+            <ns2:Type>application/mxf</ns2:Type>
+            <ns2:OriginalFileName>test00-imf-mm-api-0500Hz_v0.mxf</ns2:OriginalFileName>
+            <ns2:HashAlgorithm Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        </ns2:Asset>
+        <ns2:Asset>
+            <ns2:Id>urn:uuid:34ca64f5-300b-453f-b4f3-d0035b015d9f</ns2:Id>
+            <ns2:AnnotationText></ns2:AnnotationText>
+            <ns2:Hash>FmzY4f0wnZsz5KPlL4YBmlQUFXY=</ns2:Hash>
+            <ns2:Size>1346984</ns2:Size>
+            <ns2:Type>application/mxf</ns2:Type>
+            <ns2:OriginalFileName>test00-imf-mm-api-0500Hz_a0.mxf</ns2:OriginalFileName>
+            <ns2:HashAlgorithm Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        </ns2:Asset>
+    </ns2:AssetList>
+</ns2:PackingList>
