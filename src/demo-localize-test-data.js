@@ -20,7 +20,7 @@ const demo_json_filepath = 'docs/www/r/js/test-records.json'
 const put_post_json_filepath = 'docs/www/r/js/put-post-records.json'
 
 module.exports.localize = async function () {
-    if (!config.get('enable.demo_localization')) {
+    if (!config.get('enable.synth_local_test_data')) {
         //if localization was turned off then return
         return
     }

@@ -84,34 +84,53 @@ const get_database_info = async (ctx, next) => {
   await next()
 }
 
+/** return the current README file
+ * 
+ * @returns {String} the readme.md file from the root folder
+ */
+const get_readme = async (ctx, next) => {
+  ctx.status = 200
+  ctx.set('Content-Type', 'application/json')
+
+  ctx.body = fs.readFileSync('README.md')
+  await next()
+}
+
 const reset_db = async (ctx, next) => {
   ctx.set('Content-Type', 'application/json')
 
-  let db = require('./db')
-  let posted = await db.reset()
-    .catch(e => {
-      log.error(`${rJ(_module + ': ')}reset db: ${e.message} from ${e.fileName}(${e.lineNumber})`)
-      ctx.status = 500
-      ctx.body = JSON.stringify(
-        {
-          db_type: db.type,
-          db_status: e.message,
-        }
-      )
-    })
-    .then(async (res) => {
-      ctx.status = 204
-      let info = await db.info()
+  if (config.get('enable.admin_delete_db')) {
+    let db = require('./db')
+    let posted = await db.reset()
+      .catch(e => {
+        log.error(`${rJ(_module + ': ')}reset db: ${e.message} from ${e.fileName}(${e.lineNumber})`)
+        ctx.status = 500
+        ctx.body = JSON.stringify(
+          {
+            db_type: db.type,
+            db_status: e.message,
+          }
+        )
+      })
+      .then(async (res) => {
+        ctx.status = 204
+        let info = await db.info()
 
-      //prettify the JSON with an indent of 2
-      ctx.body = JSON.stringify(info, undefined, 2)
-      await next()
-    })
+        //prettify the JSON with an indent of 2
+        ctx.body = JSON.stringify(info, undefined, 2)
+        await next()
+      })
+  } else {
+    //deleting the dB has been disable
+    ctx.status = 405
+    ctx.body = 'Deletion of the database has been disabled. Please contact the administrator.'
+  }
 };
 
 router.get(`/info`, get_system_info)
 router.get(`/db-info`, get_database_info)
 router.delete(`/db`, reset_db)
+router.get(`/readme`, get_readme)
 
 log.info(`${rJ('module: ')}api-admin initialised`)
 

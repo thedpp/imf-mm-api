@@ -3,14 +3,16 @@
     "port": 3333,
     "api_prefix": "dev",
     "log_options": {
-        "prettyPrint": true,
+        "_help": "you can set logging levels: fatal error warn info debug trace silent. prettyPrint and log_api_acces slow the world down",
+        "level": "info",
+        "prettyPrint": false,
         "show_config_sources": true,
         "log_api_access": true
     },
     "database":{
         "type":"local"
     },
-    "imf_asset_folders":[
+    "imf_asset_sources":[
         "__test__/assets-imf"
     ]
 }

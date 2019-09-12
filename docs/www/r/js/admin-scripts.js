@@ -21,14 +21,14 @@ demo.make_admin_buttons = function (response_element_id) {
     rows.push(demo.synth({
         label: "App info",
         mode: "GET",
-        url: '/admin/info',
+        url: 'admin/info',
         element_id: response_element_id,
         help: 'get information about the running application',
     }))
     rows.push(demo.synth({
         label: "DB info",
         mode: "GET",
-        url: '/admin/db-info',
+        url: 'admin/db-info',
         element_id: response_element_id,
         help: 'get information about the current database',
     }))
@@ -37,7 +37,7 @@ demo.make_admin_buttons = function (response_element_id) {
         id: 'delete_button',
         label: "Reset the database (DANGER)",
         mode: "DELETE",
-        url: `/admin/db`,
+        url: `admin/db`,
         element_id: response_element_id,
         help: 'DANGER - this cannot be undone',
         eventListener: demo.delete_eventListener,
@@ -70,7 +70,7 @@ demo.make_admin_buttons = function (response_element_id) {
     let yes_button = demo.synth({
         label: "Re-Init database",
         mode: "DELETE",
-        url: `/admin/db`,
+        url: `admin/db`,
         element_id: response_element_id,
         help: 'DANGER - this cannot be undone',
     })
