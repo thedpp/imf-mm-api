@@ -46,6 +46,10 @@ AWS_ACCESS_KEY_ID=XxXxXxXxXxXxXxXxXxXx
 AWS_SECRET_ACCESS_KEY=ZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZz
 export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
+#
+# GIT url for this version for display in browser
+GIT_URL=https://github.com/mrmxf/imf-mm-api/tree/1348034577d532bd0ea4a8b267a2a8b54feb5264
+export GIT_URL
 ```
 
 * check the config file based on the value of `NODE_ENV` in `.env`

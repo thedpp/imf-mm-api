@@ -59,6 +59,10 @@ const get_assets_by_id = async function (ctx, next) {
     //we have at least one record
     //format the results according to the API spec
     let api_response = dbtk.asset_TO_api_get_results(assets)
+    //return the entity tag for collision avoidance
+    let etag = dbtk.asset_etag(assets)
+    ctx.set ('ETag', etag)
+
     api_response.skip = skip
     api_response.limit = limit
     api_response.total = await db.total()

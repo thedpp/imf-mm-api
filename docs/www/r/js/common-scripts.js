@@ -66,9 +66,12 @@ demo.get_app_info = async () => {
                 for (let z = 0; z < demo.overwrite_with_mode.length; z++) {
                     let thing = document.getElementById(demo.overwrite_with_mode[z])
                     if (thing) {
-                        thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} ` +
-                            `<span class="mm-highlight">v${inf.app_version}</span> in ` +
-                            `<span class="mm-highlight">${inf.node_env}</span> mode)</span>`
+                        thing.innerHTML += ` <span style="font-size:0.4em;">${inf.app_name} ` +
+                            `v<span class="mm-highlight">${inf.app_version}</span>,` +
+                            ` in <span class="mm-highlight">${inf.node_env}</span> mode,` +
+                            ` <span class="mm-highlight">${inf.db_type}</span> DB` +
+                            ((inf.git_url) ? ` <a href="${inf.git_url}" target="_blank" class="mm-highlight">GitHub</a>`: '') +
+                            `</span>`
                     }
                 }
                 resolve(demo.info)

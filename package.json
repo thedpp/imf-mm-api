@@ -14,9 +14,9 @@
   },
   "jest": {
     "testMatch": [
-      "**/xtest__*.[jt]s?(x)",
-      "**/xtest__db-local.js",
-      "**/test__api-properties.js"
+      "**/test__*.[jt]s?(x)",
+      "**/x-test__db-local.js",
+      "**/x-test__api-crawl.js"
     ],
     "roots": [
       "__test__/",

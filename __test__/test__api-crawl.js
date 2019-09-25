@@ -50,7 +50,7 @@ afterAll(async () => {
 
 // - - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -- - - - - -
 
-describe(`${__test}: testing GET /${api}`, () => {
+describe(`${__test}: testing /${api}`, () => {
     test.only(`GET /${api}`, async () => {
         //assert code 200, json content type and the body contains required 
         return request
@@ -61,15 +61,24 @@ describe(`${__test}: testing GET /${api}`, () => {
             .expect(/("id"):/)
             .expect(/("active"):/)
     });
-    test(`GET /${api}/`, async () => {
+    test(`GET /${api}/start`, async () => {
+        //assert code 200, json content type and the body contains required 
+        return request
+            .get(`/${api}/start`)
+            .expect(200)
+            .expect('Content-Type', /json/)
+            .expect(/(\"id\")\:/)
+            .expect(/("active"):/)
+    });
+    test(`GET /${api}/ i.e. status`, async () => {
         //assert code 200, json content type and the body contains required 
         return request
             .get(`/${api}/`)
             .expect(200)
             .expect('Content-Type', /json/)
             .expect(/(\"id\")\:/)
-            .expect(/("id"):/)
-            .expect(/("active"):/)
+            .expect(/(\"state\")\:/)
+            .expect(/(\"imf_asset_path\")\:/)
     });
 });
 
