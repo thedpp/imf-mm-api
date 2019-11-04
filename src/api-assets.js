@@ -43,6 +43,11 @@ const get_assets = async function (ctx, next) {
   await next()
 }
 
+/** GET an asset by an ID
+ * @param {koaCtxType} ctx - the koa context
+ * @param {async function} next - the next handler in the chain
+ * @returns {Promise}
+ */
 const get_assets_by_id = async function (ctx, next) {
   let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
@@ -109,7 +114,69 @@ const status_response = (status, ctx, message) => {
   }
 }
 
-const add_new_asset = async function (ctx, next) {
+/** PUT an asset update by an ID
+ * @param {koaCtxType} ctx - the koa context
+ * @param {async function} next - the next handler in the chain
+ * @returns {Promise}
+ */
+const put_assets_update = async function (ctx, next) {
+  let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
+  let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
+
+  // asynchronously fetch the matching assets
+  let assets = await db.get_assets_by_id(skip, limit, ctx.params.id)
+    .catch((err) => {
+      log.error(err.message)
+    })
+
+  ctx.set('Content-Type', 'application/json')
+
+  if (assets) {
+    //we have at least one record
+    //format the results according to the API spec
+    let api_response = dbtk.asset_TO_api_get_results(assets)
+    //find the database entity tag for collision avoidance
+    let etag_db = dbtk.asset_etag(assets)
+
+    //get the request entitiy tag to be sure they match
+    let etag_req = ctx.request_headers["If-Match"]
+    
+    if(!etag_req){
+      // there was no If-Match header so we should error 428
+      status_response(428, ctx, "Precondition required. Expecting If-Match header")
+    }else if (etag_req !== etag_db){
+      // there was an If-Match header but db has changed since the client
+      // did the last GET request for this ID to error 412
+      status_response(412, ctx, "Precondition failed. etag did not match for update")
+    }else{
+      // etag matches so we can try to update the record from the supplied data
+      //ctx.set ('ETag', etag)
+
+      api_response.skip = skip
+      api_response.limit = limit
+      api_response.total = await db.total()
+      //return the result as an array for consistency
+      ctx.body = JSON.stringify(api_response)
+
+      if (api_response.results.length < 1) {
+        ctx.status = 404
+        ctx.body = `Asset ID not found ${ctx.params.id}`
+      } else if (api_response.results.length == 1) {
+        ctx.status = 200
+      } else {
+        //there are multiple results
+        ctx.status = 300
+      }
+    }
+  } else {
+    ctx.status = 404
+    ctx.body = `Asset ID not found ${ctx.params.id}`
+  }
+
+  await next()
+}
+
+const post_new_asset = async function (ctx, next) {
   let asset = ctx.request.body
 
   if (!validate_asset.request_headers(ctx)) {
@@ -172,10 +239,10 @@ const delete_asset = async (ctx, next) => {
 
 router.get(`/${config.get('api_prefix')}/assets`, get_assets)
 router.get(`/${config.get('api_prefix')}/assets/:id`, get_assets_by_id)
-router.put(`/${config.get('api_prefix')}/assets/:id`, not_implemented)
-router.post(`/${config.get('api_prefix')}/assets/`, add_new_asset)
+router.put(`/${config.get('api_prefix')}/assets/:id`, put_assets_update)
+router.post(`/${config.get('api_prefix')}/assets/`, post_new_asset)
 router.delete(`/${config.get('api_prefix')}/assets/:id`, delete_asset)
 
-log.info(`${rJ('module: ')}api-assets initialised at /${config.get('api_prefix')}/assets`)
+log.debug(`${rJ('module: ')}api-assets initialised at /${config.get('api_prefix')}/assets`)
 
 module.exports = router;
