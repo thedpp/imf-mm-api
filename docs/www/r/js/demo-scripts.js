@@ -91,6 +91,15 @@ demo.make_demo_buttons = function (response_element_id, data) {
         element_id: response_element_id,
         help: ' return just one asset record',
     }))
+    //the put request uses the most recent etag in the header
+    rows.push(demo.synth({
+        label: "get #P1 by ID",
+        mode: "PUT",
+        url: `${demo.info.api_prefix}/assets/${demo.put_asset1.identifiers[0]}`,
+        element_id: response_element_id,
+        help: ' update the POST asset with type=MODIFIED',
+        data: demo.put_asset1,
+    }))
     rows.push(demo.synth({
         label: "delete #P1",
         mode: "DELETE",
@@ -163,6 +172,9 @@ const init_page = async () => {
 
     demo.post_asset1 = demo.non_crawl_data[1]
     demo.post_asset2 = demo.non_crawl_data[6]
+
+    demo.put_asset1= JSON.parse(JSON.stringify(demo.post_asset1))
+    demo.put_asset1.file_type="MODIFIED"
 
     //demo.synthesise the buttons
     let response_element_id = demo.response_id

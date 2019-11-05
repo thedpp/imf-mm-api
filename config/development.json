@@ -14,5 +14,8 @@
     },
     "imf_asset_sources":[
         "__test__/assets-imf"
-    ]
+    ],
+    "enable":{
+        "extended_config_messages":true
+    }
 }

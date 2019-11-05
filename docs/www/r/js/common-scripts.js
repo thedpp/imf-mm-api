@@ -8,6 +8,8 @@ demo.update_div_from_api = function (element_id, mode, url, payload) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
+            // if there is an etag then remember it
+            demo.etag = xhr.getResponseHeader('etag')
             msg = xhr.responseText
             num_assets = false
             if (('{' == xhr.responseText.substr(0, 1)) || ('[' == xhr.responseText.substr(0, 1))) {
@@ -35,6 +37,10 @@ demo.update_div_from_api = function (element_id, mode, url, payload) {
     };
     xhr.open(mode, url, true);
     document.getElementById(element_id).innerHTML = mode + url;
+    //put requests use the most recent etag to avoid collisions
+    if(mode.toLowerCase() == "put"){
+        xhr.setRequestHeader('If-Match', demo.etag)
+    }
     if (payload) {
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify(payload))

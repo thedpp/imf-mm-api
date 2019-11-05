@@ -66,7 +66,7 @@ const get_assets_by_id = async function (ctx, next) {
     let api_response = dbtk.asset_TO_api_get_results(assets)
     //return the entity tag for collision avoidance
     let etag = dbtk.asset_etag(assets)
-    ctx.set ('ETag', etag)
+    ctx.set('ETag', etag)
 
     api_response.skip = skip
     api_response.limit = limit
@@ -100,8 +100,16 @@ const status_response = (status, ctx, message) => {
   ctx.status = status
   ctx.set('Content-Type', 'text/plain')
   try {
-    let status_label = config.get(`paths./assets.post.responses.${ctx.status}.content.application/json.example.status_label`)
-    let description = config.get(`paths./assets.post.responses.${ctx.status}.description`)
+    //grab thelabel and description from the config default.yaml files
+    let status_label = ''
+    let description = ''
+    if (`post` == ctx.method.toLowerCase()) {
+      status_label = config.get(`paths./assets.post.responses.${ctx.status}.content.application/json.example.status_label`)
+      description = config.get(`paths./assets.post.responses.${ctx.status}.description`)
+    } else {
+      //status_label = config.paths['/assets/{id}'].put.responses.put.content.['application/json'].example.status_label
+      description = config.paths['/assets/{id}'].put.responses.put.description
+    }
     if (config.get('enable.extended_config_messages')) {
       let msg = (undefined == message) ? '' : message
       ctx.body = `${status_label}\n\nExtended Message:\n${description}\n----------\n${msg}`
@@ -139,16 +147,16 @@ const put_assets_update = async function (ctx, next) {
     let etag_db = dbtk.asset_etag(assets)
 
     //get the request entitiy tag to be sure they match
-    let etag_req = ctx.request_headers["If-Match"]
-    
-    if(!etag_req){
+    let etag_req = ctx.headers["if-match"]
+
+    if (!etag_req) {
       // there was no If-Match header so we should error 428
       status_response(428, ctx, "Precondition required. Expecting If-Match header")
-    }else if (etag_req !== etag_db){
+    } else if (etag_req !== etag_db) {
       // there was an If-Match header but db has changed since the client
       // did the last GET request for this ID to error 412
       status_response(412, ctx, "Precondition failed. etag did not match for update")
-    }else{
+    } else {
       // etag matches so we can try to update the record from the supplied data
       //ctx.set ('ETag', etag)
 
