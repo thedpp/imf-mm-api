@@ -1,5 +1,13 @@
 /* jshint node: true */
 'use strict'
+
+/** @module registration API handler */
+
+/**
+ * @todo - tidy up all the help responses. The PUT method made it messy.
+ * @todo - add authentication headers and validation
+ */
+
 const config = require('config')
 const log = require('pino')(config.get('log_options'))
 const u = require('./lib/util')
@@ -20,6 +28,26 @@ const not_implemented = async function (ctx, next) {
   ctx.body = `imf-mm-api functionality not Implemented yet. Come back later.`
   // don't fire the next event. We're done
   await next()
+}
+/** return the error description from config default.yaml
+ * @param {string} mode - GET, PUT, POST, DELETE
+ * @param {integer} status - the status code for the mode
+ * 
+ * return the code from the config default.yaml and optionally append
+ * the extended_description if config.enable.extended_config_messages
+ * is set
+ */
+function status_description(mode, status, extended_description) {
+  try {
+    let msg = config.get(`paths./assets.${mode}.responses.${status}.description`)
+    if (config.get(`enable.extended_config_messages`)) {
+      return msg + extended_description
+    } else {
+      return msg
+    }
+  } catch (e) {
+    return `Undocumented Status ${status}`
+  }
 }
 
 const get_assets = async function (ctx, next) {
@@ -139,48 +167,67 @@ const put_assets_update = async function (ctx, next) {
 
   ctx.set('Content-Type', 'application/json')
 
-  if (assets) {
-    //we have at least one record
-    //format the results according to the API spec
-    let api_response = dbtk.asset_TO_api_get_results(assets)
-    //find the database entity tag for collision avoidance
-    let etag_db = dbtk.asset_etag(assets)
-
-    //get the request entitiy tag to be sure they match
-    let etag_req = ctx.headers["if-match"]
-
-    if (!etag_req) {
-      // there was no If-Match header so we should error 428
-      status_response(428, ctx, "Precondition required. Expecting If-Match header")
-    } else if (etag_req !== etag_db) {
-      // there was an If-Match header but db has changed since the client
-      // did the last GET request for this ID to error 412
-      status_response(412, ctx, "Precondition failed. etag did not match for update")
-    } else {
-      // etag matches so we can try to update the record from the supplied data
-      //ctx.set ('ETag', etag)
-
-      api_response.skip = skip
-      api_response.limit = limit
-      api_response.total = await db.total()
-      //return the result as an array for consistency
-      ctx.body = JSON.stringify(api_response)
-
-      if (api_response.results.length < 1) {
-        ctx.status = 404
-        ctx.body = `Asset ID not found ${ctx.params.id}`
-      } else if (api_response.results.length == 1) {
-        ctx.status = 200
-      } else {
-        //there are multiple results
-        ctx.status = 300
-      }
-    }
-  } else {
+  // no matching asset to update
+  if (!assets) {
     ctx.status = 404
     ctx.body = `Asset ID not found ${ctx.params.id}`
+    await next()
+    return
   }
 
+  if (assets.length > 1) {
+    //reject bad headers with 415
+    status_response(300, ctx, "Cannot update when there is more than one matching id.")
+    await next()
+    return
+  }
+
+  //we have only  one record
+  //format the results according to the API spec
+  let api_response = dbtk.asset_TO_api_get_results(assets)
+  //find the database entity tag for collision avoidance
+  let etag_db = dbtk.asset_etag(assets)
+
+  //get the request entitiy tag to be sure they match
+  let etag_req = ctx.headers["if-match"]
+
+  if (!etag_req) {
+    // there was no If-Match header so we should error 428
+    status_response(428, ctx, "Precondition required. Expecting If-Match header")
+  } else if (etag_req !== etag_db) {
+    // there was an If-Match header but db has changed since the client
+    // did the last GET request for this ID to error 412
+    status_response(412, ctx, "Precondition failed. etag did not match for update")
+  } else {
+    // etag matches so we can try to update the record from the supplied data
+
+    if (!validate_asset.request_headers(ctx)) {
+      //reject bad headers with 415
+      status_response(415, ctx, "Bad Headers detected")
+    } else {
+      let asset = ctx.request.body
+      //let good_json = validate_asset.json_values(asset)
+      let good_json = {
+        status: 204,
+        help: "Asset registration updated",
+      }
+      if (good_json.status < 300) {
+        let ret = await db.post(asset)
+        if (ret == 'ok') {
+          status_response(good_json.status, ctx)
+
+          //Set the location header according to the API spec
+          ctx.set('Location', `${ctx.request.href}${asset.identifiers[0]}`)
+        } else {
+          //bad json
+          status_response(415, ctx, "Payload seemed valid, but database rejected asset")
+        }
+      } else {
+        //could not validate payload so reject with (probably) 415
+        status_response(good_json.status, ctx, "Could not validate POST payload")
+      }
+    }
+  }
   await next()
 }
 

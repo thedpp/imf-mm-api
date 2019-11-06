@@ -20,7 +20,7 @@ let request_headers = (ctx) => {
     return ((ctx.request.header['content-type'] == 'application/json') || (ctx.request.header['content-type'] == 'application/xml'))
 }
 
-/**
+/** @todo - add extra testing here when authentication it turned on
  * 
  * @param {asset_registration_post_object} asset - asset sent via PUT or POST
  * @returns {Object} 
