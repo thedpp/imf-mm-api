@@ -6,11 +6,7 @@ security:
   - type: [ http ]
 servers:
   - url: https://imf-mm-api.cloud/demo/1
-    description: 'Public version of API from Mr MXF hosted by Amazon Elemental'
-  - url: https://imf-mm-api.cloud/demo/staging
-    description: 'Testing release candidate from Mr MXF hosted by Amazon Elemental'
-  - url: https://imf-mm-api.cloud/demo/staging
-    description: 'Next release candidate from Mr MXF hosted by Amazon Elemental'
+    description: 'Latest implementation of API from Mr MXF hosted by Amazon Elemental'
 paths:
   /assets:
     post:

@@ -23,6 +23,8 @@ Contact [Mr MXF](https://mrmxf.com) if you need something more robust.
 * clone (or download and unzip) the repository into a folder
 * `cd` into that folder
 * install dependencies `npm install --production`
+* fix any security issues `npm audit fix`
+* dedupe modules `npm dedupe`
 * create a `.env` file with how you want to run the code and credentials for AWS  if you
   are going to use AWS SimpleDB as your database
 
@@ -37,15 +39,19 @@ NODE_ENV=development
 #NODE_ENV=production
 export NODE_ENV
 #
-# Override the default port on this server
-PORT_OVERRIDE=3001
-export PORT_OVERRIDE
+# Override any configuration property via environement JSON e.g. port or disable DB delete
+NODE_CONFIG='{"port":3100,"log_options":{"level":"error","log_api_access":false},"enable":{"admin_delete_db":false}}'
+export NODE_CONFIG
 #
 # AWS keys to access SimpleDB if you use your own cloud AWS SimpleDB database
 AWS_ACCESS_KEY_ID=XxXxXxXxXxXxXxXxXxXx
 AWS_SECRET_ACCESS_KEY=ZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZzZz
 export AWS_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY
+#
+# GIT url for this version for display in browser
+GIT_URL=https://github.com/mrmxf/imf-mm-api/tree/1348034577d532bd0ea4a8b267a2a8b54feb5264
+export GIT_URL
 ```
 
 * check the config file based on the value of `NODE_ENV` in `.env`

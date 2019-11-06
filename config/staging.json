@@ -3,17 +3,10 @@
     "port": 3002,
     "api_prefix": "staging",
     "database": {
-        "_help": "databsae.type is either 'local' or 'aws-simple-db'",
-        "type": "aws-simple-db",
-        "local_filename": "db/imf-mm-api-lowdb-staging.json",
-        "simpledb_domain_name": "imf-mm-api-staggin-test"
+        "type": "local"
     },
-
     "log_options": {
-        "_help": "you can set logging levels: fatal error warn info debug trace silent. prettyPrint and log_api_acces slow the world down",
         "level": "warn",
-        "prettyPrint": false,
-        "show_config_sources": true,
         "log_api_access": true
     }
 }

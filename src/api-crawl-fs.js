@@ -77,7 +77,7 @@ const get_crawl_status = async (ctx, next) => {
   }
   for (let p = 0; p < 1; p++) {
     let cstat = {
-      root: path.resolve(config.get('imf_asset_folders')[p]),
+      root: path.resolve(config.get('imf_asset_sources')[p]),
     }
 
     if (state == 'crawling') {
@@ -110,7 +110,7 @@ const start_crawl_in_folder = async (ctx, next) => {
   ctx.set('Content-Type', 'application/json')
 
   // only crawl a single folder for now
-  crawler.crawl(path.resolve(config.get('imf_asset_folders')[0]))
+  crawler.crawl(path.resolve(config.get('imf_asset_sources')[0]))
     .then(async crawled_assets => {
       asset_list = crawled_assets
 
@@ -133,7 +133,7 @@ const start_crawl_in_folder = async (ctx, next) => {
     {
       id: crawl_id,
       state: 'crawling',
-      root: path.resolve(config.get('imf_asset_folders')[0]),
+      root: path.resolve(config.get('imf_asset_sources')[0]),
       progress: 0,
     }
   )

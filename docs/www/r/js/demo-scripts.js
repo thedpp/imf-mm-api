@@ -7,6 +7,13 @@ demo.paging_button_eventListener = async () => {
     btn.innerHTML = `GET ${url} `
 }
 
+demo.put_button_eventListener = async () => {
+    let btn = document.getElementById('put_button')
+    let url = `${demo.info.api_prefix}/assets/${demo.put_asset1.identifiers[0]}`
+    demo.put_asset1.file_type = `MODIFIED RND(${Math.floor(1000000 * Math.random())})`
+    demo.update_div_from_api(demo.response_id, 'PUT', url, demo.put_asset1)
+}
+
 demo.make_demo_buttons = function (response_element_id, data) {
     let rows = []
 
@@ -19,7 +26,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     }))
 
     /* --------------------------------------------------------------------------------- */
-    rows.push(demo.synth({brk:1,}))
+    rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
     rows.push(demo.synth({
@@ -47,7 +54,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     }))
 
     /* --------------------------------------------------------------------------------- */
-    rows.push(demo.synth({brk:1,}))
+    rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
     rows.push(demo.synth({
@@ -73,7 +80,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     }))
 
     /* --------------------------------------------------------------------------------- */
-    rows.push(demo.synth({brk:1,}))
+    rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
     rows.push(demo.synth({
@@ -91,6 +98,17 @@ demo.make_demo_buttons = function (response_element_id, data) {
         element_id: response_element_id,
         help: ' return just one asset record',
     }))
+    //the put request uses the most recent etag in the header
+    rows.push(demo.synth({
+        id: 'put_button',
+        label: "get #P1 by ID",
+        mode: "PUT",
+        url: `${demo.info.api_prefix}/assets/${demo.put_asset1.identifiers[0]}`,
+        element_id: response_element_id,
+        help: ' update a asset #P1. GET the right asset first!!',
+        data: demo.put_asset1,
+        eventListener: demo.put_button_eventListener,
+    }))
     rows.push(demo.synth({
         label: "delete #P1",
         mode: "DELETE",
@@ -100,7 +118,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     }))
 
     /* --------------------------------------------------------------------------------- */
-    rows.push(demo.synth({brk:1,}))
+    rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
     rows.push(demo.synth({
@@ -118,6 +136,15 @@ demo.make_demo_buttons = function (response_element_id, data) {
         element_id: response_element_id,
         help: ' return just one asset record',
     }))
+    //this put request will always error because of no if-match header
+    rows.push(demo.synth({
+        label: "get #P2 by ID",
+        mode: "FAKE_PUT",
+        url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
+        element_id: response_element_id,
+        help: ' fail because of no If-Match header',
+        data: demo.post_asset2,
+    }))
     rows.push(demo.synth({
         label: "delete #P2",
         mode: "DELETE",
@@ -134,7 +161,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     }))
 
     /* --------------------------------------------------------------------------------- */
-    rows.push(demo.synth({brk:1,}))
+    rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
     return rows
@@ -163,6 +190,9 @@ const init_page = async () => {
 
     demo.post_asset1 = demo.non_crawl_data[1]
     demo.post_asset2 = demo.non_crawl_data[6]
+
+    demo.put_asset1 = JSON.parse(JSON.stringify(demo.post_asset1))
+    demo.put_asset1.file_type = "MODIFIED"
 
     //demo.synthesise the buttons
     let response_element_id = demo.response_id

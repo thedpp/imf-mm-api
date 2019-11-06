@@ -87,12 +87,23 @@ const reset = async function (params) {
     })
 }
 
-/** Add or update a record */
+/** POST a new record or replace an existing one
+ * @param {Object} asset - an asset api object
+ * @return {String} 'ok' on success
+ * 
+ * NOTE It is the responsibility of the database to generate the etag value
+ * 
+ * @todo improve return status to be an object with http code and message
+ * @todo explore db post failure mechanisms
+ */
 const post = async function (asset) {
     return new Promise((resolve, reject) => {
         /* @todo use one of the identifiers (hash?) as the canonical record */
         /* @todo search first to see if the identifier exists elsewhere */
         let item_name = asset.identifiers[0]
+
+        //simplest eTag for collision detection is a millisecond timestamp as a hex string
+        asset.etag = new Date().getTime().toString(16)
 
         asset.identifiers.forEach(element => {
             if (element.substr(0, 9) == "urn:sha1:") {

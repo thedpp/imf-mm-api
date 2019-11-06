@@ -5,7 +5,7 @@
     "log_options": {
         "_help": "you can set logging levels: fatal error warn info debug trace silent. prettyPrint and log_api_acces slow the world down",
         "level": "info",
-        "prettyPrint": false,
+        "prettyPrint": true,
         "show_config_sources": true,
         "log_api_access": true
     },
@@ -14,5 +14,8 @@
     },
     "imf_asset_sources":[
         "__test__/assets-imf"
-    ]
+    ],
+    "enable":{
+        "extended_config_messages":true
+    }
 }
