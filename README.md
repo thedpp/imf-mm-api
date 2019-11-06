@@ -86,6 +86,19 @@ properly until a few bugs are ironed out. Probably August 2019 for that update.
   * local: configure `/.vscode/runtime.env` to set `NODE_ENV`
   * lambda: edit `serverless.yml` to set `NODE_ENV` for the cloudformation deployed app
 
+### to build and run Docker image
+
+The project can be used as Docker container.
+
+First build the image:
+`docker build -t imf-mm-api .`
+
+First build the image:
+`docker run -d -p 3100:3100 --name imf-mm imf-mm-api`
+
+Then simply access to the API:
+[http://localhost:3100/demo/1/assets](http://localhost:3100/demo/1/assets)
+
 ## AWS requirements
 
 To use the simpledb cloud database as the backend, you will need to provide AWS keys that allow the
@@ -209,6 +222,8 @@ the changes along side your main server.
 
 ## API Change Log
 
+* 2019-10-14 Docker image
+  * provide the Docker image of the service
 * 2019-09-03 deployment updates
   * fixed mounting of the app under defferent routes by providing `config.mount_point`
   * updated cloud instance for testing with `staging`, `beta` and `1/` end points
