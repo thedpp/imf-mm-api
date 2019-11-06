@@ -10,7 +10,7 @@
     ],
     "port": 3000,
     "app_name": "imf-mm-api-demo-app",
-    "app_version": "0.8",
+    "app_version": "0.9",
     "app_authors": [
         "Mr MXF"
     ],

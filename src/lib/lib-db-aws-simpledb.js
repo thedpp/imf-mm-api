@@ -3,7 +3,7 @@
  * it's dumb, it's not intended for production but it works
  * it might be slow and limited in the length of identifiers but hey, it's not for production.
  * 
- * AWS credentials are taken from Environment variables - see readme
+ * AWS credentials are taken from Environment letiables - see readme
  */
 /* jshint node: true */
 'use strict'
@@ -17,9 +17,9 @@ const _module = require('path').basename(__filename)
 
 /** The simpledb library provides all the nice back-off functionality
  *  but needs to be given credentials manually. Let's extract them using
- *  the AWS automatic mechanisms from the environment variables
+ *  the AWS automatic mechanisms from the environment letiables
 */
-var aws_auto_config = new AWS.Config();
+let aws_auto_config = new AWS.Config();
 
 /**the structure of the configuration parameters for init() and reset()
  *
@@ -28,7 +28,7 @@ var aws_auto_config = new AWS.Config();
  * 
  */
 
-/* The preferred way to provide credentials is via the environment variables
+/* The preferred way to provide credentials is via the environment letiables
  * If they are missing then don't initialise sdb and therefore nothing will
  * ever run. An error will be thrown when init is called
  */
@@ -178,7 +178,7 @@ const _clean_sdb_asset = function (sdb_asset) {
  */
 const _prepare_sdb_asset = function (asset) {
   //perform a deep clone of our asset
-  var sdb_asset = JSON.parse(JSON.stringify(asset))
+  let sdb_asset = JSON.parse(JSON.stringify(asset))
 
   //stringify some of the elements so they get preserved in a SimpleDB attribute
   sdb_asset.aws = JSON.stringify(asset.aws)
@@ -218,7 +218,7 @@ const reset = async function (params) {
   return new Promise(async (resolve, reject) => {
     let deleted = await _delete_domain(sdb_domain)
     if (deleted) {
-      resolve( _create_domain(sdb_domain))
+      resolve(_create_domain(sdb_domain))
     }
   })
 }
@@ -252,12 +252,17 @@ const info = async function (params) {
   })
 }
 
-/** Add or update a record 
+/** POST a new record or replace an existing one
  * 
  * @param {Sdb_asset} asset
  * @param {Simpledb_override_parameters} [params]
  * @returns {String | Error} resolves to 'ok' or rejects with an error object
  *
+ * NOTE It is the responsibility of the database to generate the etag value
+ * according to the anti-collision requirements of that database
+ *
+ * @todo improve return status to be an object with http code and message
+ * @todo explore db post failure mechanisms
  */
 const post = async function (asset, params) {
   let sdb_domain = _resolve_sdb_domain(params)
@@ -265,7 +270,7 @@ const post = async function (asset, params) {
   return new Promise((resolve, reject) => {
     /* @todo use one of the identifiers (hash?) as the canonical record */
     /* @todo search first to see if the identifier exists elsewhere */
-    var item_name = asset.identifiers[0]
+    let item_name = asset.identifiers[0]
 
     asset.identifiers.forEach(element => {
       if (element.substr(0, 9) == "urn:sha1:") {
@@ -273,8 +278,11 @@ const post = async function (asset, params) {
       }
     });
 
-    //prepare the asset for SimpleDB
-    var sdb_asset = _prepare_sdb_asset(asset)
+    //simplest eTag for collision detection is a millisecond timestamp as a hex string
+    asset.etag = new Date().getTime().toString(16)
+
+    //prepare the asset for SimpleDB (JSON stringify objects)
+    let sdb_asset = _prepare_sdb_asset(asset)
 
     sdb.putItem(sdb_domain, item_name, sdb_asset, function (err, res, meta) {
       if (err) {
@@ -306,7 +314,7 @@ const get = async function (skip, limit, params) {
       resolve([])
     }
 
-    var query = `select * from \`${sdb_domain}\``
+    let query = `select * from \`${sdb_domain}\``
     query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
 
     //if we are paging then set the NextToken
@@ -317,7 +325,7 @@ const get = async function (skip, limit, params) {
         reject(err)
       } else {
         let assets = []
-        for (var r = 0; r < res.length; r++) {
+        for (let r = 0; r < res.length; r++) {
           assets.push(_clean_sdb_asset(res[r]))
         }
         resolve(assets)
@@ -337,7 +345,7 @@ const get_assets_by_id = async function (skip, limit, asset_id, params) {
   let sdb_domain = _resolve_sdb_domain(params)
 
   return new Promise(async (resolve, reject) => {
-    var query = `select * from \`${sdb_domain}\``
+    let query = `select * from \`${sdb_domain}\``
     query += ` where identifiers like '%"${asset_id}"%'`
     query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
 
@@ -346,7 +354,7 @@ const get_assets_by_id = async function (skip, limit, asset_id, params) {
         reject(err)
       } else {
         let assets = []
-        for (var r = 0; r < res.length; r++) {
+        for (let r = 0; r < res.length; r++) {
           assets.push(_clean_sdb_asset(res[r]))
         }
         resolve(assets)
@@ -365,7 +373,7 @@ const delete_assets_by_id = async function (asset_id, params) {
 
   return new Promise(async (resolve, reject) => {
     //get an asset by id and then use its itemname to delete it
-    var query = `select * from \`${sdb_domain}\``
+    let query = `select * from \`${sdb_domain}\``
     query += ` where identifiers like '%"${asset_id}"%'`
     query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
 
@@ -376,7 +384,7 @@ const delete_assets_by_id = async function (asset_id, params) {
       } else if (res.length > 1) {
         //there were multiple matches so return them and give a 300 error from the API
         let assets = []
-        for (var r = 0; r < res.length; r++) {
+        for (let r = 0; r < res.length; r++) {
           assets.push(_clean_sdb_asset(res[r]))
         }
         resolve(assets)
@@ -413,7 +421,7 @@ const total = async function (skip, limit, params) {
   let sdb_domain = _resolve_sdb_domain(params)
 
   return new Promise((resolve, reject) => {
-    var query = `select count(*) from \`${sdb_domain}\``
+    let query = `select count(*) from \`${sdb_domain}\``
 
     sdb.select(query, {}, function (err, res, meta) {
       if (err) {

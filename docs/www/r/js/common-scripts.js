@@ -8,6 +8,8 @@ demo.update_div_from_api = function (element_id, mode, url, payload) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
+            // if there is an etag then remember it
+            demo.etag = xhr.getResponseHeader('etag')
             msg = xhr.responseText
             num_assets = false
             if (('{' == xhr.responseText.substr(0, 1)) || ('[' == xhr.responseText.substr(0, 1))) {
@@ -33,8 +35,21 @@ demo.update_div_from_api = function (element_id, mode, url, payload) {
                 `<div id="${demo.response_body_id}">${msg}</div><br>`
         }
     };
-    xhr.open(mode, url, true);
-    document.getElementById(element_id).innerHTML = mode + url;
+    //the fake_put mode is to test the 428 error response
+    let real_method = ("fake_put" == mode.toLowerCase()) ? `PUT`: mode
+
+    //construct the http request
+    xhr.open(real_method, url, true);
+
+    //update the page while we wait for the response
+    document.getElementById(element_id).innerHTML = mode + url
+
+    //put requests use the most recent etag to avoid collisions
+    if (mode.toLowerCase() == "put") {
+        xhr.setRequestHeader('If-Match', demo.etag)
+    }
+
+    //add payloads for PUT and POST requests
     if (payload) {
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify(payload))
@@ -66,9 +81,12 @@ demo.get_app_info = async () => {
                 for (let z = 0; z < demo.overwrite_with_mode.length; z++) {
                     let thing = document.getElementById(demo.overwrite_with_mode[z])
                     if (thing) {
-                        thing.innerHTML += ` <span style="font-size:50%">(${inf.app_name} ` +
-                            `<span class="mm-highlight">v${inf.app_version}</span> in ` +
-                            `<span class="mm-highlight">${inf.node_env}</span> mode)</span>`
+                        thing.innerHTML += ` <span style="font-size:0.4em;">${inf.app_name} ` +
+                            `v<span class="mm-highlight">${inf.app_version}</span>,` +
+                            ` in <span class="mm-highlight">${inf.node_env}</span> mode,` +
+                            ` <span class="mm-highlight">${inf.db_type}</span> DB` +
+                            ((inf.git_url) ? ` <a href="${inf.git_url}" target="_blank" class="mm-highlight">GitHub</a>` : '') +
+                            `</span>`
                     }
                 }
                 resolve(demo.info)
@@ -156,7 +174,11 @@ demo.synth = function (opt) {
     } else {
         button.addEventListener('click', function () { demo.update_div_from_api(opt.element_id, opt.mode, opt.url, opt.data) })
     }
-    button.innerHTML = `${opt.mode} ${opt.url} `
+    if (opt.mode.toLowerCase() == "fake_put") {
+        button.innerHTML = `PUT ${opt.url} `
+    } else {
+        button.innerHTML = `${opt.mode} ${opt.url} `
+    }
     button_cell.appendChild(button)
     if (opt.id) {
         button.setAttribute('id', opt.id)
@@ -168,6 +190,7 @@ demo.synth = function (opt) {
     //button styles: bootstrap default to match  swaggerhub default
     let button_style = {
         GET: 'btn-primary',
+        FAKE_PUT: 'btn-warning',
         PUT: 'btn-warning',
         POST: 'btn-success',
         DELETE: 'btn-danger',

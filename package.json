@@ -14,9 +14,9 @@
   },
   "jest": {
     "testMatch": [
-      "**/xtest__*.[jt]s?(x)",
-      "**/xtest__db-local.js",
-      "**/test__api-properties.js"
+      "**/test__*.[jt]s?(x)",
+      "**/x-test__db-local.js",
+      "**/x-test__api-crawl.js"
     ],
     "roots": [
       "__test__/",
@@ -48,14 +48,14 @@
   },
   "homepage": "https://github.com/mrmxf/imf-mm-api-server-js#readme",
   "dependencies": {
-    "aws-sdk": "^2.513.0",
+    "aws-sdk": "^2.564.0",
     "binary": "^0.3.0",
-    "chokidar": "^3.0.2",
-    "config": "^3.2.2",
-    "dotenv": "^8.1.0",
+    "chokidar": "^3.3.0",
+    "config": "^3.2.4",
+    "dotenv": "^8.2.0",
     "js-yaml": "^3.13.1",
     "json-format": "^1.0.1",
-    "koa": "^2.8.1",
+    "koa": "^2.11.0",
     "koa-body": "^4.1.1",
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.1",
@@ -66,11 +66,11 @@
     "lowdb": "^1.0.0",
     "moment": "^2.24.0",
     "open": "^6.4.0",
-    "pino": "^5.13.2",
+    "pino": "^5.13.5",
     "pino-tee": "^0.2.2",
     "serverless-http": "^1.10.1",
     "simpledb": "^0.2.0",
-    "xml2js": "^0.4.19"
+    "xml2js": "^0.4.22"
   },
   "devDependencies": {
     "chalk": "^2.4.2",
@@ -81,12 +81,12 @@
     "gulp-lambda-deploy": "^0.3.0",
     "gulp-zip": "^4.2.0",
     "jest": "^24.9.0",
-    "jest-html-reporter": "^2.4.1",
-    "jshint": "^2.10.2",
+    "jest-html-reporter": "^2.7.0",
+    "jshint": "^2.10.3",
     "jshint-stylish": "^2.2.1",
     "koa-openapi": "^3.13.5",
     "lodash": "^4.17.15",
-    "pino-pretty": "^3.2.1",
+    "pino-pretty": "^3.3.0",
     "supertest": "^3.4.2"
   }
 }
