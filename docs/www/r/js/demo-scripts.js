@@ -15,150 +15,174 @@ demo.put_button_eventListener = async () => {
 }
 
 demo.make_demo_buttons = function (response_element_id, data) {
-    let rows = []
-
-    rows.push(demo.synth({
-        label: "home page",
-        mode: "GET",
-        url: '',
-        element_id: response_element_id,
-        help: 'return the website home page to prove script is working',
-    }))
-
-    /* --------------------------------------------------------------------------------- */
-    rows.push(demo.synth({ brk: 1, }))
-    /* --------------------------------------------------------------------------------- */
-
-    rows.push(demo.synth({
-        label: "all assets",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets`,
-        element_id: response_element_id,
-        help: `return first page of assets using default paging (defined in ${demo.info.node_env} config file)`,
-    }))
-    rows.push(demo.synth({
-        label: "all assets",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets?limit=500`,
-        element_id: response_element_id,
-        help: 'return first page of assets - up to 500 assets',
-    }))
-    rows.push(demo.synth({
-        id: 'paging_button',
-        label: "assets (paging)",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets?skip=${demo.skip}&limit=${demo.limit}`,
-        element_id: response_element_id,
-        help: ` page all the assets ${demo.limit} at a time`,
-        eventListener: demo.paging_button_eventListener,
-    }))
+    let rows = [
+        demo.synth({
+            label: "home page",
+            mode: "GET",
+            url: '',
+            element_id: response_element_id,
+            help: 'return the website home page to prove script is working',
+        })
+    ]
 
     /* --------------------------------------------------------------------------------- */
     rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
-    rows.push(demo.synth({
-        label: "CPL by ID",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets/${demo.cpl_id}`,
-        element_id: response_element_id,
-        help: 'return matching record',
-    }))
-    rows.push(demo.synth({
-        label: "CPL by hash",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets/${demo.cpl_sha}`,
-        element_id: response_element_id,
-        help: 'return matching record',
-    }))
-    rows.push(demo.synth({
-        label: "<span class='api400'>missing asset</span>",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets/urn:uuid:11111111-2222-3333-4444-555555555555`,
-        element_id: response_element_id,
-        help: 'search for asset that is not there and return an error',
-    }))
+    rows = rows.concat([
+        demo.synth({
+            label: "all assets",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets`,
+            element_id: response_element_id,
+            help: `return first page of assets using default paging (defined in ${demo.info.node_env} config file)`,
+        }),
+        demo.synth({
+            label: "all assets",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets?limit=500`,
+            element_id: response_element_id,
+            help: 'return first page of assets - up to 500 assets',
+        }),
+        demo.synth({
+            id: 'paging_button',
+            label: "assets (paging)",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets?skip=${demo.skip}&limit=${demo.limit}`,
+            element_id: response_element_id,
+            help: ` page all the assets ${demo.limit} at a time`,
+            eventListener: demo.paging_button_eventListener,
+        }),
+        demo.synth({
+            id: 'cpl_assets',
+            label: "CPL assets",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets?[file-type]=ft.cpl`,
+            element_id: response_element_id,
+            help: ` list assets with the CPL type`
+        }),
+        demo.synth({
+            id: 'cpl_pkl_assets',
+            label: "CPL and PKL assets",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets?[file-type]=ft.cpl&[file-type]=ft.pkl`,
+            element_id: response_element_id,
+            help: ` list assets with the CPL and PKL type`
+        })
+    ])
 
     /* --------------------------------------------------------------------------------- */
     rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
-    rows.push(demo.synth({
-        label: "add asset #P1",
-        mode: "POST",
-        url: `${demo.info.api_prefix}/assets/`,
-        element_id: response_element_id,
-        help: 'create an asset P1 - POSTing twice should not create multiple assets',
-        data: demo.post_asset1,
-    }))
-    rows.push(demo.synth({
-        label: "get #P1 by ID",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets/${demo.post_asset1.identifiers[0]}`,
-        element_id: response_element_id,
-        help: ' return just one asset record',
-    }))
-    //the put request uses the most recent etag in the header
-    rows.push(demo.synth({
-        id: 'put_button',
-        label: "get #P1 by ID",
-        mode: "PUT",
-        url: `${demo.info.api_prefix}/assets/${demo.put_asset1.identifiers[0]}`,
-        element_id: response_element_id,
-        help: ' update a asset #P1. GET the right asset first!!',
-        data: demo.put_asset1,
-        eventListener: demo.put_button_eventListener,
-    }))
-    rows.push(demo.synth({
-        label: "delete #P1",
-        mode: "DELETE",
-        url: `${demo.info.api_prefix}/assets/${demo.post_asset1.identifiers[0]}`,
-        element_id: response_element_id,
-        help: 'delete asset P1',
-    }))
+    rows = rows.concat([
+        demo.synth({
+            label: "CPL by ID",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/${demo.cpl_id}`,
+            element_id: response_element_id,
+            help: 'return matching record',
+        }),
+        demo.synth({
+            label: "CPL by hash",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/${demo.cpl_sha}`,
+            element_id: response_element_id,
+            help: 'return matching record',
+        }),
+        demo.synth({
+            label: "<span class='api400'>missing asset</span>",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/urn:uuid:11111111-2222-3333-4444-555555555555`,
+            element_id: response_element_id,
+            help: 'search for asset that is not there and return an error',
+        })
+    ])
 
     /* --------------------------------------------------------------------------------- */
     rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
-    rows.push(demo.synth({
-        label: "add asset #P2",
-        mode: "POST",
-        url: `${demo.info.api_prefix}/assets/`,
-        element_id: response_element_id,
-        help: 'create an asset P2 - POSTing twice should not create multiple assets',
-        data: demo.post_asset2,
-    }))
-    rows.push(demo.synth({
-        label: "get #P2 by ID",
-        mode: "GET",
-        url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
-        element_id: response_element_id,
-        help: ' return just one asset record',
-    }))
-    //this put request will always error because of no if-match header
-    rows.push(demo.synth({
-        label: "get #P2 by ID",
-        mode: "FAKE_PUT",
-        url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
-        element_id: response_element_id,
-        help: ' fail because of no If-Match header',
-        data: demo.post_asset2,
-    }))
-    rows.push(demo.synth({
-        label: "delete #P2",
-        mode: "DELETE",
-        url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
-        element_id: response_element_id,
-        help: 'delete asset P2',
-    }))
-    rows.push(demo.synth({
-        label: "<span class='api400'>delete missing</span>",
-        mode: "DELETE",
-        url: `${demo.info.api_prefix}/assets/urn:uuid:11111111-2222-3333-4444-555555555555`,
-        element_id: response_element_id,
-        help: 'delete an asset that does not exist',
-    }))
+    rows = rows.concat([
+        demo.synth({
+            label: "add asset #P1",
+            mode: "POST",
+            url: `${demo.info.api_prefix}/assets/`,
+            element_id: response_element_id,
+            help: 'create an asset P1 - POSTing twice should not create multiple assets',
+            data: demo.post_asset1,
+        }),
+        demo.synth({
+            label: "get #P1 by ID",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/${demo.post_asset1.identifiers[0]}`,
+            element_id: response_element_id,
+            help: ' return just one asset record',
+        }),
+        //the put request uses the most recent etag in the header
+        demo.synth({
+            id: 'put_button',
+            label: "get #P1 by ID",
+            mode: "PUT",
+            url: `${demo.info.api_prefix}/assets/${demo.put_asset1.identifiers[0]}`,
+            element_id: response_element_id,
+            help: ' update a asset #P1. GET the right asset first!!',
+            data: demo.put_asset1,
+            eventListener: demo.put_button_eventListener,
+        }),
+        demo.synth({
+            label: "delete #P1",
+            mode: "DELETE",
+            url: `${demo.info.api_prefix}/assets/${demo.post_asset1.identifiers[0]}`,
+            element_id: response_element_id,
+            help: 'delete asset P1',
+        })
+    ])
+
+    /* --------------------------------------------------------------------------------- */
+    rows.push(demo.synth({ brk: 1, }))
+    /* --------------------------------------------------------------------------------- */
+
+    rows = rows.concat([
+        demo.synth({
+            label: "add asset #P2",
+            mode: "POST",
+            url: `${demo.info.api_prefix}/assets/`,
+            element_id: response_element_id,
+            help: 'create an asset P2 - POSTing twice should not create multiple assets',
+            data: demo.post_asset2,
+        }),
+        demo.synth({
+            label: "get #P2 by ID",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
+            element_id: response_element_id,
+            help: ' return just one asset record',
+        }),
+        //this put request will always error because of no if-match header
+        demo.synth({
+            label: "get #P2 by ID",
+            mode: "FAKE_PUT",
+            url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
+            element_id: response_element_id,
+            help: ' fail because of no If-Match header',
+            data: demo.post_asset2,
+        }),
+        demo.synth({
+            label: "delete #P2",
+            mode: "DELETE",
+            url: `${demo.info.api_prefix}/assets/${demo.post_asset2.identifiers[0]}`,
+            element_id: response_element_id,
+            help: 'delete asset P2',
+        }),
+        demo.synth({
+            label: "<span class='api400'>delete missing</span>",
+            mode: "DELETE",
+            url: `${demo.info.api_prefix}/assets/urn:uuid:11111111-2222-3333-4444-555555555555`,
+            element_id: response_element_id,
+            help: 'delete an asset that does not exist',
+        })
+    ])
 
     /* --------------------------------------------------------------------------------- */
     rows.push(demo.synth({ brk: 1, }))

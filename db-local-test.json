@@ -1,0 +1,577 @@
+{
+  "assets": [
+    {
+      "id": "urn:uuid:b3bac52a-459b-4075-b2ab-2da51915c76b",
+      "value": {
+        "file_size": 2434,
+        "file_type": "ft.map",
+        "identifiers": [
+          "urn:uuid:b3bac52a-459b-4075-b2ab-2da51915c76b"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/noise/test03-imf-mm-api-wnoise/ASSETMAP.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68a9c"
+      }
+    },
+    {
+      "id": "urn:sha1:44e4c5776622426278bd99e131be956636f571a8",
+      "value": {
+        "file_size": 16419,
+        "file_type": "ft.cpl",
+        "identifiers": [
+          "urn:uuid:6396792b-6d65-45d5-aa0f-a59f1472338e",
+          "urn:sha1:44e4c5776622426278bd99e131be956636f571a8"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/noise/test03-imf-mm-api-wnoise/CPL_6396792b-6d65-45d5-aa0f-a59f1472338e.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68a9d"
+      }
+    },
+    {
+      "id": "urn:uuid:04085391-05d6-47c5-8dc3-ca7aefa79aa1",
+      "value": {
+        "file_size": 2019,
+        "file_type": "ft.pkl",
+        "identifiers": [
+          "urn:uuid:04085391-05d6-47c5-8dc3-ca7aefa79aa1"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/noise/test03-imf-mm-api-wnoise/PKL_04085391-05d6-47c5-8dc3-ca7aefa79aa1.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68a9e"
+      }
+    },
+    {
+      "id": "urn:sha1:301eb98df258502fb1b39c4208bcf51512a3a808",
+      "value": {
+        "file_size": 1346966,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:a0327d7d-b013-43f4-b9f7-696fa07a24a5",
+          "urn:sha1:301eb98df258502fb1b39c4208bcf51512a3a808"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/noise/test03-imf-mm-api-wnoise/test03-imf-mm-api-wnoise_a0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68a9f"
+      }
+    },
+    {
+      "id": "urn:sha1:04433b433e28798e02c85e251bedc40eab6e59df",
+      "value": {
+        "file_size": 3275801,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:6111757c-2fb5-4f3c-a48d-bebec5273410",
+          "urn:sha1:04433b433e28798e02c85e251bedc40eab6e59df"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/noise/test03-imf-mm-api-wnoise/test03-imf-mm-api-wnoise_v0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68a9f"
+      }
+    },
+    {
+      "id": "urn:uuid:f0fcc3c8-79d5-4a9c-a1ba-250e2738825b",
+      "value": {
+        "file_size": 2434,
+        "file_type": "ft.map",
+        "identifiers": [
+          "urn:uuid:f0fcc3c8-79d5-4a9c-a1ba-250e2738825b"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/ASSETMAP.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68a9f"
+      }
+    },
+    {
+      "id": "urn:sha1:a59f110dbed987eb86b6169e27867745806db4ad",
+      "value": {
+        "file_size": 16431,
+        "file_type": "ft.cpl",
+        "identifiers": [
+          "urn:uuid:32e351c6-bf02-4b35-b4eb-36a283caf989",
+          "urn:sha1:a59f110dbed987eb86b6169e27867745806db4ad"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/CPL_32e351c6-bf02-4b35-b4eb-36a283caf989.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa0"
+      }
+    },
+    {
+      "id": "urn:uuid:8db0c988-a129-4654-a95e-c07321148d8d",
+      "value": {
+        "file_size": 2019,
+        "file_type": "ft.pkl",
+        "identifiers": [
+          "urn:uuid:8db0c988-a129-4654-a95e-c07321148d8d"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/PKL_8db0c988-a129-4654-a95e-c07321148d8d.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa0"
+      }
+    },
+    {
+      "id": "urn:sha1:166cd8e1fd309d9b33e4a3e52f86019a54141576",
+      "value": {
+        "file_size": 1346984,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:34ca64f5-300b-453f-b4f3-d0035b015d9f",
+          "urn:sha1:166cd8e1fd309d9b33e4a3e52f86019a54141576"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/test00-imf-mm-api-0500Hz_a0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa0"
+      }
+    },
+    {
+      "id": "urn:sha1:ef2fbafebdbc82117bab4f3ae5fb3c06f33430ca",
+      "value": {
+        "file_size": 3277927,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:80156451-2f8e-4813-8100-3d39b0f1c5fc",
+          "urn:sha1:ef2fbafebdbc82117bab4f3ae5fb3c06f33430ca"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test00-imf-mm-api-0500Hz/test00-imf-mm-api-0500Hz_v0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa1"
+      }
+    },
+    {
+      "id": "urn:uuid:f5a782d8-08c9-461b-a266-37ccbcd4cd47",
+      "value": {
+        "file_size": 2434,
+        "file_type": "ft.map",
+        "identifiers": [
+          "urn:uuid:f5a782d8-08c9-461b-a266-37ccbcd4cd47"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test01-imf-mm-api-1000Hz/ASSETMAP.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa1"
+      }
+    },
+    {
+      "id": "urn:sha1:c75fe60f16a05f58abb0cb4546d6608fe194002e",
+      "value": {
+        "file_size": 16427,
+        "file_type": "ft.cpl",
+        "identifiers": [
+          "urn:uuid:8e0d6eec-1e41-49b8-92e1-db000f63d743",
+          "urn:sha1:c75fe60f16a05f58abb0cb4546d6608fe194002e"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test01-imf-mm-api-1000Hz/CPL_8e0d6eec-1e41-49b8-92e1-db000f63d743.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa1"
+      }
+    },
+    {
+      "id": "urn:uuid:dcceeba7-4860-4020-bc05-594a27e4472f",
+      "value": {
+        "file_size": 2019,
+        "file_type": "ft.pkl",
+        "identifiers": [
+          "urn:uuid:dcceeba7-4860-4020-bc05-594a27e4472f"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test01-imf-mm-api-1000Hz/PKL_dcceeba7-4860-4020-bc05-594a27e4472f.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa2"
+      }
+    },
+    {
+      "id": "urn:sha1:087b83dc174700537b9692fc56eeee2b5be5fc43",
+      "value": {
+        "file_size": 1346978,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:fb9ec264-e88d-471e-8a02-8611f2dc6861",
+          "urn:sha1:087b83dc174700537b9692fc56eeee2b5be5fc43"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test01-imf-mm-api-1000Hz/test01-imf-mm-api-1000Hz_a0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa3"
+      }
+    },
+    {
+      "id": "urn:sha1:4ffd782ddb5927361bcf58bec96b75d8f4473808",
+      "value": {
+        "file_size": 3263231,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:822fc1c1-cb0f-49d4-98bb-228651db4a5d",
+          "urn:sha1:4ffd782ddb5927361bcf58bec96b75d8f4473808"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test01-imf-mm-api-1000Hz/test01-imf-mm-api-1000Hz_v0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa4"
+      }
+    },
+    {
+      "id": "urn:uuid:9c264810-48f6-4d2f-a8ae-4cba2c22e4bc",
+      "value": {
+        "file_size": 2434,
+        "file_type": "ft.map",
+        "identifiers": [
+          "urn:uuid:9c264810-48f6-4d2f-a8ae-4cba2c22e4bc"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test02-imf-mm-api-2000Hz/ASSETMAP.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa4"
+      }
+    },
+    {
+      "id": "urn:sha1:9ff0af71c888baefc8da63955d6044e794362528",
+      "value": {
+        "file_size": 16428,
+        "file_type": "ft.cpl",
+        "identifiers": [
+          "urn:uuid:7da8c0b7-1078-494d-be68-f54639c61662",
+          "urn:sha1:9ff0af71c888baefc8da63955d6044e794362528"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test02-imf-mm-api-2000Hz/CPL_7da8c0b7-1078-494d-be68-f54639c61662.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa4"
+      }
+    },
+    {
+      "id": "urn:uuid:450c4465-2013-4304-9df6-5a59a4001486",
+      "value": {
+        "file_size": 2019,
+        "file_type": "ft.pkl",
+        "identifiers": [
+          "urn:uuid:450c4465-2013-4304-9df6-5a59a4001486"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test02-imf-mm-api-2000Hz/PKL_450c4465-2013-4304-9df6-5a59a4001486.xml"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa4"
+      }
+    },
+    {
+      "id": "urn:sha1:c43e25b4c414915273a39ed9835dcd350b3b14fb",
+      "value": {
+        "file_size": 1346978,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:70fa2807-8cc7-45eb-90dd-931e4a0c56a6",
+          "urn:sha1:c43e25b4c414915273a39ed9835dcd350b3b14fb"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test02-imf-mm-api-2000Hz/test02-imf-mm-api-2000Hz_a0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa5"
+      }
+    },
+    {
+      "id": "urn:sha1:5c92d6f170e4a14adf301af57092cae11e3378d8",
+      "value": {
+        "file_size": 3266285,
+        "file_type": "ft.mxf",
+        "identifiers": [
+          "urn:uuid:66c832b8-6c56-4c03-853c-32d572716f23",
+          "urn:sha1:5c92d6f170e4a14adf301af57092cae11e3378d8"
+        ],
+        "locations": [
+          "/home/bruce/git-hub/imf-mm-api/__test__/assets-imf/tones/test02-imf-mm-api-2000Hz/test02-imf-mm-api-2000Hz_v0.mxf"
+        ],
+        "providers": [
+          "imf-mm-api Demo App"
+        ],
+        "user": {
+          "id": "usr-10000001",
+          "name": "mrmxf"
+        },
+        "aws": {
+          "Key": "path/file.mxf",
+          "ETag": "value",
+          "LastModified": "date",
+          "StorageClasss": "STANDARD"
+        },
+        "version": "0.1",
+        "etag": "16d67a68aa5"
+      }
+    }
+  ],
+  "requests": []
+}

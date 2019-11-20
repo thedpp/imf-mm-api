@@ -3,8 +3,8 @@
 'use strict'
 require('dotenv').config({ path: '__test__/.env', })
 
-/** api-assets jest test scripts
- * 
+/**
+ * api jest test scripts
  */
 const config = require('config')
 const log = require('pino')(config.get('log_options'))
@@ -14,24 +14,14 @@ const path = require('path')
 const __test = path.basename(__filename)
 
 const prefix = config.get('api_prefix')
-const api = `${config.get('api_prefix')}/assets`
+const assets_api = `${config.get('mount_point')}/${config.get('api_prefix')}/assets`
+const admin_info_api = `${config.get('mount_point')}/admin/info`
+const crawl_api = `${config.get('mount_point')}/crawl/`
 
-// Test the server using the test port (you can replace this with any URL)
+// Test the server using the test port
 let request = require('supertest');
-request = request(`http://localhost:${config.get('port')}`)
-let app
-
-beforeAll(async () => {
-    log.info(`${rJ('Jest starting: ')}server booting on http://localhost:${config.get('port')}.`);
-    log.info(`${rJ('Jest db: ')}${config.get('port')}.`);
-    /// prevent race conditions by waiting for the server to be listening on its port
-    try {
-        app = require('../src/start_local')
-        await request.get('/')
-    } catch (e) {
-        log.error(`${rJ('Server failed to start: ')}${e}.`);
-    }
-});
+let app = require('../src/start_local')
+let testServer = request(`http://localhost:${config.get('port')}`)
 
 // close koa's http after each test
 afterAll(() => {
@@ -41,11 +31,11 @@ afterAll(() => {
 
 // Local test database may be empty here so check basic functions
 
-describe(`${__test}: testing GET /${api}`, () => {
-    test(`GET /${api}`, async () => {
+describe(`${__test}: testing Assets`, () => {
+    test(`GET ${assets_api}`, async () => {
         //assert code 200, json content type and the body contains required 
-        return request
-            .get(`/${api}`)
+        return testServer
+            .get(`${assets_api}`)
             .expect(200)
             .expect('Content-Type', /json/)
             .expect(/"limit":/)
@@ -53,10 +43,10 @@ describe(`${__test}: testing GET /${api}`, () => {
             .expect(/"skip":/)
             .expect(/"total":/)
     });
-    test(`GET /${api}/`, async () => {
+    test(`GET ${assets_api}/`, async () => {
         //assert code 200, json content type and the body contains required 
-        return request
-            .get(`/${api}/`)
+        return testServer
+            .get(`${assets_api}/`)
             .expect(200)
             .expect('Content-Type', /json/)
             .expect(/"limit":/)
@@ -66,4 +56,20 @@ describe(`${__test}: testing GET /${api}`, () => {
     });
 });
 
-// Scan the test folder and build a local database (asssum that bit's working)
+describe(`${__test}: testing Admin`, () => {
+    test(`GET ${admin_info_api}`, async () => {
+        //assert code 200, json content type and the body contains required 
+        return testServer
+            .get(`/${admin_info_api}`)
+            .expect(404)
+    });
+});
+
+describe(`${__test}: testing Crawl`, () => {
+    test(`GET ${crawl_api}`, async () => {
+        //assert code 200, json content type and the body contains required 
+        return testServer
+            .get(`/${crawl_api}`)
+            .expect(404)
+    });
+});

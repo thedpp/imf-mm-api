@@ -375,7 +375,6 @@ const delete_assets_by_id = async function (asset_id, params) {
     //get an asset by id and then use its itemname to delete it
     let query = `select * from \`${sdb_domain}\``
     query += ` where identifiers like '%"${asset_id}"%'`
-    query += (typeof (limit) == 'number') ? ` limit ${limit}` : ''
 
     sdb.select(query, {}, function (err, res, meta) {
       if (err || (res && (res.length < 1))) {
