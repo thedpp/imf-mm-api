@@ -1,8 +1,5 @@
 
 language: node_js
 
-before_script:
-  - yarn
-
 script:
-  - yarn test
+  - npm run test
