@@ -46,6 +46,7 @@ if (config.get('enable.crawl')) {
 
 server.mm_init = async (resolve) => {
     db.init()
+    resolve()
 }
 
 module.exports = server

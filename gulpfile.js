@@ -8,6 +8,7 @@ const fs = require('fs')
 const chalk = require('chalk')
 const jshint = require('gulp-jshint')
 const stylish = require('jshint-stylish')
+const ftp = require('vinyl-ftp');
 
 // handle the zip filename consistently with functions
 const zip_filename = () => {

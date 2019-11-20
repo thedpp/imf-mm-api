@@ -222,6 +222,9 @@ the changes along side your main server.
 
 ## API Change Log
 
+* 2019-11-20 Improve code and support file-type filter
+  * refactor some code
+  * be able to list `assets` and filter them by file type
 * 2019-10-14 Docker image
   * provide the Docker image of the service
 * 2019-09-03 deployment updates

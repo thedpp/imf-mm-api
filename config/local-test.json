@@ -16,5 +16,8 @@
         "show_config_sources": true,
         "prettyPrint": true,
         "log_api_access": false
+    },
+    "enable": {
+        "load_home_page_on_boot": false
     }
 }
