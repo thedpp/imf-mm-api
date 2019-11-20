@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node src/start_local",
     "test": "jest",
-    "dev": "nodemon src/start_local",
+    "dev": "nodemon -w src src/start_local",
     "serve": "pm2 src/start_local"
   },
   "jest": {
@@ -48,7 +48,7 @@
   },
   "homepage": "https://github.com/mrmxf/imf-mm-api-server-js#readme",
   "dependencies": {
-    "aws-sdk": "^2.564.0",
+    "aws-sdk": "^2.575.0",
     "binary": "^0.3.0",
     "chokidar": "^3.3.0",
     "config": "^3.2.4",
@@ -65,28 +65,30 @@
     "koa-static": "^5.0.0",
     "lowdb": "^1.0.0",
     "moment": "^2.24.0",
-    "open": "^6.4.0",
+    "open": "^7.0.0",
     "pino": "^5.13.5",
     "pino-tee": "^0.2.2",
-    "serverless-http": "^1.10.1",
+    "serverless-http": "^2.3.0",
     "simpledb": "^0.2.0",
     "xml2js": "^0.4.22"
   },
   "devDependencies": {
-    "chalk": "^2.4.2",
-    "express-openapi": "^4.6.5",
+    "chalk": "^3.0.0",
+    "express-openapi": "^5.0.0",
     "gulp": "^4.0.2",
     "gulp-jsdoc3": "^2.0.0",
     "gulp-jshint": "^2.1.0",
     "gulp-lambda-deploy": "^0.3.0",
-    "gulp-zip": "^4.2.0",
+    "gulp-zip": "^5.0.1",
     "jest": "^24.9.0",
     "jest-html-reporter": "^2.7.0",
     "jshint": "^2.10.3",
     "jshint-stylish": "^2.2.1",
-    "koa-openapi": "^3.13.5",
+    "koa-openapi": "^4.0.0",
     "lodash": "^4.17.15",
+    "nodemon": "^1.19.4",
     "pino-pretty": "^3.3.0",
-    "supertest": "^3.4.2"
+    "pm2": "^4.1.2",
+    "supertest": "^4.0.2"
   }
 }
