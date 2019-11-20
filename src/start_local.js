@@ -82,9 +82,10 @@ server.mm_init()
 
 //if we have enabled serving of web pages then ask the OS to go to the home page
 let home_page = ('/' == config.get('mount_point')) ? '/index.html': `${config.get('mount_point')}/index.html`
-if (config.get('enable.www') && config.get('enable.load_home_page_on_boot')) {
-    open(`http://localhost:${config.get('port')}${home_page}`)
-}
+
+// if (config.get('enable.www') && config.get('enable.load_home_page_on_boot')) {
+//     open(`http://localhost:${config.get('port')}${home_page}`)
+// }
 
 // The exports lines is only for the Jest test harness
 // It is not needed in development or production
