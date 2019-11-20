@@ -21,6 +21,10 @@ var test_root = path.join(__dirname, 'assets-imf')
 var empty_root = path.join(__dirname, 'assets-imf/empty')
 
 const test_db_folder = path.join(__dirname, '__db-local__')
+if (!fs.existsSync(test_db_folder)) {
+    fs.mkdirSync(test_db_folder)
+}
+
 const test_db_path = path.join(test_db_folder, config.get('database').local_crawl_filename)
 
 describe(`${__test}: fs crawl core`, () => {

@@ -2,9 +2,8 @@
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
 require('dotenv').config({ path: '__test__/.env',})
-console.log(process.env.NODE_ENV)
-/** db-local storage tester
- *
+/**
+ * db-local storage tester
  */
 const fs = require('fs')
 const path = require('path')
@@ -20,6 +19,10 @@ const test_asset1= test_assets[0]
 const test_asset2= test_assets[1]
 
 const test_folder = path.join(__dirname, '__db-local__')
+if (!fs.existsSync(test_folder)) {
+    fs.mkdirSync(test_folder)
+}
+
 var params = {
     local_filename: path.join(test_folder, config.get('database').local_filename),
 }
@@ -93,25 +96,25 @@ describe(`${_module}`, () => {
         })
 
         test('db.get()', () => {
-            return local_db.get()
+            return local_db.get_assets()
                 .then(data => {
                     expect(data.length).toEqual(2)
                 })
         })
         test('db.get(0,1)', () => {
-            return local_db.get(0, 1)
+            return local_db.get_assets(0, 1)
                 .then(data => {
                     expect(data.length).toEqual(1)
                 })
         })
         test('db.get(1,1)', () => {
-            return local_db.get(1, 1)
+            return local_db.get_assets(1, 1)
                 .then(data => {
                     expect(data.length).toEqual(1)
                 })
         })
         test('db.get(2,100)', () => {
-            return local_db.get(2, 100)
+            return local_db.get_assets(2, 100)
                 .then(data => {
                     expect(data.length).toEqual(0)
                 })
