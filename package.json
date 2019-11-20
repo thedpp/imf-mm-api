@@ -10,7 +10,8 @@
     "start": "node src/start_local",
     "test": "jest",
     "dev": "nodemon -w src src/start_local",
-    "serve": "pm2 src/start_local"
+    "serve": "pm2 src/start_local",
+    "jshint": "jshint src"
   },
   "jest": {
     "testMatch": [

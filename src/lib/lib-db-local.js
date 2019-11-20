@@ -184,7 +184,7 @@ const get_assets_by_id = async function (skip, limit, asset_id) {
         }
 
         //retun a single record in an array
-        resolve([data])
+        resolve([data,])
     })
 }
 

@@ -46,7 +46,7 @@ const get_system_info = async (ctx, next) => {
     db_type: config.get('database.type'),
     log_level: config.get('log_options.level'),
     node_env: process.env.NODE_ENV,
-    git_url: ((process.env.GIT_URL) ? process.env.GIT_URL : false)
+    git_url: ((process.env.GIT_URL) ? process.env.GIT_URL : false),
   }
 
   // log all the config files used if needed
