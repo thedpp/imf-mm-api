@@ -29,7 +29,7 @@ switch (config.get('database').type) {
 // functions in IDE editors
 
 module.exports.delete_assets_by_id = db.delete_assets_by_id
-module.exports.get = db.get
+module.exports.get_assets = db.get_assets
 module.exports.get_assets_by_id = db.get_assets_by_id
 module.exports.info = db.info
 module.exports.init = db.init

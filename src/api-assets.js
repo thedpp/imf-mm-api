@@ -53,8 +53,9 @@ function status_description(mode, status, extended_description) {
 const get_assets = async function (ctx, next) {
   let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
+
   // asynchronously fetch a page from the database
-  let assets = await db.get(skip, limit)
+  let assets = await db.get_assets(skip, limit, ctx.request.query['[file-type]'])
 
   //format the results according to the API spec
   let api_response = dbtk.asset_TO_api_get_results(assets)
@@ -80,8 +81,9 @@ const get_assets_by_id = async function (ctx, next) {
   let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
 
+  let research_asset_id = ctx.params.id
   // asynchronously fetch the matching assets
-  let assets = await db.get_assets_by_id(skip, limit, ctx.params.id)
+  let assets = await db.get_assets_by_id(skip, limit, research_asset_id)
     .catch((err) => {
       log.error(err.message)
     })
@@ -104,7 +106,8 @@ const get_assets_by_id = async function (ctx, next) {
 
     if (api_response.results.length < 1) {
       ctx.status = 404
-      ctx.body = `Asset ID not found ${ctx.params.id}`
+      ctx.set('Content-Type', 'text/plain')
+      ctx.body = `Asset ID not found ${research_asset_id}`
     } else if (api_response.results.length == 1) {
       ctx.status = 200
     } else {
@@ -113,7 +116,8 @@ const get_assets_by_id = async function (ctx, next) {
     }
   } else {
     ctx.status = 404
-    ctx.body = `Asset ID not found ${ctx.params.id}`
+    ctx.set('Content-Type', 'text/plain')
+    ctx.body = `Asset ID not found ${research_asset_id}`
   }
 
   await next()
@@ -159,8 +163,9 @@ const put_assets_update = async function (ctx, next) {
   let skip = parseInt((ctx.request.query.skip) ? ctx.request.query.skip : 0, 10)
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
 
+  let research_asset_id = ctx.params.id
   // asynchronously fetch the matching assets
-  let assets = await db.get_assets_by_id(skip, limit, ctx.params.id)
+  let assets = await db.get_assets_by_id(skip, limit, research_asset_id)
     .catch((err) => {
       log.error(err.message)
     })
@@ -170,7 +175,8 @@ const put_assets_update = async function (ctx, next) {
   // no matching asset to update
   if (!assets) {
     ctx.status = 404
-    ctx.body = `Asset ID not found ${ctx.params.id}`
+    ctx.set('Content-Type', 'text/plain')
+    ctx.body = `Asset ID not found ${research_asset_id}`
     await next()
     return
   }

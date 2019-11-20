@@ -127,7 +127,6 @@ const post = async function (asset) {
                 .write()
             resolve('ok')
         }
-
     })
 }
 
@@ -136,19 +135,26 @@ const post = async function (asset) {
  * @param {Integer} limit the maximum number of queries to return 
  * @returns {Array} of asset objects
  */
-const get = async function (skip, limit) {
+const get_assets = async function (skip, limit, file_types) {
     skip = (undefined == skip) ? 0 : skip
     limit = (undefined == limit) ? config.get('default_get_limit') : limit
 
     return new Promise((resolve, reject) => {
-        let data = db.get('assets')
+        let assets = db.get('assets')
+
+        if(file_types) {
+            assets =
+                assets
+                .filter(function(item) {
+                    return file_types.includes(item.value.file_type);
+                })
+        }
+
+        assets = assets
             .slice(skip, skip + limit)
             .value()
+            .map(asset => asset.value)
 
-        let assets = []
-        for (let d = 0; d < data.length; d++) {
-            assets.push(data[d].value)
-        }
         resolve(assets)
     })
 }
@@ -158,27 +164,27 @@ const get = async function (skip, limit) {
  * @returns {Array} of asset objects
  */
 const get_assets_by_id = async function (skip, limit, asset_id) {
-
     return new Promise(async (resolve, reject) => {
         //look inside the identifiers array for the asset_id
         let data = await db.get('assets')
-            .find({ value: { identifiers: [asset_id,], }, })
+            .filter(function(item) {
+                return item.value.identifiers.includes(asset_id);
+            })
             .value()
-        if (data) {
-            //check if an array of records or a single record was returned
-            if (undefined == data.id) {
-                //multiple records were returned
-                let assets = []
-                for (let d = 0; d < data.length; d++) {
-                    assets.push(data[d].value)
-                }
-                resolve(assets)
-            } else {
-                //retun a single record in an array
-                resolve([data.value,])
-            }
+            .map(asset => asset.value)
+
+        if (!data) {
+            return resolve(undefined)
         }
-        resolve(undefined)
+
+        //check if an array of records or a single record was returned
+        if (!data.id) {
+            //multiple records were returned
+            return resolve(data)
+        }
+
+        //retun a single record in an array
+        resolve([data])
     })
 }
 
@@ -228,7 +234,7 @@ const total = async function (skip, limit) {
 
 //export the functions
 module.exports.delete_assets_by_id = delete_assets_by_id
-module.exports.get = get
+module.exports.get_assets = get_assets
 module.exports.get_assets_by_id = get_assets_by_id
 module.exports.init = init
 module.exports.info = info
