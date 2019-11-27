@@ -31,6 +31,7 @@ switch (config.get('database').type) {
 module.exports.delete_assets_by_id = db.delete_assets_by_id
 module.exports.get_assets = db.get_assets
 module.exports.get_assets_by_id = db.get_assets_by_id
+module.exports.get_cpls_by_mxf_ids = db.get_cpls_by_mxf_ids
 module.exports.info = db.info
 module.exports.init = db.init
 module.exports.post = db.post

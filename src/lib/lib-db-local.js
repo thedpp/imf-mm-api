@@ -188,6 +188,35 @@ const get_assets_by_id = async function (skip, limit, asset_id) {
     })
 }
 
+/** Get related CPLs from a list of MXF identifiers
+ * @param {String} id and identifier that you would find in the identifiers array
+ * @returns {Array} of asset objects
+ */
+const get_cpls_by_mxf_ids = async function (skip, limit, mxf_ids) {
+    return new Promise(async (resolve, reject) => {
+        //look inside the identifiers array for the asset_id
+        let assets = await db.get('assets')
+            .filter(function(item) {
+                if(item.value.file_type != 'ft.cpl') {
+                    return false
+                }
+
+                for(var index in item.value.track_file_ids) {
+                    if(mxf_ids.includes(item.value.track_file_ids[index])) {
+                        return true;
+                    }
+                }
+                return false
+            })
+            .slice(skip, skip + limit)
+            .value()
+            .map(asset => asset.value)
+
+        //retun a single record in an array
+        resolve(assets)
+    })
+}
+
 /** Delete assets by id
  * @param {String} id an identifier that you would find in the identifiers array
  * @returns {Array} of asset objects
@@ -236,6 +265,7 @@ const total = async function (skip, limit) {
 module.exports.delete_assets_by_id = delete_assets_by_id
 module.exports.get_assets = get_assets
 module.exports.get_assets_by_id = get_assets_by_id
+module.exports.get_cpls_by_mxf_ids = get_cpls_by_mxf_ids
 module.exports.init = init
 module.exports.info = info
 module.exports.reset = reset
