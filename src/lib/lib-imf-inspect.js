@@ -258,12 +258,12 @@ module.exports = class IMF_inspect {
 
         let content_kind;
         if(typeof content_kind_item === "object"){
-            content_kind = content_kind_item['_']
+            content_kind = content_kind_item._
         } else {
             content_kind = content_kind_item
         }
 
-        return {'content_kind': content_kind, 'track_file_ids': track_file_ids}
+        return {'content_kind': content_kind, 'track_file_ids': track_file_ids, }
     }
 
     /** is the buffer an IMF PKL
