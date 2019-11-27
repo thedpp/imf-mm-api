@@ -163,7 +163,8 @@ module.exports = class IMF_inspect {
         })
     }
 
-    /** is the buffer an  xml document?
+    /*
+     * is the buffer an  xml document?
      * 
      * check to see that there are keys
      */
@@ -171,7 +172,8 @@ module.exports = class IMF_inspect {
         return (Object.keys(this.xmljs).length > 0)
     }
 
-    /** return the namespaced ID from the file
+    /**
+     * return the namespaced ID from the file
      * this might fail if the XML has a prefix on the root node but
      * uses the default namespace on the Id field
      * xml2JSON also returns all values as arrays
@@ -188,18 +190,80 @@ module.exports = class IMF_inspect {
         return id
     }
 
-    /** is the buffer an IMF ASSETMAP
+    /*
+     * is the buffer an IMF ASSETMAP
      */
     is_map() {
         //check the root object of the XML (namespace prefix aware check)
         return (undefined !== this.xmljs[`${this.ns_prefix}AssetMap`])
     }
 
-    /** is the buffer an IMF CPL
+    /*
+     * is the buffer an IMF CPL
      */
     is_cpl() {
         //check the root object of the XML (namespace prefix aware check)
         return (undefined !== this.xmljs[`${this.ns_prefix}CompositionPlaylist`])
+    }
+
+    /*
+     * is the buffer an IMF CPL
+     */
+    get_cpl_information() {
+        const cpl = this.xmljs[`${this.ns_prefix}CompositionPlaylist`]
+        const content_kind_item = cpl[`${this.ns_prefix}ContentKind`][0]
+        const segments = cpl[`${this.ns_prefix}SegmentList`]
+
+        let track_file_ids = []
+
+        for (const segments_index in segments) {
+            const segment = segments[segments_index][`${this.ns_prefix}Segment`]
+
+            for (const segment_index in segment) {
+                const sequences = segment[segment_index][`${this.ns_prefix}SequenceList`]
+                for (const sequences_index in sequences) {
+                    const sequence = sequences[sequences_index]
+                    const ns_prefix = Object.keys(sequence)[0].split(':')[0]
+
+                    const main_images = sequence[`${ns_prefix}:MainImageSequence`]
+                    for (const main_images_index in main_images) {
+                        const resources = main_images[main_images_index][`${this.ns_prefix}ResourceList`]
+
+                        for (const resources_index in resources) {
+                            const resource = resources[resources_index][`${this.ns_prefix}Resource`]
+
+                            for (const resource_index in resource) {
+                                const track_file_id = resource[resource_index][`${this.ns_prefix}TrackFileId`][0]
+                                track_file_ids.push(track_file_id)
+                            }
+                        }
+                    }
+
+                    const main_audios = sequence[`${ns_prefix}:MainAudioSequence`]
+                    for (const main_audios_index in main_audios) {
+                        const resources = main_audios[main_audios_index][`${this.ns_prefix}ResourceList`]
+
+                        for (const resources_index in resources) {
+                            const resource = resources[resources_index][`${this.ns_prefix}Resource`]
+
+                            for (const resource_index in resource) {
+                                const track_file_id = resource[resource_index][`${this.ns_prefix}TrackFileId`][0]
+                                track_file_ids.push(track_file_id)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        let content_kind;
+        if(typeof content_kind_item === "object"){
+            content_kind = content_kind_item['_']
+        } else {
+            content_kind = content_kind_item
+        }
+
+        return {'content_kind': content_kind, 'track_file_ids': track_file_ids}
     }
 
     /** is the buffer an IMF PKL
@@ -260,6 +324,9 @@ module.exports = class IMF_inspect {
             if (this.is_xml()) {
                 this.asset_record.file_type = file_type.alias.xml
                 if (this.is_cpl()) {
+                    const information = this.get_cpl_information()
+                    this.asset_record.content_kind = information.content_kind
+                    this.asset_record.track_file_ids = information.track_file_ids
                     this.asset_record.file_type = file_type.alias.cpl
                 }
                 if (this.is_pkl()) {

@@ -17,6 +17,8 @@ const _map_asset_TO_api_get_result = (asset) => {
         file_size: asset.file_size,
         file_type: asset.file_type,
         locations: asset.locations,
+        content_kind: asset.content_kind,
+        track_file_ids: asset.track_file_ids,
     }
     return result
 }
