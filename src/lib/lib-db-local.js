@@ -192,25 +192,35 @@ const get_assets_by_id = async function (skip, limit, asset_id) {
  * @param {String} id and identifier that you would find in the identifiers array
  * @returns {Array} of asset objects
  */
-const get_cpls_by_mxf_ids = async function (skip, limit, mxf_ids) {
+const get_cpls_by_mxf_ids = async function (skip, limit, mxf_ids, filtered_cpl_ids) {
     return new Promise(async (resolve, reject) => {
         //look inside the identifiers array for the asset_id
         let assets = await db.get('assets')
-            .filter(function(item) {
-                if(item.value.file_type != 'ft.cpl') {
+            .map(asset => asset.value)
+            .filter(function(asset) {
+                if(filtered_cpl_ids) {
+                    for(var index in asset.identifiers) {
+                        if(filtered_cpl_ids.includes(asset.identifiers[index])) {
+                            return false;
+                        }
+                    }
+                }
+
+                if(asset.file_type != 'ft.cpl') {
                     return false
                 }
 
-                for(var index in item.value.track_file_ids) {
-                    if(mxf_ids.includes(item.value.track_file_ids[index])) {
-                        return true;
+                if(mxf_ids) {
+                    for(var index in asset.track_file_ids) {
+                        if(mxf_ids.includes(asset.track_file_ids[index])) {
+                            return true;
+                        }
                     }
                 }
                 return false
             })
             .slice(skip, skip + limit)
             .value()
-            .map(asset => asset.value)
 
         //retun a single record in an array
         resolve(assets)

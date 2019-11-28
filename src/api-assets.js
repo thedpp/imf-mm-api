@@ -149,15 +149,17 @@ const get_linked_asset = async function(ctx, next) {
     const asset = assets[0];
 
     var mxf_ids = [];
+    var filtered_cpl_ids = [];
 
     if(asset.file_type === 'ft.cpl') {
       mxf_ids = asset.track_file_ids;
+      filtered_cpl_ids = asset.identifiers;
     }
     if(asset.file_type === 'ft.mxf') {
       mxf_ids = asset.identifiers
     }
 
-    let cpl_assets = await db.get_cpls_by_mxf_ids(skip, limit, mxf_ids);
+    let cpl_assets = await db.get_cpls_by_mxf_ids(skip, limit, mxf_ids, filtered_cpl_ids);
     let api_response = dbtk.asset_TO_api_get_results(cpl_assets)
 
     api_response.skip = skip
