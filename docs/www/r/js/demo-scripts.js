@@ -105,6 +105,27 @@ demo.make_demo_buttons = function (response_element_id, data) {
 
     rows = rows.concat([
         demo.synth({
+            label: "Linked CPLs of a CPL",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/${demo.cpl_id}/linked_cpls`,
+            element_id: response_element_id,
+            help: 'return matching CPL assets',
+        }),
+        demo.synth({
+            label: "Linked CPLs of an MXF file",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets/${demo.mxf_id}/linked_cpls`,
+            element_id: response_element_id,
+            help: 'return matching CPL assets',
+        })
+    ])
+
+    /* --------------------------------------------------------------------------------- */
+    rows.push(demo.synth({ brk: 1, }))
+    /* --------------------------------------------------------------------------------- */
+
+    rows = rows.concat([
+        demo.synth({
             label: "add asset #P1",
             mode: "POST",
             url: `${demo.info.api_prefix}/assets/`,
@@ -206,11 +227,15 @@ const init_page = async () => {
     let d = 0
     do {
         asset = demo.db_data[d++]
-        if (asset.locations[0].indexOf('CPL') > 0) {
+        if (asset.file_type == "ft.cpl" && !demo.cpl_id) {
             demo.cpl_id = asset.identifiers[0]
             demo.cpl_sha = asset.identifiers[1]
         }
-    } while ((d < demo.db_data.length) && !demo.cpl_id)
+        console.log(asset)
+        if (asset.file_type == "ft.mxf" && !demo.mxf_id) {
+            demo.mxf_id = asset.identifiers[0]
+        }
+    } while ((d < demo.db_data.length) )//&& !demo.cpl_id && !demo.mxf_id)
 
     demo.post_asset1 = demo.non_crawl_data[1]
     demo.post_asset2 = demo.non_crawl_data[6]
