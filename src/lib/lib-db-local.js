@@ -199,8 +199,8 @@ const get_cpls_by_mxf_ids = async function (skip, limit, mxf_ids, filtered_cpl_i
             .map(asset => asset.value)
             .filter(function(asset) {
                 if(filtered_cpl_ids) {
-                    for(var index in asset.identifiers) {
-                        if(filtered_cpl_ids.includes(asset.identifiers[index])) {
+                    for(var i_index in asset.identifiers) {
+                        if(filtered_cpl_ids.includes(asset.identifiers[i_index])) {
                             return false;
                         }
                     }
@@ -211,8 +211,8 @@ const get_cpls_by_mxf_ids = async function (skip, limit, mxf_ids, filtered_cpl_i
                 }
 
                 if(mxf_ids) {
-                    for(var index in asset.track_file_ids) {
-                        if(mxf_ids.includes(asset.track_file_ids[index])) {
+                    for(var t_index in asset.track_file_ids) {
+                        if(mxf_ids.includes(asset.track_file_ids[t_index])) {
                             return true;
                         }
                     }
