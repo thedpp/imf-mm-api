@@ -229,8 +229,6 @@ const init_page = async () => {
 
     //pull in the data from the assets in the __test__ folder
     demo.non_crawl_data = await demo.get_non_crawl_data()
-    demo.db_data = await demo.get_test_data()
-
 
     const first_cpl = await demo.get_json_data(`${demo.info.api_prefix}/assets?[file-type]=ft.cpl&limit=1`)
 
