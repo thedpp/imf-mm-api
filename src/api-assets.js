@@ -55,7 +55,7 @@ const get_assets = async function (ctx, next) {
   let limit = parseInt((ctx.request.query.limit) ? ctx.request.query.limit : config.get('default_get_limit'), 10)
 
   // asynchronously fetch a page from the database
-  let assets = await db.get_assets(skip, limit, ctx.request.query['[file-type]'])
+  let assets = await db.get_assets(skip, limit, ctx.request.query['[file-type]'], ctx.request.query['[content-kind]'])
 
   //format the results according to the API spec
   let api_response = dbtk.asset_TO_api_get_results(assets)
