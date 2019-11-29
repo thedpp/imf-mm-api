@@ -46,7 +46,12 @@
       "LastModified": "date",
       "StorageClasss": "STANDARD"
     },
-    "version": "0.1"
+    "version": "0.1",
+    "content_kind": "test",
+    "track_file_ids": [
+      "urn:uuid:987bfc4f-ecd2-4246-ada5-abf315d7a588",
+      "urn:uuid:3cbd6a6a-de57-4745-a47b-e16069e3581b"
+    ]
   },
   {
     "file_size": 2027,
@@ -169,7 +174,12 @@
       "LastModified": "date",
       "StorageClasss": "STANDARD"
     },
-    "version": "0.1"
+    "version": "0.1",
+    "content_kind": "test",
+    "track_file_ids": [
+      "urn:uuid:3670998f-7f1a-4b0d-88d7-f100433e2515",
+      "urn:uuid:f412b426-f1ad-4254-8f03-28df13ff9e50"
+    ]
   },
   {
     "file_size": 2027,
