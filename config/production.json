@@ -2,7 +2,7 @@
     "database":{
         "type": "local"
     },
-    // "imf_asset_sources":[
-    //     "/assets"
-    // ]
+    "imf_asset_sources":[
+        "/assets"
+    ]
 }

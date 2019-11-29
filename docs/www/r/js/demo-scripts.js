@@ -83,21 +83,47 @@ demo.make_demo_buttons = function (response_element_id, data) {
     rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
-    rows = rows.concat([
-        demo.synth({
-            label: "CPL by ID",
-            mode: "GET",
-            url: `${demo.info.api_prefix}/assets/${demo.cpl_id}`,
-            element_id: response_element_id,
-            help: 'return matching record',
-        }),
-        demo.synth({
-            label: "CPL by hash",
-            mode: "GET",
-            url: `${demo.info.api_prefix}/assets/${demo.cpl_sha}`,
-            element_id: response_element_id,
-            help: 'return matching record',
-        }),
+    if(demo.cpl_id) {
+        rows.push(
+            demo.synth({
+                label: "CPL by ID",
+                mode: "GET",
+                url: `${demo.info.api_prefix}/assets/${demo.cpl_id}`,
+                element_id: response_element_id,
+                help: 'return matching record',
+            })
+        )
+    } else {
+        rows.push(
+            demo.synth({
+                missing_asset: 1,
+                asset_type: "CPL",
+                comment: "to get CPL by it's UUID"
+            })
+        )
+    }
+
+    if(demo.cpl_sha) {
+        rows.push(
+            demo.synth({
+                label: "CPL by hash",
+                mode: "GET",
+                url: `${demo.info.api_prefix}/assets/${demo.cpl_sha}`,
+                element_id: response_element_id,
+                help: 'return matching record',
+            })
+        )
+    } else {
+        rows.push(
+            demo.synth({
+                missing_asset: 1,
+                asset_type: "CPL",
+                comment: "to get CPL by it's SHA-1"
+            })
+        )
+    }
+
+    rows.push(
         demo.synth({
             label: "<span class='api400'>missing asset</span>",
             mode: "GET",
@@ -105,28 +131,51 @@ demo.make_demo_buttons = function (response_element_id, data) {
             element_id: response_element_id,
             help: 'search for asset that is not there and return an error',
         })
-    ])
+    )
 
     /* --------------------------------------------------------------------------------- */
     rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
-    rows = rows.concat([
-        demo.synth({
-            label: "Linked CPLs of a CPL",
-            mode: "GET",
-            url: `${demo.info.api_prefix}/assets/${demo.supplemental_cpl_id}/linked_cpls`,
-            element_id: response_element_id,
-            help: 'return matching CPL assets',
-        }),
-        demo.synth({
-            label: "Linked CPLs of an MXF file",
-            mode: "GET",
-            url: `${demo.info.api_prefix}/assets/${demo.mxf_id}/linked_cpls`,
-            element_id: response_element_id,
-            help: 'return matching CPL assets',
-        })
-    ])
+    if(demo.supplemental_cpl_id2) {
+        rows.push(
+            demo.synth({
+                label: "Linked CPLs of a CPL",
+                mode: "GET",
+                url: `${demo.info.api_prefix}/assets/${demo.supplemental_cpl_id}/linked_cpls`,
+                element_id: response_element_id,
+                help: 'return matching CPL assets',
+            })
+        );
+    } else {
+        rows.push(
+            demo.synth({
+                missing_asset: 1,
+                asset_type: "CPL",
+                comment: "to get linked CPLs by CPL identifier"
+            })
+        )
+    }
+
+    if(demo.mxf_id1) {
+        rows.push(
+            demo.synth({
+                label: "Linked CPLs of an MXF file",
+                mode: "GET",
+                url: `${demo.info.api_prefix}/assets/${demo.mxf_id}/linked_cpls`,
+                element_id: response_element_id,
+                help: 'return matching CPL assets',
+            })
+        )
+    } else {
+        rows.push(
+            demo.synth({
+                missing_asset: 1,
+                asset_type: "MXF",
+                comment: "to get linked CPLs by one related MXF identifier"
+            })
+        )
+    }
 
     /* --------------------------------------------------------------------------------- */
     rows.push(demo.synth({ brk: 1, }))
@@ -231,30 +280,35 @@ const init_page = async () => {
     demo.non_crawl_data = await demo.get_non_crawl_data()
 
     const first_cpl = await demo.get_json_data(`${demo.info.api_prefix}/assets?[file-type]=ft.cpl&limit=1`)
-
-    var identifiers = first_cpl.results[0].identifiers
-    for(let index in identifiers) {
-        if(identifiers[index].startsWith('urn:uuid')) {
-            demo.cpl_id = identifiers[index]
-        }
-        if(identifiers[index].startsWith('urn:sha1')) {
-            demo.cpl_sha = identifiers[index]
+    if(first_cpl.results.length > 0) {
+        var identifiers = first_cpl.results[0].identifiers
+        for(let index in identifiers) {
+            if(identifiers[index].startsWith('urn:uuid')) {
+                demo.cpl_id = identifiers[index]
+            }
+            if(identifiers[index].startsWith('urn:sha1')) {
+                demo.cpl_sha = identifiers[index]
+            }
         }
     }
 
     const supplemental_cpl = await demo.get_json_data(`${demo.info.api_prefix}/assets?[content-kind]=supplemental&limit=1`)
-    identifiers = supplemental_cpl.results[0].identifiers
-    for(let index in identifiers) {
-        if(identifiers[index].startsWith('urn:uuid')) {
-            demo.supplemental_cpl_id = identifiers[index]
+    if(supplemental_cpl.results.length > 0) {
+        identifiers = supplemental_cpl.results[0].identifiers
+        for(let index in identifiers) {
+            if(identifiers[index].startsWith('urn:uuid')) {
+                demo.supplemental_cpl_id = identifiers[index]
+            }
         }
     }
 
     const first_mxf = await demo.get_json_data(`${demo.info.api_prefix}/assets?[file-type]=ft.mxf&limit=1`)
-    identifiers = first_mxf.results[0].identifiers
-    for(let index in identifiers) {
-        if(identifiers[index].startsWith('urn:uuid')) {
-            demo.mxf_id = identifiers[index]
+    if(supplemental_cpl.results.length > 0) {
+        identifiers = first_mxf.results[0].identifiers
+        for(let index in identifiers) {
+            if(identifiers[index].startsWith('urn:uuid')) {
+                demo.mxf_id = identifiers[index]
+            }
         }
     }
 

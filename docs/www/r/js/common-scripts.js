@@ -157,6 +157,17 @@ demo.synth = function (opt) {
         row.appendChild(lcell)
         return row
     }
+    if (opt.missing_asset) {
+        let row = document.createElement('tr')
+        let comment = document.createElement('div')
+        comment.setAttribute('style', 'color: darkred')
+        comment.innerHTML = `Unable to locate ${opt.asset_type} asset - missing demo ${opt.comment}`
+        let lcell = document.createElement('td')
+        lcell.setAttribute('colspan', 2)
+        lcell.appendChild(comment)
+        row.appendChild(lcell)
+        return row
+    }
     //tr
     let row = document.createElement('tr')
     //td - label
