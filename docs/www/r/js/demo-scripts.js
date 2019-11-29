@@ -107,7 +107,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
         demo.synth({
             label: "Linked CPLs of a CPL",
             mode: "GET",
-            url: `${demo.info.api_prefix}/assets/${demo.cpl_id}/linked_cpls`,
+            url: `${demo.info.api_prefix}/assets/${demo.supplemental_cpl_id}/linked_cpls`,
             element_id: response_element_id,
             help: 'return matching CPL assets',
         }),
@@ -231,7 +231,10 @@ const init_page = async () => {
             demo.cpl_id = asset.identifiers[0]
             demo.cpl_sha = asset.identifiers[1]
         }
-        console.log(asset)
+        if (asset.file_type == "ft.cpl" && asset.content_kind == "supplemental" && !demo.supplemental_cpl_id) {
+            demo.supplemental_cpl_id = asset.identifiers[0]
+        }
+
         if (asset.file_type == "ft.mxf" && !demo.mxf_id) {
             demo.mxf_id = asset.identifiers[0]
         }
