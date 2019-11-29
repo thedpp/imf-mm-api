@@ -135,7 +135,7 @@ const post = async function (asset) {
  * @param {Integer} limit the maximum number of queries to return 
  * @returns {Array} of asset objects
  */
-const get_assets = async function (skip, limit, file_types) {
+const get_assets = async function (skip, limit, file_types, content_kinds) {
     skip = (undefined == skip) ? 0 : skip
     limit = (undefined == limit) ? config.get('default_get_limit') : limit
 
@@ -147,6 +147,14 @@ const get_assets = async function (skip, limit, file_types) {
                 assets
                 .filter(function(item) {
                     return file_types.includes(item.value.file_type);
+                })
+        }
+
+        if(content_kinds) {
+            assets =
+                assets
+                .filter(function(item) {
+                    return content_kinds.includes(item.value.content_kind);
                 })
         }
 

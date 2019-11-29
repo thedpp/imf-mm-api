@@ -70,6 +70,20 @@ demo.get_data = function (url, callback) {
     xhr.send();
 }
 
+demo.get_json_data = function (url) {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState == 4) {
+                msg = JSON.parse(xhr.responseText)
+                resolve(msg)
+            }
+        };
+        xhr.open('GET', url, true);
+        xhr.send();
+    })
+}
+
 demo.get_app_info = async () => {
     var xhr = new XMLHttpRequest()
 
@@ -110,21 +124,6 @@ demo.get_readme = async () => {
         };
         //wait for the response of the call
         xhr.open("GET", "admin/readme", true);
-        xhr.send();
-    })
-}
-
-demo.get_test_data = async () => {
-    return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (this.readyState == 4) {
-                let data = JSON.parse(xhr.responseText)
-                resolve(data)
-            }
-        };
-        //wait for the response of the call
-        xhr.open("GET", "r/js/test-records.json", true);
         xhr.send();
     })
 }

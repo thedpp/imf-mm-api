@@ -68,6 +68,14 @@ demo.make_demo_buttons = function (response_element_id, data) {
             url: `${demo.info.api_prefix}/assets?[file-type]=ft.cpl&[file-type]=ft.pkl`,
             element_id: response_element_id,
             help: ` list assets with the CPL and PKL type`
+        }),
+        demo.synth({
+            id: 'supplemental_assets',
+            label: "Supplemental CPL assets",
+            mode: "GET",
+            url: `${demo.info.api_prefix}/assets?[content-kind]=supplemental`,
+            element_id: response_element_id,
+            help: ` list Supplemental CPLs`
         })
     ])
 
@@ -223,22 +231,34 @@ const init_page = async () => {
     demo.non_crawl_data = await demo.get_non_crawl_data()
     demo.db_data = await demo.get_test_data()
 
-    //find the first CPL in the given data
-    let d = 0
-    do {
-        asset = demo.db_data[d++]
-        if (asset.file_type == "ft.cpl" && !demo.cpl_id) {
-            demo.cpl_id = asset.identifiers[0]
-            demo.cpl_sha = asset.identifiers[1]
-        }
-        if (asset.file_type == "ft.cpl" && asset.content_kind == "supplemental" && !demo.supplemental_cpl_id) {
-            demo.supplemental_cpl_id = asset.identifiers[0]
-        }
 
-        if (asset.file_type == "ft.mxf" && !demo.mxf_id) {
-            demo.mxf_id = asset.identifiers[0]
+    const first_cpl = await demo.get_json_data(`${demo.info.api_prefix}/assets?[file-type]=ft.cpl&limit=1`)
+
+    var identifiers = first_cpl.results[0].identifiers
+    for(let index in identifiers) {
+        if(identifiers[index].startsWith('urn:uuid')) {
+            demo.cpl_id = identifiers[index]
         }
-    } while ((d < demo.db_data.length) )//&& !demo.cpl_id && !demo.mxf_id)
+        if(identifiers[index].startsWith('urn:sha1')) {
+            demo.cpl_sha = identifiers[index]
+        }
+    }
+
+    const supplemental_cpl = await demo.get_json_data(`${demo.info.api_prefix}/assets?[content-kind]=supplemental&limit=1`)
+    identifiers = supplemental_cpl.results[0].identifiers
+    for(let index in identifiers) {
+        if(identifiers[index].startsWith('urn:uuid')) {
+            demo.supplemental_cpl_id = identifiers[index]
+        }
+    }
+
+    const first_mxf = await demo.get_json_data(`${demo.info.api_prefix}/assets?[file-type]=ft.mxf&limit=1`)
+    identifiers = first_mxf.results[0].identifiers
+    for(let index in identifiers) {
+        if(identifiers[index].startsWith('urn:uuid')) {
+            demo.mxf_id = identifiers[index]
+        }
+    }
 
     demo.post_asset1 = demo.non_crawl_data[1]
     demo.post_asset2 = demo.non_crawl_data[6]
