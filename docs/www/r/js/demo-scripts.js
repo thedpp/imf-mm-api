@@ -137,7 +137,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
     rows.push(demo.synth({ brk: 1, }))
     /* --------------------------------------------------------------------------------- */
 
-    if(demo.supplemental_cpl_id2) {
+    if(demo.supplemental_cpl_id) {
         rows.push(
             demo.synth({
                 label: "Linked CPLs of a CPL",
@@ -157,7 +157,7 @@ demo.make_demo_buttons = function (response_element_id, data) {
         )
     }
 
-    if(demo.mxf_id1) {
+    if(demo.mxf_id) {
         rows.push(
             demo.synth({
                 label: "Linked CPLs of an MXF file",
