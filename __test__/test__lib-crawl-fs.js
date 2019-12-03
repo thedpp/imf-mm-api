@@ -65,7 +65,7 @@ describe(`${__test}: fs crawl core`, () => {
             return await crawl(test_root)
                 .then((assets) => {
                     expect(assets.length).toBeGreaterThan(14)
-                    expect(crawler.report.added.length).toEqual(35)
+                    expect(crawler.report.added.length).toEqual(20)
                     expect(crawler.report.skipped.length).toEqual(5)
                 })
         })
