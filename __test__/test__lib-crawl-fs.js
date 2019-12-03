@@ -66,7 +66,7 @@ describe(`${__test}: fs crawl core`, () => {
                 .then((assets) => {
                     expect(assets.length).toBeGreaterThan(14)
                     expect(crawler.report.added.length).toEqual(20)
-                    expect(crawler.report.skipped.length).toEqual(5)
+                    expect(crawler.report.skipped.length).toEqual(1)
                 })
         })
         test('db commit', async () => {
