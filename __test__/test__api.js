@@ -33,7 +33,6 @@ afterAll(() => {
 
 describe(`${__test}: testing Assets`, () => {
     test(`GET ${assets_api}`, async () => {
-        //assert code 200, json content type and the body contains required 
         return testServer
             .get(`${assets_api}`)
             .expect(200)
@@ -44,7 +43,6 @@ describe(`${__test}: testing Assets`, () => {
             .expect(/"total":/)
     });
     test(`GET ${assets_api}/`, async () => {
-        //assert code 200, json content type and the body contains required 
         return testServer
             .get(`${assets_api}/`)
             .expect(200)
@@ -53,6 +51,57 @@ describe(`${__test}: testing Assets`, () => {
             .expect(/"results":/)
             .expect(/"skip":/)
             .expect(/"total":/)
+    });
+
+    test(`GET ${assets_api}?[file-type]=ft.cpl`, async () => {
+        return testServer
+            .get(`${assets_api}?[file-type]=ft.cpl`).then(data => {
+                const assets = JSON.parse(data.text).results;
+                const list = assets.filter(asset => {
+                    asset.file_type != 'ft.cpl'
+                })
+
+                expect(assets.length).not.toBe(0)
+                expect(list.length).toBe(0)
+            })
+    });
+
+    test(`GET ${assets_api}?[content-kind]=test`, async () => {
+        return testServer
+            .get(`${assets_api}?[content-kind]=test`).then(data => {
+                const assets = JSON.parse(data.text).results;
+                const list = assets.filter(asset => {
+                    asset.content_kind != 'test'
+                })
+
+                expect(assets.length).not.toBe(0)
+                expect(list.length).toBe(0)
+            })
+    });
+
+    test(`GET ${assets_api}/urn:uuid:0252e87b-9716-4ef7-93f3-0b60ffa2e0a4/linked_cpls`, async () => {
+        return testServer
+            .get(`${assets_api}/urn:uuid:0252e87b-9716-4ef7-93f3-0b60ffa2e0a4/linked_cpls`).then(data => {
+                const assets = JSON.parse(data.text).results;
+                const list = assets.filter(asset => {
+                    asset.file_type != 'ft.cpl'
+                })
+                expect(assets.length).not.toBe(0)
+                expect(list.length).toBe(0)
+            })
+    });
+
+    test(`GET ${assets_api}/urn:uuid:34ca64f5-300b-453f-b4f3-d0035b015d9f/linked_cpls`, async () => {
+        return testServer
+            .get(`${assets_api}/urn:uuid:34ca64f5-300b-453f-b4f3-d0035b015d9f/linked_cpls`).then(data => {
+                const assets = JSON.parse(data.text).results;
+                const list = assets.filter(asset => {
+                    asset.file_type != 'ft.cpl'
+                })
+
+                expect(assets.length).not.toBe(0)
+                expect(list.length).toBe(0)
+            })
     });
 });
 
