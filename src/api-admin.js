@@ -16,7 +16,7 @@ const _module = require('path').basename(__filename)
 const Router = require('koa-router');
 const fs = require('fs')
 
-//Prefix all routes for this API with /crawl
+//Prefix all routes for this API with /admin
 const router = Router({ prefix: `/admin`, })
 
 /** return information about the system
@@ -46,7 +46,7 @@ const get_system_info = async (ctx, next) => {
     db_type: config.get('database.type'),
     log_level: config.get('log_options.level'),
     node_env: process.env.NODE_ENV,
-    git_url: ((process.env.GIT_URL) ? process.env.GIT_URL : false)
+    git_url: ((process.env.GIT_URL) ? process.env.GIT_URL : false),
   }
 
   // log all the config files used if needed

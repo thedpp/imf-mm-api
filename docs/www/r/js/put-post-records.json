@@ -6,7 +6,7 @@
       "urn:uuid:3c6102bf-7049-4d13-be87-bff2544d920b"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/ASSETMAP.xml"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/ASSETMAP.xml"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -31,7 +31,7 @@
       "urn:sha1:67225712751c4ab8ec0412f874cf319a7348a2bf"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/CPL_3a1eb9a5-5f16-4a6e-86be-e4d85cca2bd2.xml"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/CPL_3a1eb9a5-5f16-4a6e-86be-e4d85cca2bd2.xml"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -46,7 +46,12 @@
       "LastModified": "date",
       "StorageClasss": "STANDARD"
     },
-    "version": "0.1"
+    "version": "0.1",
+    "content_kind": "test",
+    "track_file_ids": [
+      "urn:uuid:987bfc4f-ecd2-4246-ada5-abf315d7a588",
+      "urn:uuid:3cbd6a6a-de57-4745-a47b-e16069e3581b"
+    ]
   },
   {
     "file_size": 2027,
@@ -55,7 +60,7 @@
       "urn:uuid:9b8122f7-253e-4e28-874d-7e63172352f1"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/PKL_9b8122f7-253e-4e28-874d-7e63172352f1.xml"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/PKL_9b8122f7-253e-4e28-874d-7e63172352f1.xml"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -80,7 +85,7 @@
       "urn:sha1:4e7ff1b3f166e8864a42eb80161f5664b7551e79"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/testP1-imf-mm-api-put-post-1_a0.mxf"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/testP1-imf-mm-api-put-post-1_a0.mxf"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -105,7 +110,7 @@
       "urn:sha1:285cc0a920040dc22099a5f0fec65cb5a7ec337b"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/testP1-imf-mm-api-put-post-1_v0.mxf"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP1-imf-mm-api-put-post-1/testP1-imf-mm-api-put-post-1_v0.mxf"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -129,7 +134,7 @@
       "urn:uuid:342c218c-e22c-4320-83a6-9f939a965e3b"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/ASSETMAP.xml"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/ASSETMAP.xml"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -154,7 +159,7 @@
       "urn:sha1:0a556ef1424d5e6fbd4e817c5df2b977d8cf6aa4"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/CPL_da0c20d7-08c6-4803-bce5-8ad6583b1cfc.xml"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/CPL_da0c20d7-08c6-4803-bce5-8ad6583b1cfc.xml"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -169,7 +174,12 @@
       "LastModified": "date",
       "StorageClasss": "STANDARD"
     },
-    "version": "0.1"
+    "version": "0.1",
+    "content_kind": "test",
+    "track_file_ids": [
+      "urn:uuid:3670998f-7f1a-4b0d-88d7-f100433e2515",
+      "urn:uuid:f412b426-f1ad-4254-8f03-28df13ff9e50"
+    ]
   },
   {
     "file_size": 2027,
@@ -178,7 +188,7 @@
       "urn:uuid:815aa2b2-caee-4207-b4f5-8bf2eeb7a87e"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/PKL_815aa2b2-caee-4207-b4f5-8bf2eeb7a87e.xml"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/PKL_815aa2b2-caee-4207-b4f5-8bf2eeb7a87e.xml"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -203,7 +213,7 @@
       "urn:sha1:c7c135673983bf30c0616913e7479cb609b4fb88"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/testP2-imf-mm-api-put-post-2_a0.mxf"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/testP2-imf-mm-api-put-post-2_a0.mxf"
     ],
     "providers": [
       "imf-mm-api Demo App"
@@ -228,7 +238,7 @@
       "urn:sha1:160867e202eb7d8ceaf484b5887bd56f7261b752"
     ],
     "locations": [
-      "/home/bruce/git-hub/imf-mm-api-1/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/testP2-imf-mm-api-put-post-2_v0.mxf"
+      "/Users/marco/dev/mediaio/imf-mm-api/__test__/assets-put-post/testP2-imf-mm-api-put-post-2/testP2-imf-mm-api-put-post-2_v0.mxf"
     ],
     "providers": [
       "imf-mm-api Demo App"

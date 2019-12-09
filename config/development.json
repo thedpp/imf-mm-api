@@ -16,6 +16,7 @@
         "__test__/assets-imf"
     ],
     "enable":{
-        "extended_config_messages":true
+        "extended_config_messages": true,
+        "load_home_page_on_boot": false
     }
 }

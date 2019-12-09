@@ -127,7 +127,6 @@ const post = async function (asset) {
                 .write()
             resolve('ok')
         }
-
     })
 }
 
@@ -136,19 +135,34 @@ const post = async function (asset) {
  * @param {Integer} limit the maximum number of queries to return 
  * @returns {Array} of asset objects
  */
-const get = async function (skip, limit) {
+const get_assets = async function (skip, limit, file_types, content_kinds) {
     skip = (undefined == skip) ? 0 : skip
     limit = (undefined == limit) ? config.get('default_get_limit') : limit
 
     return new Promise((resolve, reject) => {
-        let data = db.get('assets')
+        let assets = db.get('assets')
+
+        if(file_types) {
+            assets =
+                assets
+                .filter(function(item) {
+                    return file_types.includes(item.value.file_type);
+                })
+        }
+
+        if(content_kinds) {
+            assets =
+                assets
+                .filter(function(item) {
+                    return content_kinds.includes(item.value.content_kind);
+                })
+        }
+
+        assets = assets
             .slice(skip, skip + limit)
             .value()
+            .map(asset => asset.value)
 
-        let assets = []
-        for (let d = 0; d < data.length; d++) {
-            assets.push(data[d].value)
-        }
         resolve(assets)
     })
 }
@@ -158,27 +172,66 @@ const get = async function (skip, limit) {
  * @returns {Array} of asset objects
  */
 const get_assets_by_id = async function (skip, limit, asset_id) {
-
     return new Promise(async (resolve, reject) => {
         //look inside the identifiers array for the asset_id
         let data = await db.get('assets')
-            .find({ value: { identifiers: [asset_id,], }, })
+            .filter(function(item) {
+                return item.value.identifiers.includes(asset_id);
+            })
             .value()
-        if (data) {
-            //check if an array of records or a single record was returned
-            if (undefined == data.id) {
-                //multiple records were returned
-                let assets = []
-                for (let d = 0; d < data.length; d++) {
-                    assets.push(data[d].value)
-                }
-                resolve(assets)
-            } else {
-                //retun a single record in an array
-                resolve([data.value,])
-            }
+            .map(asset => asset.value)
+
+        if (!data) {
+            return resolve(undefined)
         }
-        resolve(undefined)
+
+        //check if an array of records or a single record was returned
+        if (!data.id) {
+            //multiple records were returned
+            return resolve(data)
+        }
+
+        //retun a single record in an array
+        resolve([data,])
+    })
+}
+
+/** Get related CPLs from a list of MXF identifiers
+ * @param {String} id and identifier that you would find in the identifiers array
+ * @returns {Array} of asset objects
+ */
+const get_cpls_by_mxf_ids = async function (skip, limit, mxf_ids, filtered_cpl_ids) {
+    return new Promise(async (resolve, reject) => {
+        //look inside the identifiers array for the asset_id
+        let assets = await db.get('assets')
+            .map(asset => asset.value)
+            .filter(function(asset) {
+                if(filtered_cpl_ids) {
+                    for(var i_index in asset.identifiers) {
+                        if(filtered_cpl_ids.includes(asset.identifiers[i_index])) {
+                            return false;
+                        }
+                    }
+                }
+
+                if(asset.file_type != 'ft.cpl') {
+                    return false
+                }
+
+                if(mxf_ids) {
+                    for(var t_index in asset.track_file_ids) {
+                        if(mxf_ids.includes(asset.track_file_ids[t_index])) {
+                            return true;
+                        }
+                    }
+                }
+                return false
+            })
+            .slice(skip, skip + limit)
+            .value()
+
+        //retun a single record in an array
+        resolve(assets)
     })
 }
 
@@ -228,8 +281,9 @@ const total = async function (skip, limit) {
 
 //export the functions
 module.exports.delete_assets_by_id = delete_assets_by_id
-module.exports.get = get
+module.exports.get_assets = get_assets
 module.exports.get_assets_by_id = get_assets_by_id
+module.exports.get_cpls_by_mxf_ids = get_cpls_by_mxf_ids
 module.exports.init = init
 module.exports.info = info
 module.exports.reset = reset

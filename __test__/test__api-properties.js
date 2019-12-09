@@ -1,13 +1,13 @@
-/** @module test__api
- * 
+/**
+ * @module test__api
  */
 /* jshint node: true */
 /* globals afterAll, beforeAll, describe, expect, test */
 'use strict'
 require('dotenv').config({ path: '__test__/.env',})
-console.log(process.env.NODE_ENV)
-/** db-local storage tester
- *
+
+/**
+ * db-local storage tester
  */
 const fs = require('fs')
 const path = require('path')

@@ -29,7 +29,7 @@
         "assets": true,
         "crawl": true,
         "www": true,
-        "load_home_page_on_boot": true,
+        "load_home_page_on_boot": false,
         "extended_status_messages": true,
         "synth_local_test_data": true
     },
