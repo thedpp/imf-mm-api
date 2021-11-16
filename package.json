@@ -48,7 +48,7 @@
   },
   "homepage": "https://github.com/mrmxf/imf-mm-api-server-js#readme",
   "dependencies": {
-    "aws-sdk": "^2.564.0",
+    "aws-sdk": "^2.814.0",
     "binary": "^0.3.0",
     "chokidar": "^3.3.0",
     "config": "^3.2.4",
